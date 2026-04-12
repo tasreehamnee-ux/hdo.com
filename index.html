@@ -110,6 +110,12 @@
             box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
         }
 
+        .nav-btn.admin {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(142, 68, 173, 0.3);
+        }
+
         .logo-center {
             position: absolute;
             left: 50%;
@@ -432,6 +438,18 @@
             box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
         }
 
+        .action-btn.whatsapp {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .action-btn.email {
+            background: linear-gradient(135deg, #ea4335 0%, #c5221f 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(234, 67, 53, 0.3);
+        }
+
         .report-container {
             background: white;
             border-radius: 12px;
@@ -651,6 +669,266 @@
             color: white;
         }
 
+        /* Admin Login Styles */
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-title {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: #8e44ad;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Admin Dashboard Styles */
+        .admin-header {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #6c3483;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 4px solid #8e44ad;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8e44ad;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .admin-table th {
+            background: #8e44ad;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .admin-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .admin-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .badge-warning {
+            background: #fdebd0;
+            color: #f39c12;
+        }
+
+        .badge-info {
+            background: #d6eaf8;
+            color: #3498db;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .admin-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .admin-btn.view {
+            background: #3498db;
+            color: white;
+        }
+
+        .admin-btn.delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .admin-btn.edit {
+            background: #f39c12;
+            color: white;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .admin-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            padding-right: 10px;
+            border-right: 4px solid #8e44ad;
+        }
+
+        .user-management {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .user-list {
+            margin-top: 15px;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .add-user-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .add-user-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .logout-btn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+
         /* Print Styles */
         @media print {
             @page {
@@ -685,6 +963,8 @@
             .modal-overlay,
             .toast,
             #formSection,
+            #adminSection,
+            #loginSection,
             .form-container form,
             iframe,
             object,
@@ -714,7 +994,7 @@
                 overflow: visible !important;
             }
 
-            #formSection {
+            #formSection, #adminSection, #loginSection {
                 display: none !important;
             }
 
@@ -812,17 +1092,144 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <div class="top-header">
+    <!-- Top Header -->
+    <div class="top-header" id="mainHeader">
         <div class="header-content">
             <div class="nav-buttons" style="margin-right: auto;">
                 <button class="nav-btn primary" onclick="showSection('form')">📝 تسجيل أسبوعي</button>
                 <button class="nav-btn secondary" onclick="showSection('dashboard')">📊 عرض التقارير</button>
+                <button class="nav-btn admin" onclick="showSection('login')">🔐 لوحة التحكم</button>
             </div>
             <div class="logo-center">
                 <img src="image.jpeg" alt="شعار النصاريح الأمنية" class="logo-img-top">
                 <div class="logo-text-top">النصاريح الأمنية</div>
             </div>
             <div style="margin-left: auto; width: 150px;"></div>
+        </div>
+    </div>
+
+    <!-- Login Section -->
+    <div class="container" id="loginSection">
+        <div class="login-container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="image.jpeg" alt="Logo" style="width: 80px; height: 80px; border-radius: 50%;">
+            </div>
+            <h2 class="login-title">🔐 تسجيل دخول المسؤول</h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <input type="text" class="login-input" id="loginUsername" placeholder="اسم المستخدم" required>
+                <input type="password" class="login-input" id="loginPassword" placeholder="كلمة المرور" required>
+                <button type="submit" class="login-btn">دخول</button>
+            </form>
+            <button class="btn-secondary" onclick="showSection('form')" style="margin-top: 15px;">العودة للصفحة الرئيسية</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Section -->
+    <div class="container" id="adminSection">
+        <div class="admin-header" style="position: relative;">
+            <button class="logout-btn" onclick="logout()">🚪 خروج</button>
+            <h2>⚙️ لوحة تحكم المسؤول</h2>
+            <p>نظام إدارة التقارير والمستخدمين</p>
+        </div>
+
+        <div class="form-container">
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalReports">0</div>
+                    <div class="stat-label">إجمالي التقارير</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalEmployees">0</div>
+                    <div class="stat-label">إجمالي الموظفين</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUnits">0</div>
+                    <div class="stat-label">الوحدات النشطة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="adminCount">0</div>
+                    <div class="stat-label">المسؤولين</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label class="form-label">الوحدة/القسم</label>
+                    <select class="form-select" id="filterUnit" onchange="filterReports()">
+                        <option value="">جميع الوحدات</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="form-label">من تاريخ</label>
+                    <input type="date" class="form-input" id="filterStartDate" onchange="filterReports()">
+                </div>
+                <div class="filter-group">
+                    <label class="form-label">إلى تاريخ</label>
+                    <input type="date" class="form-input" id="filterEndDate" onchange="filterReports()">
+                </div>
+                <div class="filter-group">
+                    <button class="action-btn pdf" onclick="exportAllToPDF()">
+                        <span>📄</span> تصدير الكل PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reports Table -->
+            <div class="admin-section">
+                <h3 class="section-title">📋 التقارير المسجلة</h3>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الوحدة</th>
+                                <th>الفترة</th>
+                                <th>عدد الموظفين</th>
+                                <th>المشرف</th>
+                                <th>تاريخ الإدخال</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminReportsTable">
+                            <!-- Reports will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Detailed View -->
+            <div class="admin-section" id="detailedView" style="display: none;">
+                <h3 class="section-title">👁️ عرض التقرير التفصيلي</h3>
+                <div class="report-container" id="adminReportContent">
+                    <!-- Report content will be inserted here -->
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn pdf" onclick="downloadCurrentReport()">📄 تحميل PDF</button>
+                    <button class="action-btn print" onclick="printCurrentReport()">🖨️ طباعة</button>
+                    <button class="action-btn whatsapp" onclick="shareToWhatsApp()">📱 مشاركة واتساب</button>
+                    <button class="action-btn email" onclick="shareByEmail()">📧 إرسال بالبريد</button>
+                </div>
+            </div>
+
+            <!-- User Management -->
+            <div class="admin-section">
+                <h3 class="section-title">👥 إدارة المسؤولين</h3>
+                <div class="user-management">
+                    <div class="user-list" id="adminUsersList">
+                        <!-- Users will be loaded here -->
+                    </div>
+                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+                    <h4 style="margin-bottom: 15px; color: #8e44ad;">➕ إضافة مسؤول جديد</h4>
+                    <form class="add-user-form" onsubmit="addNewAdmin(event)">
+                        <input type="text" class="form-input" id="newAdminUsername" placeholder="اسم المستخدم" required>
+                        <input type="password" class="form-input" id="newAdminPassword" placeholder="كلمة المرور" required>
+                        <button type="submit" class="nav-btn primary">إضافة</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -951,6 +1358,16 @@
         // Global Data Storage
         let attendanceData = [];
         let currentReportData = null;
+        let currentAdminReport = null;
+        let isAdminLoggedIn = false;
+
+        // Default admin credentials (in production, use secure backend)
+        let adminUsers = JSON.parse(localStorage.getItem('adminUsers')) || [
+            { username: 'admin', password: 'admin123', role: 'super_admin' }
+        ];
+
+        // All reports storage
+        let allReports = JSON.parse(localStorage.getItem('allAttendanceReports')) || [];
 
         // Status options with full names
         const statusOptions = [
@@ -1090,10 +1507,380 @@
 
             if (section === 'form') {
                 document.getElementById('formSection').classList.add('active');
+                document.getElementById('mainHeader').style.display = 'block';
             } else if (section === 'dashboard') {
                 document.getElementById('dashboardSection').classList.add('active');
+                document.getElementById('mainHeader').style.display = 'block';
                 generateReport();
+            } else if (section === 'login') {
+                if (isAdminLoggedIn) {
+                    document.getElementById('adminSection').classList.add('active');
+                    loadAdminDashboard();
+                } else {
+                    document.getElementById('loginSection').classList.add('active');
+                }
+                document.getElementById('mainHeader').style.display = 'block';
+            } else if (section === 'admin') {
+                if (!isAdminLoggedIn) {
+                    document.getElementById('loginSection').classList.add('active');
+                } else {
+                    document.getElementById('adminSection').classList.add('active');
+                    loadAdminDashboard();
+                }
+                document.getElementById('mainHeader').style.display = 'block';
             }
+        }
+
+        // Admin Functions
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = adminUsers.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                isAdminLoggedIn = true;
+                showToast('✅ تم تسجيل الدخول بنجاح');
+                showSection('admin');
+            } else {
+                showToast('❌ اسم المستخدم أو كلمة المرور غير صحيحة');
+            }
+        }
+
+        function logout() {
+            isAdminLoggedIn = false;
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            showToast('👋 تم تسجيل الخروج');
+            showSection('form');
+        }
+
+        function loadAdminDashboard() {
+            // Update statistics
+            document.getElementById('totalReports').textContent = allReports.length;
+
+            let totalEmps = 0;
+            const units = new Set();
+
+            allReports.forEach(report => {
+                totalEmps += report.employees ? report.employees.length : 0;
+                units.add(report.unitName);
+            });
+
+            document.getElementById('totalEmployees').textContent = totalEmps;
+            document.getElementById('totalUnits').textContent = units.size;
+            document.getElementById('adminCount').textContent = adminUsers.length;
+
+            // Populate unit filter
+            const unitSelect = document.getElementById('filterUnit');
+            unitSelect.innerHTML = '<option value="">جميع الوحدات</option>';
+            units.forEach(unit => {
+                unitSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
+            });
+
+            // Load reports table
+            renderAdminReports(allReports);
+
+            // Load users list
+            renderAdminUsers();
+        }
+
+        function renderAdminReports(reports) {
+            const tbody = document.getElementById('adminReportsTable');
+            tbody.innerHTML = '';
+
+            if (reports.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">لا توجد تقارير مسجلة</td></tr>';
+                return;
+            }
+
+            reports.forEach((report, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${report.unitName}</strong></td>
+                    <td>${report.startDate} إلى ${report.endDate}</td>
+                    <td>${report.employees ? report.employees.length : 0}</td>
+                    <td>${report.supervisor || '-'}</td>
+                    <td>${report.generatedDate || '-'}</td>
+                    <td><span class="badge badge-success">مكتمل</span></td>
+                    <td>
+                        <div class="admin-actions">
+                            <button class="admin-btn view" onclick="viewReport(${index})">👁️ عرض</button>
+                            <button class="admin-btn delete" onclick="deleteReport(${index})">🗑️ حذف</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderAdminUsers() {
+            const container = document.getElementById('adminUsersList');
+            container.innerHTML = '';
+
+            adminUsers.forEach((user, index) => {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <div style="font-weight: 700;">${user.username}</div>
+                            <div style="font-size: 0.8rem; color: #666;">${user.role === 'super_admin' ? 'مدير النظام' : 'مسؤول'}</div>
+                        </div>
+                    </div>
+                    ${user.role !== 'super_admin' ? `
+                        <button class="admin-btn delete" onclick="deleteAdminUser(${index})">حذف</button>
+                    ` : '<span class="badge badge-info">غير قابل للحذف</span>'}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addNewAdmin(e) {
+            e.preventDefault();
+            const username = document.getElementById('newAdminUsername').value;
+            const password = document.getElementById('newAdminPassword').value;
+
+            if (adminUsers.find(u => u.username === username)) {
+                showToast('❌ اسم المستخدم موجود مسبقاً');
+                return;
+            }
+
+            adminUsers.push({
+                username: username,
+                password: password,
+                role: 'admin'
+            });
+
+            localStorage.setItem('adminUsers', JSON.stringify(adminUsers));
+
+            document.getElementById('newAdminUsername').value = '';
+            document.getElementById('newAdminPassword').value = '';
+
+            renderAdminUsers();
+            document.getElementById('adminCount').textContent = adminUsers.length;
+            showToast('✅ تم إضافة المسؤول بنجاح');
+        }
+
+        function deleteAdminUser(index) {
+            if (confirm('هل أنت متأكد من حذف هذا المسؤول؟')) {
+                adminUsers.splice(index, 1);
+                localStorage.setItem('adminUsers', JSON.stringify(adminUsers));
+                renderAdminUsers();
+                document.getElementById('adminCount').textContent = adminUsers.length;
+                showToast('✅ تم حذف المسؤول');
+            }
+        }
+
+        function filterReports() {
+            const unit = document.getElementById('filterUnit').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+
+            let filtered = allReports;
+
+            if (unit) {
+                filtered = filtered.filter(r => r.unitName === unit);
+            }
+
+            if (startDate) {
+                filtered = filtered.filter(r => r.startDate >= startDate);
+            }
+
+            if (endDate) {
+                filtered = filtered.filter(r => r.endDate <= endDate);
+            }
+
+            renderAdminReports(filtered);
+        }
+
+        function viewReport(index) {
+            currentAdminReport = allReports[index];
+
+            // Generate report HTML
+            const container = document.getElementById('adminReportContent');
+            container.innerHTML = `
+                <div class="report-header">
+                    <img src="image.jpeg" alt="شعار المتابعة">
+                    <div class="report-title">تقرير الحضور والغياب الأسبوعي</div>
+                    <div class="report-subtitle">النصاريح الأمنية - قسم المتابعة</div>
+                    <div class="report-unit">الوحدة: <span>${currentAdminReport.unitName}</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem;">
+                        <div>الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}</div>
+                        <div>تاريخ التقرير: ${currentAdminReport.generatedDate}</div>
+                    </div>
+                </div>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الاسم الثلاثي</th>
+                            <th>حالة الدوام</th>
+                            <th>السبت</th>
+                            <th>الأحد</th>
+                            <th>الإثنين</th>
+                            <th>الثلاثاء</th>
+                            <th>الأربعاء</th>
+                            <th>الخميس</th>
+                            <th>الجمعة</th>
+                            <th>ملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${currentAdminReport.employees.map(emp => `
+                            <tr>
+                                <td>${emp.id}</td>
+                                <td>${emp.name}</td>
+                                <td style="font-weight: bold;">${shiftNames[emp.shift] || 'صباحي'}</td>
+                                ${emp.days.map(d => `<td style="color: ${getStatusColor(d)}; font-weight: bold;">${statusFullNames[d] || d}</td>`).join('')}
+                                <td class="notes-cell">${emp.notes || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('detailedView').style.display = 'block';
+            document.getElementById('detailedView').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteReport(index) {
+            if (confirm('هل أنت متأكد من حذف هذا التقرير؟')) {
+                allReports.splice(index, 1);
+                localStorage.setItem('allAttendanceReports', JSON.stringify(allReports));
+                loadAdminDashboard();
+                showToast('✅ تم حذف التقرير');
+            }
+        }
+
+        async function exportAllToPDF() {
+            showLoading(true);
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('l', 'mm', 'a4');
+
+                // Add title page
+                pdf.setFontSize(20);
+                pdf.text('تقرير الحضور والغياب - النصاريح الأمنية', 150, 20, { align: 'center' });
+
+                pdf.setFontSize(12);
+                pdf.text(`تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`, 150, 30, { align: 'center' });
+                pdf.text(`إجمالي التقارير: ${allReports.length}`, 150, 40, { align: 'center' });
+
+                let yPosition = 60;
+
+                allReports.forEach((report, idx) => {
+                    if (yPosition > 180) {
+                        pdf.addPage();
+                        yPosition = 20;
+                    }
+
+                    pdf.setFontSize(14);
+                    pdf.text(`${idx + 1}. ${report.unitName} (${report.startDate} إلى ${report.endDate})`, 20, yPosition);
+                    yPosition += 10;
+
+                    pdf.setFontSize(10);
+                    report.employees.forEach(emp => {
+                        if (yPosition > 190) {
+                            pdf.addPage();
+                            yPosition = 20;
+                        }
+                        pdf.text(`- ${emp.name}: ${emp.days.map(d => statusFullNames[d]).join(', ')}`, 25, yPosition);
+                        yPosition += 5;
+                    });
+
+                    yPosition += 10;
+                });
+
+                pdf.save(`تقرير_الحضور_الكامل_${new Date().toISOString().split('T')[0]}.pdf`);
+                showToast('✅ تم تصدير جميع التقارير');
+            } catch (error) {
+                console.error(error);
+                showToast('❌ حدث خطأ أثناء التصدير');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function downloadCurrentReport() {
+            if (!currentAdminReport) return;
+
+            showLoading(true);
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('l', 'mm', 'a4');
+
+                const canvas = await html2canvas(document.getElementById('adminReportContent'), {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff'
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 280;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                pdf.save(`تقرير_${currentAdminReport.unitName}_${currentAdminReport.startDate}.pdf`);
+
+                showToast('✅ تم تحميل التقرير');
+            } catch (error) {
+                showToast('❌ حدث خطأ');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function printCurrentReport() {
+            const printWindow = window.open('', '_blank');
+            const content = document.getElementById('adminReportContent').innerHTML;
+
+            printWindow.document.write(`
+                <html dir="rtl">
+                <head>
+                    <title>تقرير الحضور</title>
+                    <style>
+                        body { font-family: 'Cairo', sans-serif; margin: 20px; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+                        th { background: #e0e0e0; }
+                        .report-header { text-align: center; margin-bottom: 20px; }
+                    </style>
+                </head>
+                <body>${content}</body>
+                </html>
+            `);
+
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function shareToWhatsApp() {
+            if (!currentAdminReport) return;
+
+            const text = `تقرير الحضور - ${currentAdminReport.unitName}%0A` +
+                        `الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}%0A` +
+                        `عدد الموظفين: ${currentAdminReport.employees.length}%0A%0A` +
+                        currentAdminReport.employees.map(e => `- ${e.name}: ${e.days.map(d => statusFullNames[d]).join(', ')}`).join('%0A');
+
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function shareByEmail() {
+            if (!currentAdminReport) return;
+
+            const subject = `تقرير الحضور - ${currentAdminReport.unitName}`;
+            const body = `الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}\n\n` +
+                        currentAdminReport.employees.map(e =>
+                            `${e.name} (${shiftNames[e.shift]}): ${e.days.map(d => statusFullNames[d]).join(' | ')}\nملاحظات: ${e.notes || 'لا يوجد'}`
+                        ).join('\n\n');
+
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
         function addNewRow() {
@@ -1245,10 +2032,15 @@
                 endDate,
                 supervisor,
                 employees,
-                generatedDate: new Date().toLocaleDateString('ar-SA')
+                generatedDate: new Date().toLocaleDateString('ar-SA'),
+                timestamp: new Date().toISOString()
             };
 
             localStorage.setItem('attendanceReport', JSON.stringify(currentReportData));
+
+            // Add to all reports for admin dashboard
+            allReports.push(currentReportData);
+            localStorage.setItem('allAttendanceReports', JSON.stringify(allReports));
         }
 
         function generateReport() {
