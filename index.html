@@ -12,7 +12,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -23,7 +23,7 @@
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Amiri', sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             padding: 10px;
@@ -114,6 +114,12 @@
             background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
             color: white;
             box-shadow: 0 2px 8px rgba(142, 68, 173, 0.3);
+        }
+
+        .nav-btn.success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
         }
 
         .logo-center {
@@ -246,7 +252,7 @@
             width: 100%;
             border-collapse: collapse;
             background: white;
-            min-width: 800px;
+            min-width: 900px;
         }
 
         .entry-table th {
@@ -265,6 +271,41 @@
             border: 1px solid #ddd;
             text-align: center;
             vertical-align: middle;
+        }
+
+        /* تعديل عرض الأعمدة حسب الاستمارة */
+        .entry-table th:first-child,
+        .entry-table td:first-child {
+            width: 40px;
+            min-width: 40px;
+        }
+
+        .entry-table th:nth-child(2),
+        .entry-table td:nth-child(2) {
+            min-width: 180px;
+        }
+
+        .entry-table th:nth-child(3),
+        .entry-table td:nth-child(3),
+        .entry-table th:nth-child(4),
+        .entry-table td:nth-child(4),
+        .entry-table th:nth-child(5),
+        .entry-table td:nth-child(5),
+        .entry-table th:nth-child(6),
+        .entry-table td:nth-child(6),
+        .entry-table th:nth-child(7),
+        .entry-table td:nth-child(7),
+        .entry-table th:nth-child(8),
+        .entry-table td:nth-child(8),
+        .entry-table th:nth-child(9),
+        .entry-table td:nth-child(9) {
+            width: 80px;
+            min-width: 80px;
+        }
+
+        .entry-table th:last-child,
+        .entry-table td:last-child {
+            min-width: 150px;
         }
 
         .notes-input {
@@ -377,9 +418,23 @@
             -webkit-touch-callout: none;
         }
 
-        .btn-danger:active { transform: scale(0.98); }
+        .btn-success {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+        }
 
-        .btn-secondary:active { transform: scale(0.98); }
+        .btn-danger:active, .btn-success:active, .btn-secondary:active { transform: scale(0.98); }
 
         .action-buttons {
             display: grid;
@@ -450,6 +505,12 @@
             box-shadow: 0 4px 12px rgba(234, 67, 53, 0.3);
         }
 
+        .action-btn.send-admin {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+
         .report-container {
             background: white;
             border-radius: 12px;
@@ -459,6 +520,7 @@
             max-width: 100%;
             margin-left: auto;
             margin-right: auto;
+            font-family: 'Amiri', 'Cairo', serif;
         }
 
         @media (max-width: 768px) {
@@ -491,6 +553,7 @@
             font-weight: 700;
             color: #000;
             margin-bottom: 10px;
+            font-family: 'Amiri', serif;
         }
 
         .report-subtitle {
@@ -514,33 +577,35 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             border: 2px solid #333;
+            font-family: 'Amiri', serif;
         }
 
         .report-table th {
-            background: #e0e0e0;
+            background: #f0f0f0;
             color: #000;
-            padding: 10px 6px;
+            padding: 12px 6px;
             text-align: center;
             font-weight: 700;
             border: 1px solid #333;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+            font-family: 'Cairo', sans-serif;
         }
 
         .report-table td {
-            padding: 8px 5px;
+            padding: 10px 5px;
             border: 1px solid #333;
             text-align: center;
             vertical-align: middle;
             font-weight: 600;
-            height: 40px;
-            font-size: 0.8rem;
+            height: 45px;
+            font-size: 0.9rem;
         }
 
         .report-table .notes-cell {
             text-align: right;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             max-width: 150px;
             word-wrap: break-word;
         }
@@ -933,7 +998,7 @@
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 0;
+                margin: 10mm;
             }
 
             * {
@@ -947,10 +1012,7 @@
                 margin: 0 !important;
                 height: auto !important;
                 overflow: visible !important;
-            }
-
-            head, meta, script, link {
-                display: none !important;
+                font-family: 'Amiri', serif !important;
             }
 
             .top-header,
@@ -959,6 +1021,7 @@
             .submit-btn,
             .btn-danger,
             .btn-secondary,
+            .btn-success,
             .loading-overlay,
             .modal-overlay,
             .toast,
@@ -1005,27 +1068,30 @@
                 margin: 0 !important;
                 page-break-inside: avoid;
                 position: static !important;
+                font-family: 'Amiri', serif !important;
             }
 
             .report-table {
                 width: 100% !important;
                 page-break-inside: auto;
-                font-size: 0.7rem;
+                font-size: 0.8rem;
                 border: 2px solid #000 !important;
                 margin: 0 !important;
+                font-family: 'Amiri', serif !important;
             }
 
             .report-table th {
-                background-color: #d0d0d0 !important;
+                background-color: #e0e0e0 !important;
                 border: 1px solid #000 !important;
-                font-size: 0.7rem;
-                padding: 5px 3px;
+                font-size: 0.75rem;
+                padding: 8px 4px;
+                font-weight: bold;
             }
 
             .report-table td {
                 border: 1px solid #000 !important;
-                font-size: 0.7rem;
-                padding: 4px 2px;
+                font-size: 0.85rem;
+                padding: 6px 3px;
                 height: auto;
             }
 
@@ -1035,16 +1101,17 @@
             }
 
             .report-title {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
+                font-family: 'Amiri', serif !important;
             }
 
             .report-subtitle {
-                font-size: 0.9rem;
+                font-size: 1rem;
             }
 
             .report-header img {
-                width: 50px;
-                height: 50px;
+                width: 60px;
+                height: 60px;
             }
 
             a[href]:after {
@@ -1065,6 +1132,7 @@
         }
     </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -1077,13 +1145,12 @@
     <!-- Confirmation Modal -->
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-content">
-            <div class="modal-title">⚠️ تأكيد المسح</div>
+            <div class="modal-title" id="modalTitle">⚠️ تأكيد</div>
             <div class="modal-text" id="modalText">
-                هل أنت متأكد من مسح جميع البيانات؟<br>
-                <small>سيتم حذف جميع المعلومات المدخلة ولا يمكن التراجع عن هذا الإجراء.</small>
+                هل أنت متأكد من هذا الإجراء؟
             </div>
             <div class="modal-buttons">
-                <button class="modal-btn confirm" onclick="confirmClear()">نعم، امسح</button>
+                <button class="modal-btn confirm" id="modalConfirmBtn" onclick="closeModal()">نعم</button>
                 <button class="modal-btn cancel" onclick="closeModal()">إلغاء</button>
             </div>
         </div>
@@ -1137,7 +1204,7 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-number" id="totalReports">0</div>
-                    <div class="stat-label">إجمالي التقارير</div>
+                    <div class="stat-label">إجمالي التقارير المرسلة</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="totalEmployees">0</div>
@@ -1178,7 +1245,7 @@
 
             <!-- Reports Table -->
             <div class="admin-section">
-                <h3 class="section-title">📋 التقارير المسجلة</h3>
+                <h3 class="section-title">📋 التقارير المرسلة من المستخدمين</h3>
                 <div class="table-responsive">
                     <table class="admin-table">
                         <thead>
@@ -1188,7 +1255,7 @@
                                 <th>الفترة</th>
                                 <th>عدد الموظفين</th>
                                 <th>المشرف</th>
-                                <th>تاريخ الإدخال</th>
+                                <th>تاريخ الإرسال</th>
                                 <th>الحالة</th>
                                 <th>الإجراءات</th>
                             </tr>
@@ -1267,7 +1334,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>الاسم الثلاثي</th>
-                                <th>حالة الدوام</th>
                                 <th>السبت</th>
                                 <th>الأحد</th>
                                 <th>الإثنين</th>
@@ -1285,7 +1351,8 @@
                 </div>
 
                 <button type="button" class="submit-btn" onclick="addNewRow()">+ إضافة موظف </button>
-                <button type="submit" class="submit-btn" style="margin-top: 10px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%);">💾 حفظ البيانات</button>
+                <button type="submit" class="submit-btn" style="margin-top: 10px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%);">💾 حفظ البيانات محلياً</button>
+                <button type="button" class="btn-success" onclick="showSendConfirm()">📤 إرسال للإدمن</button>
                 <button type="button" class="btn-danger" onclick="showClearConfirm()">🗑️ مسح جميع البيانات</button>
             </form>
         </div>
@@ -1308,6 +1375,9 @@
                 <button class="action-btn share" onclick="shareReport()" id="shareBtn" style="display: none;">
                     <span>📤</span> مشاركة
                 </button>
+                <button class="action-btn send-admin" onclick="showSendConfirm()">
+                    <span>📨</span> إرسال للإدمن
+                </button>
                 <button class="action-btn clear" onclick="showClearConfirm()">
                     <span>🗑️</span> مسح البيانات
                 </button>
@@ -1316,11 +1386,11 @@
             <div class="report-container" id="reportContent">
                 <div class="report-header">
                     <img src="image.jpeg" alt="شعار المتابعة">
-                    <div class="report-title">تقرير الحضور والغياب الأسبوعي</div>
-                    <div class="report-subtitle">النصاريح الأمنية - قسم المتابعة</div>
-                    <div class="report-unit" id="reportUnit">الوحدة: <span></span></div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem;">
-                        <div>الفترة: <span id="reportPeriod"></span></div>
+                    <div class="report-title">موقف الحضور الأسبوعي</div>
+                    <div class="report-subtitle">النصاريح الأمنية</div>
+                    <div class="report-unit" id="reportUnit">الوحدة / <span></span></div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem; font-weight: bold;">
+                        <div>اعتباراً من تاريخ: <span id="reportPeriod"></span></div>
                         <div>تاريخ التقرير: <span id="reportDate"></span></div>
                     </div>
                 </div>
@@ -1330,7 +1400,6 @@
                         <tr>
                             <th>#</th>
                             <th>الاسم الثلاثي</th>
-                            <th>حالة الدوام</th>
                             <th>السبت</th>
                             <th>الأحد</th>
                             <th>الإثنين</th>
@@ -1360,33 +1429,26 @@
         let currentReportData = null;
         let currentAdminReport = null;
         let isAdminLoggedIn = false;
+        let pendingAction = null;
 
-        // Default admin credentials (in production, use secure backend)
+        // Default admin credentials
         let adminUsers = JSON.parse(localStorage.getItem('adminUsers')) || [
             { username: 'admin', password: 'admin123', role: 'super_admin' }
         ];
 
-        // All reports storage
+        // All reports storage (sent to admin)
         let allReports = JSON.parse(localStorage.getItem('allAttendanceReports')) || [];
 
-        // Status options with full names
+        // Status options with full names - مبسطة حسب الاستمارة
         const statusOptions = [
-            {value: 'present', text: 'حاضر', class: 'present'},
-            {value: 'absent', text: 'غائب', class: 'absent'},
-            {value: 'holiday', text: 'عطلة رسمية', class: 'holiday'},
-            {value: 'rest', text: 'عطلة اسبوعية', class: 'rest'},
-            {value: 'compensation', text: 'تعويضية', class: 'compensation'},
-            {value: 'tafreeg', text: 'تفرغ', class: 'tafreeg'},
-            {value: 'tafreeg-taawidi', text: 'تفريغ تعويضية', class: 'tafreeg-taawidi'},
-            {value: 'istiraha', text: 'استراحة', class: 'istiraha'},
-            {value: 'wajib', text: 'واجب', class: 'wajib'}
-        ];
-
-        // Shift options
-        const shiftOptions = [
-            {value: 'morning', text: 'صباحي', class: 'morning'},
-            {value: 'evening', text: 'مسائي', class: 'evening'},
-            {value: 'both', text: 'كلاهما', class: 'both'}
+            {value: 'present', text: 'ح', class: 'present', full: 'حاضر'},
+            {value: 'absent', text: 'غ', class: 'absent', full: 'غائب'},
+            {value: 'holiday', text: 'ع.ر', class: 'holiday', full: 'عطلة رسمية'},
+            {value: 'rest', text: 'ع.ا', class: 'rest', full: 'عطلة اسبوعية'},
+            {value: 'compensation', text: 'تع', class: 'compensation', full: 'تعويضية'},
+            {value: 'tafreeg', text: 'تف', class: 'tafreeg', full: 'تفرغ'},
+            {value: 'istiraha', text: 'است', class: 'istiraha', full: 'استراحة'},
+            {value: 'wajib', text: 'و', class: 'wajib', full: 'واجب'}
         ];
 
         // Full names mapping for report
@@ -1397,16 +1459,20 @@
             'rest': 'عطلة اسبوعية',
             'compensation': 'تعويضية',
             'tafreeg': 'تفرغ',
-            'tafreeg-taawidi': 'تفريغ تعويضية',
             'istiraha': 'استراحة',
             'wajib': 'واجب'
         };
 
-        // Shift names mapping
-        const shiftNames = {
-            'morning': 'صباحي',
-            'evening': 'مسائي',
-            'both': 'كلاهما'
+        // Short codes for table display
+        const statusShortNames = {
+            'present': 'ح',
+            'absent': 'غ',
+            'holiday': 'ع.ر',
+            'rest': 'ع.ا',
+            'compensation': 'تع',
+            'tafreeg': 'تف',
+            'istiraha': 'است',
+            'wajib': 'و'
         };
 
         // Initialize
@@ -1433,9 +1499,8 @@
 
         function initializeDates() {
             const today = new Date();
-            // Get Saturday of current week (start of week)
-            const dayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
-            const diff = today.getDate() - dayOfWeek - 1; // Adjust to get Saturday
+            const dayOfWeek = today.getDay();
+            const diff = today.getDate() - dayOfWeek - 1;
             const startOfWeek = new Date(today.setDate(diff));
             const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
 
@@ -1483,18 +1548,10 @@
                 statusHtml += `<td><select class="status-select ${dayVal}" onchange="updateSelectStyle(this)">${optionsHtml}</select></td>`;
             });
 
-            let shiftHtml = '';
-            const currentShift = empData.shift || 'morning';
-            shiftOptions.forEach((opt) => {
-                const selected = opt.value === currentShift ? 'selected' : '';
-                shiftHtml += `<option value="${opt.value}" class="${opt.class}" ${selected}>${opt.text}</option>`;
-            });
-
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-input" style="width: 100%; min-width: 140px;" placeholder="الاسم الثلاثي" value="${empData.name || ''}"></td>
-                <td><select class="shift-select ${currentShift}" onchange="updateShiftStyle(this)" style="min-width: 100px;">${shiftHtml}</select></td>
+                <td><input type="text" class="form-input" style="width: 100%; min-width: 180px;" placeholder="الاسم الثلاثي" value="${empData.name || ''}"></td>
                 ${statusHtml}
                 <td><input type="text" class="notes-input" placeholder="ملاحظات..." value="${empData.notes || ''}"></td>
             `;
@@ -1591,11 +1648,15 @@
             tbody.innerHTML = '';
 
             if (reports.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">لا توجد تقارير مسجلة</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">لا توجد تقارير مرسلة</td></tr>';
                 return;
             }
 
-            reports.forEach((report, index) => {
+            // Sort by date descending
+            const sortedReports = [...reports].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            sortedReports.forEach((report, index) => {
+                const originalIndex = reports.indexOf(report);
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${index + 1}</td>
@@ -1603,12 +1664,12 @@
                     <td>${report.startDate} إلى ${report.endDate}</td>
                     <td>${report.employees ? report.employees.length : 0}</td>
                     <td>${report.supervisor || '-'}</td>
-                    <td>${report.generatedDate || '-'}</td>
-                    <td><span class="badge badge-success">مكتمل</span></td>
+                    <td>${new Date(report.timestamp).toLocaleString('ar-SA')}</td>
+                    <td><span class="badge badge-success">مستلم</span></td>
                     <td>
                         <div class="admin-actions">
-                            <button class="admin-btn view" onclick="viewReport(${index})">👁️ عرض</button>
-                            <button class="admin-btn delete" onclick="deleteReport(${index})">🗑️ حذف</button>
+                            <button class="admin-btn view" onclick="viewReport(${originalIndex})">👁️ عرض</button>
+                            <button class="admin-btn delete" onclick="deleteReport(${originalIndex})">🗑️ حذف</button>
                         </div>
                     </td>
                 `;
@@ -1700,16 +1761,16 @@
         function viewReport(index) {
             currentAdminReport = allReports[index];
 
-            // Generate report HTML
+            // Generate report HTML matching the form format
             const container = document.getElementById('adminReportContent');
             container.innerHTML = `
                 <div class="report-header">
                     <img src="image.jpeg" alt="شعار المتابعة">
-                    <div class="report-title">تقرير الحضور والغياب الأسبوعي</div>
-                    <div class="report-subtitle">النصاريح الأمنية - قسم المتابعة</div>
-                    <div class="report-unit">الوحدة: <span>${currentAdminReport.unitName}</span></div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem;">
-                        <div>الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}</div>
+                    <div class="report-title">موقف الحضور الأسبوعي</div>
+                    <div class="report-subtitle">النصاريح الأمنية</div>
+                    <div class="report-unit">الوحدة / <span>${currentAdminReport.unitName}</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem; font-weight: bold;">
+                        <div>اعتباراً من تاريخ: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}</div>
                         <div>تاريخ التقرير: ${currentAdminReport.generatedDate}</div>
                     </div>
                 </div>
@@ -1718,7 +1779,6 @@
                         <tr>
                             <th>#</th>
                             <th>الاسم الثلاثي</th>
-                            <th>حالة الدوام</th>
                             <th>السبت</th>
                             <th>الأحد</th>
                             <th>الإثنين</th>
@@ -1733,9 +1793,8 @@
                         ${currentAdminReport.employees.map(emp => `
                             <tr>
                                 <td>${emp.id}</td>
-                                <td>${emp.name}</td>
-                                <td style="font-weight: bold;">${shiftNames[emp.shift] || 'صباحي'}</td>
-                                ${emp.days.map(d => `<td style="color: ${getStatusColor(d)}; font-weight: bold;">${statusFullNames[d] || d}</td>`).join('')}
+                                <td style="text-align: right; padding-right: 10px;">${emp.name}</td>
+                                ${emp.days.map(d => `<td style="color: ${getStatusColor(d)}; font-weight: bold;">${statusShortNames[d] || d}</td>`).join('')}
                                 <td class="notes-cell">${emp.notes || '-'}</td>
                             </tr>
                         `).join('')}
@@ -1756,133 +1815,6 @@
             }
         }
 
-        async function exportAllToPDF() {
-            showLoading(true);
-
-            try {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('l', 'mm', 'a4');
-
-                // Add title page
-                pdf.setFontSize(20);
-                pdf.text('تقرير الحضور والغياب - النصاريح الأمنية', 150, 20, { align: 'center' });
-
-                pdf.setFontSize(12);
-                pdf.text(`تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`, 150, 30, { align: 'center' });
-                pdf.text(`إجمالي التقارير: ${allReports.length}`, 150, 40, { align: 'center' });
-
-                let yPosition = 60;
-
-                allReports.forEach((report, idx) => {
-                    if (yPosition > 180) {
-                        pdf.addPage();
-                        yPosition = 20;
-                    }
-
-                    pdf.setFontSize(14);
-                    pdf.text(`${idx + 1}. ${report.unitName} (${report.startDate} إلى ${report.endDate})`, 20, yPosition);
-                    yPosition += 10;
-
-                    pdf.setFontSize(10);
-                    report.employees.forEach(emp => {
-                        if (yPosition > 190) {
-                            pdf.addPage();
-                            yPosition = 20;
-                        }
-                        pdf.text(`- ${emp.name}: ${emp.days.map(d => statusFullNames[d]).join(', ')}`, 25, yPosition);
-                        yPosition += 5;
-                    });
-
-                    yPosition += 10;
-                });
-
-                pdf.save(`تقرير_الحضور_الكامل_${new Date().toISOString().split('T')[0]}.pdf`);
-                showToast('✅ تم تصدير جميع التقارير');
-            } catch (error) {
-                console.error(error);
-                showToast('❌ حدث خطأ أثناء التصدير');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        async function downloadCurrentReport() {
-            if (!currentAdminReport) return;
-
-            showLoading(true);
-            try {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('l', 'mm', 'a4');
-
-                const canvas = await html2canvas(document.getElementById('adminReportContent'), {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff'
-                });
-
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = 280;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                pdf.save(`تقرير_${currentAdminReport.unitName}_${currentAdminReport.startDate}.pdf`);
-
-                showToast('✅ تم تحميل التقرير');
-            } catch (error) {
-                showToast('❌ حدث خطأ');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        function printCurrentReport() {
-            const printWindow = window.open('', '_blank');
-            const content = document.getElementById('adminReportContent').innerHTML;
-
-            printWindow.document.write(`
-                <html dir="rtl">
-                <head>
-                    <title>تقرير الحضور</title>
-                    <style>
-                        body { font-family: 'Cairo', sans-serif; margin: 20px; }
-                        table { width: 100%; border-collapse: collapse; }
-                        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
-                        th { background: #e0e0e0; }
-                        .report-header { text-align: center; margin-bottom: 20px; }
-                    </style>
-                </head>
-                <body>${content}</body>
-                </html>
-            `);
-
-            printWindow.document.close();
-            printWindow.print();
-        }
-
-        function shareToWhatsApp() {
-            if (!currentAdminReport) return;
-
-            const text = `تقرير الحضور - ${currentAdminReport.unitName}%0A` +
-                        `الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}%0A` +
-                        `عدد الموظفين: ${currentAdminReport.employees.length}%0A%0A` +
-                        currentAdminReport.employees.map(e => `- ${e.name}: ${e.days.map(d => statusFullNames[d]).join(', ')}`).join('%0A');
-
-            window.open(`https://wa.me/?text=${text}`, '_blank');
-        }
-
-        function shareByEmail() {
-            if (!currentAdminReport) return;
-
-            const subject = `تقرير الحضور - ${currentAdminReport.unitName}`;
-            const body = `الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}\n\n` +
-                        currentAdminReport.employees.map(e =>
-                            `${e.name} (${shiftNames[e.shift]}): ${e.days.map(d => statusFullNames[d]).join(' | ')}\nملاحظات: ${e.notes || 'لا يوجد'}`
-                        ).join('\n\n');
-
-            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
-
         function addNewRow() {
             const tbody = document.getElementById('tableBody');
             const rowCount = tbody.children.length + 1;
@@ -1901,17 +1833,10 @@
                 statusHtml += `<td><select class="status-select ${defaultVal}" onchange="updateSelectStyle(this)">${optionsHtml}</select></td>`;
             });
 
-            let shiftHtml = '';
-            shiftOptions.forEach((opt, idx) => {
-                const selected = idx === 0 ? 'selected' : '';
-                shiftHtml += `<option value="${opt.value}" class="${opt.class}" ${selected}>${opt.text}</option>`;
-            });
-
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${rowCount}</td>
-                <td><input type="text" class="form-input" style="width: 100%; min-width: 140px;" placeholder="الاسم الثلاثي"></td>
-                <td><select class="shift-select morning" onchange="updateShiftStyle(this)" style="min-width: 100px;">${shiftHtml}</select></td>
+                <td><input type="text" class="form-input" style="width: 100%; min-width: 180px;" placeholder="الاسم الثلاثي"></td>
                 ${statusHtml}
                 <td><input type="text" class="notes-input" placeholder="ملاحظات..."></td>
             `;
@@ -1926,20 +1851,30 @@
             select.classList.add(select.value);
         }
 
-        function updateShiftStyle(select) {
-            shiftOptions.forEach(opt => {
-                select.classList.remove(opt.value);
-            });
-            select.classList.add(select.value);
-        }
-
         // Clear Data Functions
         function showClearConfirm() {
+            document.getElementById('modalTitle').textContent = '⚠️ تأكيد المسح';
+            document.getElementById('modalText').innerHTML = 'هل أنت متأكد من مسح جميع البيانات؟<br><small>سيتم حذف جميع المعلومات المدخلة ولا يمكن التراجع عن هذا الإجراء.</small>';
+            document.getElementById('modalConfirmBtn').onclick = confirmClear;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function showSendConfirm() {
+            const unitName = document.getElementById('unitName').value;
+            if (!unitName) {
+                showToast('❌ يرجى إدخال اسم الوحدة أولاً');
+                return;
+            }
+
+            document.getElementById('modalTitle').textContent = '📤 تأكيد الإرسال';
+            document.getElementById('modalText').innerHTML = `هل أنت متأكد من إرسال تقرير الوحدة <strong>${unitName}</strong> إلى الإدمن؟<br><small>سيتم حفظ البيانات في قاعدة البيانات المركزية.</small>`;
+            document.getElementById('modalConfirmBtn').onclick = sendToAdmin;
             document.getElementById('confirmModal').classList.add('active');
         }
 
         function closeModal() {
             document.getElementById('confirmModal').classList.remove('active');
+            pendingAction = null;
         }
 
         function confirmClear() {
@@ -1949,14 +1884,10 @@
         }
 
         function clearAllData() {
-            // Clear form fields
             document.getElementById('unitName').value = '';
             document.getElementById('supervisorName').value = '';
-
-            // Reset dates to default
             initializeDates();
 
-            // Clear table rows and add new empty ones
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
 
@@ -1964,19 +1895,57 @@
                 addNewRow();
             }
 
-            // Clear localStorage
             localStorage.removeItem('attendanceReport');
-
-            // Clear current report data
             currentReportData = null;
 
-            // If in dashboard, go back to form
             if (document.getElementById('dashboardSection').classList.contains('active')) {
                 showSection('form');
             }
         }
 
-        // Close modal when clicking outside
+        function sendToAdmin() {
+            closeModal();
+            showLoading(true);
+
+            // Save current data first
+            saveData(false);
+
+            if (!currentReportData || !currentReportData.employees || currentReportData.employees.length === 0) {
+                showLoading(false);
+                showToast('❌ لا يوجد بيانات لإرسالها');
+                return;
+            }
+
+            // Check if report already exists
+            const existingIndex = allReports.findIndex(r =>
+                r.unitName === currentReportData.unitName &&
+                r.startDate === currentReportData.startDate
+            );
+
+            if (existingIndex !== -1) {
+                // Update existing
+                allReports[existingIndex] = {
+                    ...currentReportData,
+                    updatedAt: new Date().toISOString()
+                };
+                showToast('✅ تم تحديث التقرير السابق');
+            } else {
+                // Add new
+                allReports.push({
+                    ...currentReportData,
+                    timestamp: new Date().toISOString()
+                });
+                showToast('✅ تم إرسال التقرير للإدمن بنجاح');
+            }
+
+            localStorage.setItem('allAttendanceReports', JSON.stringify(allReports));
+
+            setTimeout(() => {
+                showLoading(false);
+                showSection('dashboard');
+            }, 1000);
+        }
+
         document.getElementById('confirmModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal();
@@ -1985,12 +1954,12 @@
 
         document.getElementById('attendanceForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            saveData();
-            showToast('✅ تم حفظ البيانات بنجاح');
+            saveData(true);
+            showToast('✅ تم حفظ البيانات محلياً بنجاح');
             showSection('dashboard');
         });
 
-        function saveData() {
+        function saveData(showMessage = true) {
             const unitName = document.getElementById('unitName').value;
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
@@ -2003,22 +1972,19 @@
                 const cells = row.querySelectorAll('td');
                 if (cells.length > 2) {
                     const name = cells[1].querySelector('input')?.value || '';
-                    const shift = cells[2].querySelector('select')?.value || 'morning';
 
                     if (name.trim() !== '') {
-                        // Days order: Saturday(3), Sunday(4), Monday(5), Tuesday(6), Wednesday(7), Thursday(8), Friday(9)
+                        // Days order: Saturday(2), Sunday(3), Monday(4), Tuesday(5), Wednesday(6), Thursday(7), Friday(8)
                         const days = [];
-                        for (let i = 3; i < 10; i++) {
+                        for (let i = 2; i < 9; i++) {
                             days.push(cells[i].querySelector('select')?.value || 'present');
                         }
 
-                        // Get notes from last cell (index 10)
-                        const notes = cells[10].querySelector('input')?.value || '';
+                        const notes = cells[9].querySelector('input')?.value || '';
 
                         employees.push({
                             id: index + 1,
                             name: name,
-                            shift: shift,
                             days: days,
                             notes: notes
                         });
@@ -2038,9 +2004,17 @@
 
             localStorage.setItem('attendanceReport', JSON.stringify(currentReportData));
 
-            // Add to all reports for admin dashboard
-            allReports.push(currentReportData);
-            localStorage.setItem('allAttendanceReports', JSON.stringify(allReports));
+            if (showMessage) {
+                // Also add to all reports if not exists
+                const exists = allReports.findIndex(r =>
+                    r.unitName === unitName && r.startDate === startDate
+                ) !== -1;
+
+                if (!exists) {
+                    allReports.push({...currentReportData});
+                    localStorage.setItem('allAttendanceReports', JSON.stringify(allReports));
+                }
+            }
         }
 
         function generateReport() {
@@ -2049,7 +2023,7 @@
                 if (saved) {
                     currentReportData = JSON.parse(saved);
                 } else {
-                    document.getElementById('reportTableBody').innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات مسجلة</td></tr>';
+                    document.getElementById('reportTableBody').innerHTML = '<tr><td colspan="10" style="text-align: center;">لا توجد بيانات مسجلة</td></tr>';
                     return;
                 }
             }
@@ -2061,7 +2035,7 @@
             tbody.innerHTML = '';
 
             if (!currentReportData.employees || currentReportData.employees.length === 0) {
-                document.getElementById('reportTableBody').innerHTML = '<tr><td colspan="11" style="text-align: center;">لا يوجد موظفين مسجلين</td></tr>';
+                document.getElementById('reportTableBody').innerHTML = '<tr><td colspan="10" style="text-align: center;">لا يوجد موظفين مسجلين</td></tr>';
                 return;
             }
 
@@ -2069,9 +2043,8 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${emp.id}</td>
-                    <td>${emp.name}</td>
-                    <td style="font-weight: bold; color: #333;">${shiftNames[emp.shift] || 'صباحي'}</td>
-                    ${emp.days.map(d => `<td style="color: ${getStatusColor(d)}; font-weight: bold;">${statusFullNames[d] || d}</td>`).join('')}
+                    <td style="text-align: right; padding-right: 10px;">${emp.name}</td>
+                    ${emp.days.map(d => `<td style="color: ${getStatusColor(d)}; font-weight: bold;">${statusShortNames[d] || d}</td>`).join('')}
                     <td class="notes-cell">${emp.notes || '-'}</td>
                 `;
                 tbody.appendChild(tr);
@@ -2086,19 +2059,20 @@
                 'rest': '#f39c12',
                 'compensation': '#9b59b6',
                 'tafreeg': '#1abc9c',
-                'tafreeg-taawidi': '#fdcb6e',
                 'istiraha': '#636e72',
                 'wajib': '#0984e3'
             };
             return colors[status] || '#000';
         }
 
+        // PDF Generation with Arabic Support
         async function generatePDF() {
             showLoading(true);
 
             try {
                 const { jsPDF } = window.jspdf;
 
+                // Create PDF with Arabic support
                 const pdf = new jsPDF({
                     orientation: 'l',
                     unit: 'mm',
@@ -2107,20 +2081,26 @@
                     floatPrecision: 16
                 });
 
+                // Add Amiri font for Arabic support
+                // Note: In production, you should load the font file properly
+                pdf.setFont('helvetica');
+
                 const reportContent = document.getElementById('reportContent');
 
                 const canvas = await html2canvas(reportContent, {
-                    scale: 2,
+                    scale: 3,
                     useCORS: true,
                     allowTaint: true,
                     logging: false,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    letterRendering: true,
+                    font: 'Amiri'
                 });
 
                 const imgData = canvas.toDataURL('image/png');
 
-                const imgWidth = 280;
-                const pageHeight = 210;
+                const imgWidth = 277;
+                const pageHeight = 190;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
                 let heightLeft = imgHeight;
@@ -2136,7 +2116,7 @@
                     heightLeft -= pageHeight;
                 }
 
-                const fileName = `تقرير_الحضور_${currentReportData?.unitName || 'النصاريح'}_${new Date().toISOString().split('T')[0]}.pdf`;
+                const fileName = `موقف_الحضور_${currentReportData?.unitName || 'النصاريح'}_${currentReportData?.startDate || ''}.pdf`;
                 pdf.save(fileName);
 
                 showToast('✅ تم حفظ التقرير بنجاح');
@@ -2155,18 +2135,106 @@
             }
         }
 
-        // FIXED Print Function
+        async function exportAllToPDF() {
+            showLoading(true);
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('l', 'mm', 'a4');
+
+                // Title page
+                pdf.setFontSize(18);
+                pdf.text('تقرير الحضور والغياب - النصاريح الأمنية', 150, 20, { align: 'center' });
+
+                pdf.setFontSize(12);
+                pdf.text(`تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`, 150, 30, { align: 'center' });
+                pdf.text(`إجمالي التقارير: ${allReports.length}`, 150, 40, { align: 'center' });
+
+                let yPosition = 55;
+
+                // Sort reports by date
+                const sortedReports = [...allReports].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                for (let idx = 0; idx < sortedReports.length; idx++) {
+                    const report = sortedReports[idx];
+
+                    if (yPosition > 160) {
+                        pdf.addPage();
+                        yPosition = 20;
+                    }
+
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(196, 30, 58);
+                    pdf.text(`${idx + 1}. ${report.unitName}`, 20, yPosition);
+                    yPosition += 8;
+
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(0, 0, 0);
+                    pdf.text(`الفترة: ${report.startDate} إلى ${report.endDate} | المشرف: ${report.supervisor || '-'}`, 25, yPosition);
+                    yPosition += 6;
+
+                    // Employees table
+                    pdf.setFillColor(240, 240, 240);
+                    pdf.rect(20, yPosition, 255, 8, 'F');
+                    pdf.setFontSize(9);
+                    pdf.text('#', 25, yPosition + 5);
+                    pdf.text('الاسم', 40, yPosition + 5);
+                    pdf.text('س', 120, yPosition + 5);
+                    pdf.text('أح', 135, yPosition + 5);
+                    pdf.text('إث', 150, yPosition + 5);
+                    pdf.text('ثل', 165, yPosition + 5);
+                    pdf.text('أر', 180, yPosition + 5);
+                    pdf.text('خم', 195, yPosition + 5);
+                    pdf.text('جم', 210, yPosition + 5);
+                    pdf.text('ملاحظات', 230, yPosition + 5);
+                    yPosition += 8;
+
+                    report.employees.forEach((emp, empIdx) => {
+                        if (yPosition > 180) {
+                            pdf.addPage();
+                            yPosition = 20;
+                        }
+
+                        pdf.setFontSize(8);
+                        pdf.text(`${emp.id}`, 25, yPosition + 4);
+                        pdf.text(emp.name.substring(0, 30), 40, yPosition + 4);
+
+                        const dayCodes = emp.days.map(d => statusShortNames[d] || '-');
+                        pdf.text(dayCodes[0], 120, yPosition + 4);
+                        pdf.text(dayCodes[1], 135, yPosition + 4);
+                        pdf.text(dayCodes[2], 150, yPosition + 4);
+                        pdf.text(dayCodes[3], 165, yPosition + 4);
+                        pdf.text(dayCodes[4], 180, yPosition + 4);
+                        pdf.text(dayCodes[5], 195, yPosition + 4);
+                        pdf.text(dayCodes[6], 210, yPosition + 4);
+
+                        const notes = emp.notes ? emp.notes.substring(0, 20) : '-';
+                        pdf.text(notes, 230, yPosition + 4);
+
+                        yPosition += 6;
+                    });
+
+                    yPosition += 10;
+                }
+
+                pdf.save(`تقرير_الحضور_الكامل_${new Date().toISOString().split('T')[0]}.pdf`);
+                showToast('✅ تم تصدير جميع التقارير');
+            } catch (error) {
+                console.error(error);
+                showToast('❌ حدث خطأ أثناء التصدير');
+            } finally {
+                showLoading(false);
+            }
+        }
+
         function printReport() {
-            // First, make sure we are in dashboard section and report is generated
             const dashboard = document.getElementById('dashboardSection');
 
             if (!dashboard.classList.contains('active')) {
                 showSection('dashboard');
             }
 
-            // Small delay to ensure content is rendered
             setTimeout(() => {
-                // Trigger browser print
                 window.print();
             }, 300);
         }
@@ -2184,14 +2252,15 @@
                     scale: 2,
                     useCORS: true,
                     allowTaint: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    font: 'Amiri'
                 });
 
                 canvas.toBlob(async (blob) => {
-                    const file = new File([blob], `تقرير_الحضور.png`, { type: 'image/png' });
+                    const file = new File([blob], `موقف_الحضور.png`, { type: 'image/png' });
 
                     await navigator.share({
-                        title: 'تقرير الحضور والغياب',
+                        title: 'موقف الحضور الأسبوعي',
                         text: `تقرير الحضور لـ ${currentReportData?.unitName || 'النصاريح الأمنية'}`,
                         files: [file]
                     });
@@ -2203,6 +2272,124 @@
                 console.error('Share Error:', error);
                 showToast('❌ فشلت المشاركة');
             }
+        }
+
+        // Admin report functions
+        async function downloadCurrentReport() {
+            if (!currentAdminReport) return;
+
+            showLoading(true);
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('l', 'mm', 'a4');
+
+                const container = document.getElementById('adminReportContent');
+                const canvas = await html2canvas(container, {
+                    scale: 3,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    font: 'Amiri'
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 277;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                pdf.save(`موقف_الحضور_${currentAdminReport.unitName}_${currentAdminReport.startDate}.pdf`);
+
+                showToast('✅ تم تحميل التقرير');
+            } catch (error) {
+                showToast('❌ حدث خطأ');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function printCurrentReport() {
+            const printWindow = window.open('', '_blank');
+            const content = document.getElementById('adminReportContent').innerHTML;
+
+            printWindow.document.write(`
+                <html dir="rtl">
+                <head>
+                    <title>موقف الحضور</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+                    <style>
+                        body {
+                            font-family: 'Amiri', serif;
+                            margin: 20px;
+                            direction: rtl;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 20px;
+                        }
+                        th, td {
+                            border: 1px solid #333;
+                            padding: 8px;
+                            text-align: center;
+                            font-size: 14px;
+                        }
+                        th {
+                            background: #e0e0e0;
+                            font-weight: bold;
+                        }
+                        .report-header {
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }
+                        .report-unit {
+                            text-align: right;
+                            font-weight: bold;
+                            margin: 10px 0;
+                            padding: 10px;
+                            background: #f8f9fa;
+                            border-right: 4px solid #c41e3a;
+                        }
+                    </style>
+                </head>
+                <body>${content}</body>
+                </html>
+            `);
+
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function shareToWhatsApp() {
+            if (!currentAdminReport) return;
+
+            const text = `*موقف الحضور - ${currentAdminReport.unitName}*%0A` +
+                        `الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}%0A` +
+                        `المشرف: ${currentAdminReport.supervisor || '-'}%0A` +
+                        `عدد الموظفين: ${currentAdminReport.employees.length}%0A%0A` +
+                        currentAdminReport.employees.map(e =>
+                            `${e.id}. ${e.name}: ${e.days.map(d => statusShortNames[d]).join(' ')}`
+                        ).join('%0A');
+
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function shareByEmail() {
+            if (!currentAdminReport) return;
+
+            const subject = `موقف الحضور - ${currentAdminReport.unitName}`;
+            const body = `الوحدة: ${currentAdminReport.unitName}\n` +
+                        `الفترة: ${currentAdminReport.startDate} إلى ${currentAdminReport.endDate}\n` +
+                        `المشرف: ${currentAdminReport.supervisor || '-'}\n\n` +
+                        currentAdminReport.employees.map(e =>
+                            `${e.id}. ${e.name}\n` +
+                            `   الأيام: ${e.days.map((d, i) => {
+                                const days = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+                                return `${days[i]}: ${statusFullNames[d]}`;
+                            }).join(' | ')}\n` +
+                            `   ملاحظات: ${e.notes || 'لا يوجد'}`
+                        ).join('\n\n');
+
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
         function showLoading(show) {
