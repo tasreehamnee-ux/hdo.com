@@ -506,124 +506,6 @@
             box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
         }
 
-        /* Hidden container for PDF generation */
-        #pdfContainer {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            width: 1200px;
-            background: white;
-            padding: 40px;
-            font-family: 'Amiri', 'Cairo', serif;
-            direction: rtl;
-        }
-
-        .pdf-report {
-            background: white;
-            padding: 20px;
-            width: 100%;
-        }
-
-        .pdf-header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #c41e3a;
-            padding-bottom: 20px;
-        }
-
-        .pdf-header img {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 15px;
-        }
-
-        .pdf-title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #1e3c72;
-            margin-bottom: 10px;
-            font-family: 'Amiri', serif;
-        }
-
-        .pdf-subtitle {
-            font-size: 18px;
-            color: #c41e3a;
-            margin-bottom: 15px;
-        }
-
-        .pdf-info {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-right: 5px solid #c41e3a;
-        }
-
-        .pdf-info-item {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .pdf-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        .pdf-table th {
-            background: #1e3c72;
-            color: white;
-            padding: 12px 8px;
-            text-align: center;
-            border: 2px solid #333;
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .pdf-table td {
-            padding: 10px 8px;
-            border: 2px solid #333;
-            text-align: center;
-            font-size: 13px;
-            height: 40px;
-        }
-
-        .pdf-table td.name-cell {
-            text-align: right;
-            padding-right: 15px;
-            font-weight: bold;
-        }
-
-        .pdf-table td.notes-cell {
-            text-align: right;
-            font-size: 11px;
-        }
-
-        .pdf-footer {
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
-            padding-top: 20px;
-            border-top: 2px solid #333;
-        }
-
-        .pdf-signature {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        /* Status colors for PDF */
-        .status-present { color: #27ae60; font-weight: bold; }
-        .status-absent { color: #e74c3c; font-weight: bold; }
-        .status-holiday { color: #3498db; font-weight: bold; }
-        .status-rest { color: #f39c12; font-weight: bold; }
-        .status-compensation { color: #9b59b6; font-weight: bold; }
-        .status-tafreeg { color: #1abc9c; font-weight: bold; }
-        .status-istiraha { color: #636e72; font-weight: bold; }
-        .status-wajib { color: #0984e3; font-weight: bold; }
-
         .report-container {
             background: white;
             border-radius: 12px;
@@ -642,23 +524,32 @@
             .report-subtitle { font-size: 0.9rem !important; }
         }
 
+        /* تعديل مهم: ضمان توسيط الصورة في الترويسة */
         .report-header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* تعديل مهم: ضمان ظهور الصورة في المنتصف */
         .report-header img {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px auto;
             display: block;
             object-fit: contain;
+            object-position: center;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @media (max-width: 480px) {
-            .report-header img { width: 60px; height: 60px; }
+            .report-header img { width: 80px; height: 80px; }
         }
 
         .report-title {
@@ -667,16 +558,20 @@
             color: #000;
             margin-bottom: 10px;
             font-family: 'Amiri', serif;
+            text-align: center;
+            width: 100%;
         }
 
         .report-subtitle {
             font-size: 1.1rem;
             color: #333;
             margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
         }
 
         .report-unit {
-            text-align: right;
+            text-align: center;
             font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 20px;
@@ -684,6 +579,7 @@
             background: #f8f9fa;
             border-radius: 8px;
             border-right: 4px solid #c41e3a;
+            width: 100%;
         }
 
         .report-table {
@@ -1147,7 +1043,6 @@
             #formSection,
             #adminSection,
             #loginSection,
-            #pdfContainer,
             .form-container form,
             iframe,
             object,
@@ -1191,6 +1086,20 @@
                 font-family: 'Amiri', serif !important;
             }
 
+            .report-header {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            .report-header img {
+                display: block !important;
+                margin: 0 auto 15px auto !important;
+                width: 100px !important;
+                height: 100px !important;
+            }
+
             .report-table {
                 width: 100% !important;
                 page-break-inside: auto;
@@ -1229,11 +1138,6 @@
                 font-size: 1rem;
             }
 
-            .report-header img {
-                width: 60px;
-                height: 60px;
-            }
-
             a[href]:after {
                 content: none !important;
             }
@@ -1252,14 +1156,13 @@
         }
     </style>
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
-        <div class="loading-text">جاري إنشاء ملف PDF...</div>
+        <div class="loading-text" id="loadingText">جاري معالجة الطلب...</div>
     </div>
 
     <!-- Confirmation Modal -->
@@ -1292,7 +1195,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">
-                        <input type="checkbox" id="saveSettings" checked> 
+                        <input type="checkbox" id="saveSettings" checked>
                         حفظ الإعدادات للاستخدام المستقبلي
                     </label>
                 </div>
@@ -1306,13 +1209,6 @@
 
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
-
-    <!-- Hidden PDF Container -->
-    <div id="pdfContainer">
-        <div class="pdf-report" id="pdfContent">
-            <!-- PDF content will be generated here -->
-        </div>
-    </div>
 
     <!-- Top Header -->
     <div class="top-header" id="mainHeader">
@@ -1528,15 +1424,6 @@
                 <button class="action-btn print" onclick="printReport()">
                     <span>🖨️</span> طباعة
                 </button>
-                <button class="action-btn share" onclick="shareReport()" id="shareBtn" style="display: none;">
-                    <span>📤</span> مشاركة
-                </button>
-                <button class="action-btn whatsapp" onclick="showSettingsThenSend('whatsapp')">
-                    <span>📱</span> واتساب PDF
-                </button>
-                <button class="action-btn email" onclick="showSettingsThenSend('email')">
-                    <span>📧</span> بريد PDF
-                </button>
                 <button class="action-btn send-admin" onclick="showSendConfirm()">
                     <span>📨</span> إرسال للإدمن
                 </button>
@@ -1546,12 +1433,13 @@
             </div>
 
             <div class="report-container" id="reportContent">
+                <!-- تم تعديل هذا القسم لضمان ظهور الصورة في المنتصف -->
                 <div class="report-header">
-                    <img src="image.jpeg" alt="شعار المتابعة">
+                    <img src="image.jpeg" alt="شعار النصاريح الأمنية" id="reportLogo">
                     <div class="report-title">موقف الحضور الأسبوعي</div>
                     <div class="report-subtitle">النصاريح الأمنية</div>
                     <div class="report-unit" id="reportUnit">الوحدة / <span></span></div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem; font-weight: bold;">
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem; font-weight: bold; width: 100%;">
                         <div>اعتباراً من تاريخ: <span id="reportPeriod"></span></div>
                         <div>تاريخ التقرير: <span id="reportDate"></span></div>
                     </div>
@@ -1592,6 +1480,7 @@
         let currentAdminReport = null;
         let isAdminLoggedIn = false;
         let pendingSendType = null;
+        let generatedPDFBlob = null;
 
         // Default admin credentials
         let adminUsers = JSON.parse(localStorage.getItem('adminUsers')) || [
@@ -1607,7 +1496,7 @@
             targetWhatsApp: ''
         };
 
-        // Status options with full names
+        // Status options with full names - للعرض في القوائم المنسدلة
         const statusOptions = [
             {value: 'present', text: 'حاضر', class: 'present', full: 'حاضر'},
             {value: 'absent', text: 'غائب', class: 'absent', full: 'غائب'},
@@ -1629,18 +1518,6 @@
             'tafreeg': 'تفرغ',
             'istiraha': 'استراحة',
             'wajib': 'واجب'
-        };
-
-        // Status CSS classes for PDF
-        const statusClasses = {
-            'present': 'status-present',
-            'absent': 'status-absent',
-            'holiday': 'status-holiday',
-            'rest': 'status-rest',
-            'compensation': 'status-compensation',
-            'tafreeg': 'status-tafreeg',
-            'istiraha': 'status-istiraha',
-            'wajib': 'status-wajib'
         };
 
         // Initialize
@@ -1790,8 +1667,10 @@
 
         function showSettingsThenSend(type) {
             pendingSendType = type;
-            
+
+            // Check if we have saved settings
             if (appSettings.targetEmail || appSettings.targetWhatsApp) {
+                // Use saved settings directly if available
                 if (type === 'email' && appSettings.targetEmail) {
                     sendPDFByEmail(appSettings.targetEmail);
                 } else if (type === 'whatsapp' && appSettings.targetWhatsApp) {
@@ -1811,7 +1690,7 @@
             const password = document.getElementById('loginPassword').value;
 
             const user = adminUsers.find(u => u.username === username && u.password === password);
-            
+
             if (user) {
                 isAdminLoggedIn = true;
                 showToast('✅ تم تسجيل الدخول بنجاح');
@@ -1831,15 +1710,15 @@
 
         function loadAdminDashboard() {
             document.getElementById('totalReports').textContent = allReports.length;
-            
+
             let totalEmps = 0;
             const units = new Set();
-            
+
             allReports.forEach(report => {
                 totalEmps += report.employees ? report.employees.length : 0;
                 units.add(report.unitName);
             });
-            
+
             document.getElementById('totalEmployees').textContent = totalEmps;
             document.getElementById('totalUnits').textContent = units.size;
             document.getElementById('adminCount').textContent = adminUsers.length;
@@ -1927,10 +1806,10 @@
             });
 
             localStorage.setItem('adminUsers', JSON.stringify(adminUsers));
-            
+
             document.getElementById('newAdminUsername').value = '';
             document.getElementById('newAdminPassword').value = '';
-            
+
             renderAdminUsers();
             document.getElementById('adminCount').textContent = adminUsers.length;
             showToast('✅ تم إضافة المسؤول بنجاح');
@@ -1970,7 +1849,7 @@
 
         function viewReport(index) {
             currentAdminReport = allReports[index];
-            
+
             const container = document.getElementById('adminReportContent');
             container.innerHTML = generateReportHTML(currentAdminReport);
 
@@ -1981,11 +1860,11 @@
         function generateReportHTML(report) {
             return `
                 <div class="report-header">
-                    <img src="image.jpeg" alt="شعار المتابعة">
+                    <img src="image.jpeg" alt="شعار النصاريح الأمنية">
                     <div class="report-title">موقف الحضور الأسبوعي</div>
                     <div class="report-subtitle">النصاريح الأمنية</div>
                     <div class="report-unit">الوحدة / <span>${report.unitName}</span></div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem; font-weight: bold;">
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem; font-weight: bold; width: 100%;">
                         <div>اعتباراً من تاريخ: ${report.startDate} إلى ${report.endDate}</div>
                         <div>تاريخ التقرير: ${report.generatedDate}</div>
                     </div>
@@ -2126,8 +2005,8 @@
                 return;
             }
 
-            const existingIndex = allReports.findIndex(r => 
-                r.unitName === currentReportData.unitName && 
+            const existingIndex = allReports.findIndex(r =>
+                r.unitName === currentReportData.unitName &&
                 r.startDate === currentReportData.startDate
             );
 
@@ -2209,12 +2088,12 @@
             };
 
             localStorage.setItem('attendanceReport', JSON.stringify(currentReportData));
-            
+
             if (showMessage) {
-                const exists = allReports.findIndex(r => 
+                const exists = allReports.findIndex(r =>
                     r.unitName === unitName && r.startDate === startDate
                 ) !== -1;
-                
+
                 if (!exists) {
                     allReports.push({...currentReportData});
                     localStorage.setItem('allAttendanceReports', JSON.stringify(allReports));
@@ -2270,115 +2149,147 @@
             return colors[status] || '#000';
         }
 
-        // Generate PDF HTML Content
-        function generatePDFHTML(reportData) {
-            const data = reportData || currentReportData;
-            if (!data) return '';
-
-            const rowsHTML = data.employees.map(emp => `
-                <tr>
-                    <td>${emp.id}</td>
-                    <td class="name-cell">${emp.name}</td>
-                    ${emp.days.map(d => `<td class="${statusClasses[d]}">${statusFullNames[d]}</td>`).join('')}
-                    <td class="notes-cell">${emp.notes || '-'}</td>
-                </tr>
-            `).join('');
-
-            return `
-                <div class="pdf-header">
-                    <img src="image.jpeg" alt="Logo" onerror="this.style.display='none'">
-                    <div class="pdf-title">موقف الحضور الأسبوعي</div>
-                    <div class="pdf-subtitle">النصاريح الأمنية</div>
-                </div>
-                
-                <div class="pdf-info">
-                    <div class="pdf-info-item">الوحدة / ${data.unitName}</div>
-                    <div class="pdf-info-item">الفترة: ${data.startDate} إلى ${data.endDate}</div>
-                    <div class="pdf-info-item">المشرف: ${data.supervisor || '-'}</div>
-                    <div class="pdf-info-item">تاريخ التقرير: ${data.generatedDate}</div>
-                </div>
-
-                <table class="pdf-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%;">#</th>
-                            <th style="width: 25%;">الاسم الثلاثي</th>
-                            <th style="width: 8%;">السبت</th>
-                            <th style="width: 8%;">الأحد</th>
-                            <th style="width: 8%;">الإثنين</th>
-                            <th style="width: 8%;">الثلاثاء</th>
-                            <th style="width: 8%;">الأربعاء</th>
-                            <th style="width: 8%;">الخميس</th>
-                            <th style="width: 8%;">الجمعة</th>
-                            <th style="width: 22%;">ملاحظات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${rowsHTML}
-                    </tbody>
-                </table>
-
-                <div class="pdf-footer">
-                    <div class="pdf-signature">توقيع المشرف: _________________</div>
-                    <div class="pdf-signature">الختم الرسمي: _________________</div>
-                </div>
-            `;
-        }
-
-        // Generate PDF using html2canvas (Supports Arabic)
+        // دالة محسنة لإنشاء PDF مع ضمان ظهور الصورة في المنتصف
         async function generatePDFBlob(reportData = null) {
             const data = reportData || currentReportData;
             if (!data) return null;
 
-            // Generate HTML content
-            const pdfContent = document.getElementById('pdfContent');
-            pdfContent.innerHTML = generatePDFHTML(data);
+            const element = document.getElementById('reportContent');
 
-            // Wait for fonts to load
-            await document.fonts.ready;
+            // حفظ الحالة الأصلية
+            const originalDisplay = element.style.display;
+            const originalPosition = element.style.position;
+            const originalLeft = element.style.left;
+            const originalVisibility = element.style.visibility;
+            const originalZIndex = element.style.zIndex;
 
-            // Use html2canvas to convert HTML to image
-            const canvas = await html2canvas(pdfContent, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                logging: false,
-                backgroundColor: '#ffffff',
-                letterRendering: true,
-                font: 'Amiri, Cairo',
-                width: 1200,
-                height: pdfContent.offsetHeight
-            });
-
-            // Calculate dimensions for PDF
-            const imgWidth = 297; // A4 width in mm (landscape)
-            const pageHeight = 210; // A4 height in mm
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-            // Create PDF
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('l', 'mm', 'a4');
-
-            let heightLeft = imgHeight;
-            let position = 0;
-
-            // Add first page
-            const imgData = canvas.toDataURL('image/png');
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-
-            // Add more pages if needed
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
+            // إظهار العنصر مؤقتاً إذا كان مخفياً
+            const wasHidden = element.offsetParent === null;
+            if (wasHidden) {
+                element.style.position = 'fixed';
+                element.style.left = '-9999px';
+                element.style.top = '0';
+                element.style.display = 'block';
+                element.style.visibility = 'visible';
+                element.style.zIndex = '-9999';
             }
 
-            return pdf.output('blob');
+            try {
+                // تحديث نص الانتظار
+                document.getElementById('loadingText').textContent = 'جاري تحميل الخطوط والصور...';
+
+                // انتظار تحميل جميع الخطوط بشكل كامل
+                if (document.fonts && document.fonts.ready) {
+                    await document.fonts.ready;
+                }
+
+                // انتظار تحميل الصورة (الشعار) بشكل خاص
+                const logoImg = element.querySelector('.report-header img');
+                if (logoImg && !logoImg.complete) {
+                    await new Promise((resolve) => {
+                        logoImg.onload = resolve;
+                        logoImg.onerror = resolve;
+                        setTimeout(resolve, 1000); // timeout بعد ثانية
+                    });
+                }
+
+                // انتظار إضافي للتأكد من رسم الحروف العربية والصور (2 ثانية)
+                document.getElementById('loadingText').textContent = 'جاري معالجة المحتوى...';
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                document.getElementById('loadingText').textContent = 'جاري إنشاء ملف PDF...';
+
+                // إنشاء canvas عالي الدقة
+                const canvas = await html2canvas(element, {
+                    scale: 3, // دقة عالية جداً
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: element.scrollWidth,
+                    height: element.scrollHeight,
+                    foreignObjectRendering: false,
+                    imageTimeout: 0,
+                    onclone: (clonedDoc) => {
+                        // التأكد من تطبيق الاتجاه RTL والتوسيط على النسخة المستنسخة
+                        clonedDoc.body.style.direction = 'rtl';
+                        const reportContainer = clonedDoc.querySelector('.report-container');
+                        const reportHeader = clonedDoc.querySelector('.report-header');
+                        const headerImg = clonedDoc.querySelector('.report-header img');
+
+                        if (reportContainer) {
+                            reportContainer.style.transform = 'none';
+                            reportContainer.style.boxShadow = 'none';
+                            reportContainer.style.display = 'block';
+                        }
+
+                        // ضمان توسيط الصورة في النسخة المستنسخة
+                        if (reportHeader) {
+                            reportHeader.style.display = 'flex';
+                            reportHeader.style.flexDirection = 'column';
+                            reportHeader.style.alignItems = 'center';
+                            reportHeader.style.justifyContent = 'center';
+                            reportHeader.style.textAlign = 'center';
+                        }
+
+                        if (headerImg) {
+                            headerImg.style.display = 'block';
+                            headerImg.style.margin = '0 auto 15px auto';
+                            headerImg.style.marginLeft = 'auto';
+                            headerImg.style.marginRight = 'auto';
+                        }
+                    }
+                });
+
+                // إرجاع العنصر لحالته الأصلية
+                element.style.display = originalDisplay;
+                element.style.position = originalPosition;
+                element.style.left = originalLeft;
+                element.style.visibility = originalVisibility;
+                element.style.zIndex = originalZIndex;
+
+                document.getElementById('loadingText').textContent = 'جاري إنشاء ملف PDF...';
+
+                // إنشاء PDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'l',
+                    unit: 'mm',
+                    format: 'a4',
+                    putOnlyUsedFonts: true,
+                    compress: true,
+                    precision: 16
+                });
+
+                // تحويل Canvas إلى PNG عالي الجودة
+                const imgData = canvas.toDataURL('image/png', 1.0);
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                const ratio = Math.min((pdfWidth - 20) / imgWidth, (pdfHeight - 20) / imgHeight);
+
+                const imgX = 10 + (pdfWidth - 20 - imgWidth * ratio) / 2;
+                const imgY = 10;
+
+                // إضافة الصورة إلى PDF
+                pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio, undefined, 'FAST');
+
+                return pdf.output('blob');
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                // إرجاع العنصر لحالته الأصلية في حالة الخطأ
+                element.style.display = originalDisplay;
+                element.style.position = originalPosition;
+                element.style.left = originalLeft;
+                element.style.visibility = originalVisibility;
+                element.style.zIndex = originalZIndex;
+                return null;
+            }
         }
 
-        // Download PDF
         async function generateAndDownloadPDF() {
             showLoading(true);
             try {
@@ -2393,11 +2304,14 @@
                     document.body.removeChild(link);
                     URL.revokeObjectURL(url);
                     showToast('✅ تم حفظ التقرير بنجاح');
+                } else {
+                    showToast('❌ فشل إنشاء PDF');
                 }
             } catch (error) {
                 console.error('PDF Error:', error);
                 showToast('❌ حدث خطأ أثناء إنشاء PDF');
             } finally {
+                document.getElementById('loadingText').textContent = 'جاري معالجة الطلب...';
                 showLoading(false);
             }
         }
@@ -2417,47 +2331,37 @@
                     return;
                 }
 
-                // Create file from blob
-                const file = new File([blob], `موقف_الحضور_${currentReportData?.unitName}.pdf`, { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
 
-                // Try to use Web Share API if available (for mobile)
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: `موقف الحضور - ${currentReportData?.unitName}`,
-                        text: `تقرير الحضور والغياب للوحدة: ${currentReportData?.unitName}`,
-                        files: [file]
-                    });
-                    showToast('✅ تم فتح تطبيق المشاركة');
-                } else {
-                    // Fallback: download and open email client
-                    const url = URL.createObjectURL(blob);
+                // Open email client
+                const subject = encodeURIComponent(`موقف الحضور - ${currentReportData?.unitName}`);
+                const body = encodeURIComponent(
+                    `السلام عليكم،\n\n` +
+                    `مرفق تقرير الحضور والغياب الأسبوعي:\n\n` +
+                    `الوحدة: ${currentReportData?.unitName}\n` +
+                    `الفترة: من ${currentReportData?.startDate} إلى ${currentReportData?.endDate}\n` +
+                    `المشرف: ${currentReportData?.supervisor || '-'}\n` +
+                    `عدد الموظفين: ${currentReportData?.employees?.length || 0}\n\n` +
+                    `تم إنشاء هذا التقرير بواسطة نظام الحضور والغياب - النصاريح الأمنية\n\n` +
+                    `لتحميل الملف PDF، يرجى الضغط على الرابط التالي:\n${url}\n\n` +
+                    `أو قم بتحميل الملف المرفق يدوياً.`
+                );
+
+                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+
+                setTimeout(() => {
                     const link = document.createElement('a');
                     link.href = url;
                     link.download = `موقف_الحضور_${currentReportData?.unitName}.pdf`;
                     link.click();
+                    showToast('📧 تم فتح تطبيق البريد وتحميل الملف للإرفاق');
+                }, 1000);
 
-                    // Open email client
-                    const subject = encodeURIComponent(`موقف الحضور - ${currentReportData?.unitName}`);
-                    const body = encodeURIComponent(
-                        `السلام عليكم،\n\n` +
-                        `مرفق تقرير الحضور والغياب الأسبوعي:\n\n` +
-                        `الوحدة: ${currentReportData?.unitName}\n` +
-                        `الفترة: من ${currentReportData?.startDate} إلى ${currentReportData?.endDate}\n` +
-                        `المشرف: ${currentReportData?.supervisor || '-'}\n` +
-                        `عدد الموظفين: ${currentReportData?.employees?.length || 0}\n\n` +
-                        `تم تحميل ملف PDF، يرجى إرفاقه مع هذه الرسالة.\n\n` +
-                        `نظام الحضور والغياب - النصاريح الأمنية`
-                    );
-
-                    setTimeout(() => {
-                        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-                        showToast('📧 تم تحميل الملف وفتح تطبيق البريد');
-                    }, 1000);
-                }
             } catch (error) {
                 console.error('Email Error:', error);
                 showToast('❌ حدث خطأ');
             } finally {
+                document.getElementById('loadingText').textContent = 'جاري معالجة الطلب...';
                 showLoading(false);
             }
         }
@@ -2470,7 +2374,7 @@
             }
 
             phoneNumber = phoneNumber.replace(/[^0-9]/g, '');
-            
+
             if (phoneNumber.length < 10) {
                 showToast('❌ رقم الواتساب غير صحيح');
                 return;
@@ -2484,113 +2388,122 @@
                     return;
                 }
 
-                // Create file
-                const file = new File([blob], `موقف_الحضور_${currentReportData?.unitName}.pdf`, { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `موقف_الحضور_${currentReportData?.unitName}.pdf`;
+                link.click();
 
-                // Try Web Share API first
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: `موقف الحضور - ${currentReportData?.unitName}`,
-                        text: `تقرير الحضور والغياب`,
-                        files: [file]
-                    });
-                    showToast('✅ تم فتح تطبيق المشاركة');
-                } else {
-                    // Fallback: download and open WhatsApp
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `موقف_الحضور_${currentReportData?.unitName}.pdf`;
-                    link.click();
+                const message = encodeURIComponent(
+                    `*موقف الحضور الأسبوعي*\n\n` +
+                    `🏢 الوحدة: ${currentReportData?.unitName}\n` +
+                    `📅 الفترة: ${currentReportData?.startDate} إلى ${currentReportData?.endDate}\n` +
+                    `👤 المشرف: ${currentReportData?.supervisor || '-'}\n` +
+                    `👥 عدد الموظفين: ${currentReportData?.employees?.length || 0}\n\n` +
+                    `تم تحميل ملف PDF، يرجى إرفاقه مع هذه الرسالة.`
+                );
 
-                    const message = encodeURIComponent(
-                        `*موقف الحضور الأسبوعي*\n\n` +
-                        `🏢 الوحدة: ${currentReportData?.unitName}\n` +
-                        `📅 الفترة: ${currentReportData?.startDate} إلى ${currentReportData?.endDate}\n` +
-                        `👤 المشرف: ${currentReportData?.supervisor || '-'}\n` +
-                        `👥 عدد الموظفين: ${currentReportData?.employees?.length || 0}\n\n` +
-                        `تم تحميل ملف PDF، يرجى إرفاقه مع هذه الرسالة.`
-                    );
+                window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
 
-                    setTimeout(() => {
-                        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-                        showToast('📱 تم تحميل الملف وفتح الواتساب');
-                    }, 1000);
-                }
+                showToast('📱 تم تحميل الملف وفتح الواتساب');
+
             } catch (error) {
                 console.error('WhatsApp Error:', error);
                 showToast('❌ حدث خطأ');
             } finally {
+                document.getElementById('loadingText').textContent = 'جاري معالجة الطلب...';
                 showLoading(false);
             }
         }
 
-        // Legacy functions
-        async function generatePDF() {
-            await generateAndDownloadPDF();
-        }
-
         async function exportAllToPDF() {
             showLoading(true);
-            
+            document.getElementById('loadingText').textContent = 'جاري تصدير جميع التقارير...';
+
             try {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('l', 'mm', 'a4');
-                
+
                 // Title
-                pdf.setFillColor(30, 60, 114);
-                pdf.rect(0, 0, 297, 20, 'F');
-                pdf.setTextColor(255, 255, 255);
-                pdf.setFontSize(16);
-                pdf.text('تقرير الحضور والغياب - النصاريح الأمنية', 148.5, 12, { align: 'center' });
-                
-                pdf.setTextColor(0, 0, 0);
-                pdf.setFontSize(10);
-                pdf.text(`تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`, 20, 30);
-                pdf.text(`إجمالي التقارير: ${allReports.length}`, 150, 30);
-                
-                let yPosition = 40;
-                
+                pdf.setFontSize(18);
+                pdf.text('تقرير الحضور والغياب - النصاريح الأمنية', 148.5, 20, { align: 'center' });
+
+                pdf.setFontSize(12);
+                pdf.text(`تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`, 148.5, 30, { align: 'center' });
+                pdf.text(`إجمالي التقارير: ${allReports.length}`, 148.5, 40, { align: 'center' });
+
+                let yPosition = 55;
+
                 const sortedReports = [...allReports].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
+
                 for (let idx = 0; idx < sortedReports.length; idx++) {
                     const report = sortedReports[idx];
-                    
-                    if (yPosition > 200) {
+
+                    if (yPosition > 160) {
                         pdf.addPage();
                         yPosition = 20;
                     }
-                    
-                    pdf.setFillColor(196, 30, 58);
-                    pdf.rect(10, yPosition - 5, 277, 8, 'F');
-                    pdf.setTextColor(255, 255, 255);
-                    pdf.setFontSize(12);
-                    pdf.text(`${idx + 1}. ${report.unitName} (${report.startDate} إلى ${report.endDate})`, 20, yPosition);
-                    yPosition += 10;
-                    
+
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(196, 30, 58);
+                    pdf.text(`${idx + 1}. ${report.unitName}`, 20, yPosition);
+                    yPosition += 8;
+
+                    pdf.setFontSize(10);
                     pdf.setTextColor(0, 0, 0);
+                    pdf.text(`الفترة: ${report.startDate} إلى ${report.endDate} | المشرف: ${report.supervisor || '-'}`, 25, yPosition);
+                    yPosition += 6;
+
+                    // Table
+                    pdf.setFillColor(240, 240, 240);
+                    pdf.rect(20, yPosition, 255, 8, 'F');
                     pdf.setFontSize(9);
-                    
+                    pdf.text('#', 25, yPosition + 5);
+                    pdf.text('الاسم', 40, yPosition + 5);
+
+                    const days = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+                    let xPos = 120;
+                    days.forEach(day => {
+                        pdf.text(day.substring(0, 3), xPos, yPosition + 5);
+                        xPos += 20;
+                    });
+
+                    pdf.text('ملاحظات', 250, yPosition + 5);
+                    yPosition += 8;
+
                     report.employees.forEach((emp, empIdx) => {
-                        if (yPosition > 190) {
+                        if (yPosition > 180) {
                             pdf.addPage();
                             yPosition = 20;
                         }
-                        
-                        const dayTexts = emp.days.map(d => statusFullNames[d].substring(0, 6));
-                        pdf.text(`${emp.id}. ${emp.name.substring(0, 30)}: ${dayTexts.join(' | ')}`, 20, yPosition);
-                        yPosition += 5;
+
+                        pdf.setFontSize(8);
+                        pdf.text(`${emp.id}`, 25, yPosition + 4);
+                        pdf.text(emp.name.substring(0, 25), 40, yPosition + 4);
+
+                        xPos = 120;
+                        emp.days.forEach(d => {
+                            const dayName = statusFullNames[d];
+                            pdf.text(dayName.substring(0, 4), xPos, yPosition + 4);
+                            xPos += 20;
+                        });
+
+                        const notes = emp.notes ? emp.notes.substring(0, 15) : '-';
+                        pdf.text(notes, 250, yPosition + 4);
+
+                        yPosition += 6;
                     });
-                    
-                    yPosition += 5;
+
+                    yPosition += 10;
                 }
-                
+
                 pdf.save(`تقرير_الحضور_الكامل_${new Date().toISOString().split('T')[0]}.pdf`);
                 showToast('✅ تم تصدير جميع التقارير');
             } catch (error) {
                 console.error(error);
                 showToast('❌ حدث خطأ أثناء التصدير');
             } finally {
+                document.getElementById('loadingText').textContent = 'جاري معالجة الطلب...';
                 showLoading(false);
             }
         }
@@ -2627,28 +2540,81 @@
             } catch (error) {
                 console.error('Share Error:', error);
                 showToast('❌ فشلت المشاركة');
+            } finally {
+                document.getElementById('loadingText').textContent = 'جاري معالجة الطلب...';
             }
         }
 
         // Admin report functions
         async function downloadCurrentReport() {
             if (!currentAdminReport) return;
-            
+
             showLoading(true);
+            document.getElementById('loadingText').textContent = 'جاري تحضير التقرير...';
+
             try {
-                const blob = await generatePDFBlob(currentAdminReport);
-                if (blob) {
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `موقف_الحضور_${currentAdminReport.unitName}_${currentAdminReport.startDate}.pdf`;
-                    link.click();
-                    URL.revokeObjectURL(url);
-                    showToast('✅ تم تحميل التقرير');
+                // إنشاء عنصر مؤقت للتقرير
+                const tempDiv = document.createElement('div');
+                tempDiv.className = 'report-container';
+                tempDiv.innerHTML = generateReportHTML(currentAdminReport);
+                tempDiv.style.position = 'fixed';
+                tempDiv.style.left = '-9999px';
+                tempDiv.style.top = '0';
+                document.body.appendChild(tempDiv);
+
+                // انتظار تحميل الصورة في العنصر المؤقت
+                const tempImg = tempDiv.querySelector('img');
+                if (tempImg && !tempImg.complete) {
+                    await new Promise((resolve) => {
+                        tempImg.onload = resolve;
+                        tempImg.onerror = resolve;
+                        setTimeout(resolve, 1000);
+                    });
                 }
+
+                // انتظار تحميل الخطوط
+                if (document.fonts) {
+                    await document.fonts.ready;
+                }
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                const canvas = await html2canvas(tempDiv, {
+                    scale: 3,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    foreignObjectRendering: false
+                });
+
+                document.body.removeChild(tempDiv);
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'l',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                const ratio = Math.min((pdfWidth - 20) / imgWidth, (pdfHeight - 20) / imgHeight);
+
+                const imgX = 10 + (pdfWidth - 20 - imgWidth * ratio) / 2;
+                const imgY = 10;
+
+                pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+
+                pdf.save(`موقف_الحضور_${currentAdminReport.unitName}_${currentAdminReport.startDate}.pdf`);
+                showToast('✅ تم تحميل التقرير');
             } catch (error) {
+                console.error(error);
                 showToast('❌ حدث خطأ');
             } finally {
+                document.getElementById('loadingText').textContent = 'جاري معالجة الطلب...';
                 showLoading(false);
             }
         }
@@ -2656,51 +2622,62 @@
         function printCurrentReport() {
             const printWindow = window.open('', '_blank');
             const content = document.getElementById('adminReportContent').innerHTML;
-            
+
             printWindow.document.write(`
                 <html dir="rtl">
                 <head>
                     <title>موقف الحضور</title>
                     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
                     <style>
-                        body { 
-                            font-family: 'Amiri', serif; 
-                            margin: 20px; 
+                        body {
+                            font-family: 'Amiri', serif;
+                            margin: 20px;
                             direction: rtl;
                         }
-                        table { 
-                            width: 100%; 
-                            border-collapse: collapse; 
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
                             margin-top: 20px;
                         }
-                        th, td { 
-                            border: 1px solid #333; 
-                            padding: 8px; 
-                            text-align: center; 
+                        th, td {
+                            border: 1px solid #333;
+                            padding: 8px;
+                            text-align: center;
                             font-size: 14px;
                         }
-                        th { 
-                            background: #e0e0e0; 
+                        th {
+                            background: #e0e0e0;
                             font-weight: bold;
                         }
-                        .report-header { 
-                            text-align: center; 
-                            margin-bottom: 20px; 
+                        .report-header {
+                            text-align: center;
+                            margin-bottom: 20px;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .report-header img {
+                            display: block;
+                            margin: 0 auto 15px auto;
+                            width: 100px;
+                            height: 100px;
                         }
                         .report-unit {
-                            text-align: right;
+                            text-align: center;
                             font-weight: bold;
                             margin: 10px 0;
                             padding: 10px;
                             background: #f8f9fa;
                             border-right: 4px solid #c41e3a;
+                            width: 100%;
                         }
                     </style>
                 </head>
                 <body>${content}</body>
                 </html>
             `);
-            
+
             printWindow.document.close();
             printWindow.print();
         }
