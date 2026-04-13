@@ -1156,6 +1156,7 @@
         }
     </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -1179,27 +1180,7 @@
         </div>
     </div>
 
-    <!-- Settings Modal for Email/WhatsApp -->
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-title" style="color: #17a2b8;">⚙️ إعدادات الإرسال</div>
-            <div class="settings-form">
-                <div class="form-group">
-                    <label class="form-label">📧 البريد الإلكتروني المستلم</label>
-                    <input type="email" class="form-input" id="targetEmail" placeholder="example@domain.com" value="">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">📱 رقم الواتساب (مع رمز الدولة)</label>
-                    <input type="tel" class="form-input" id="targetWhatsApp" placeholder="966501234567" value="">
-                    <small style="color: #666; display: block; margin-top: 5px;">مثال: 966501234567 (بدون + أو مسافات)</small>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">
-                        <input type="checkbox" id="saveSettings" checked>
-                        حفظ الإعدادات للاستخدام المستقبلي
-                    </label>
-                </div>
-            </div>
+
             <div class="modal-buttons">
                 <button class="modal-btn confirm" style="background: #17a2b8;" onclick="saveSettingsAndSend()">متابعة الإرسال</button>
                 <button class="modal-btn cancel" onclick="closeSettingsModal()">إلغاء</button>
@@ -1327,8 +1308,8 @@
                 <div class="action-buttons">
                     <button class="action-btn pdf" onclick="downloadCurrentReport()">📄 تحميل PDF</button>
                     <button class="action-btn print" onclick="printCurrentReport()">🖨️ طباعة</button>
-                    <button class="action-btn whatsapp" onclick="showSettingsThenSend('whatsapp')">📱 واتساب PDF</button>
-                    <button class="action-btn email" onclick="showSettingsThenSend('email')">📧 بريد PDF</button>
+
+
                 </div>
             </div>
 
@@ -1404,7 +1385,7 @@
                 <button type="button" class="submit-btn" onclick="addNewRow()">+ إضافة موظف </button>
                 <button type="submit" class="submit-btn" style="margin-top: 10px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%);">💾 حفظ البيانات محلياً</button>
                 <button type="button" class="btn-success" onclick="showSendConfirm()">📤 إرسال للإدمن</button>
-                <button type="button" class="btn-info" onclick="showSettingsModal()">⚙️ إعدادات الإرسال</button>
+
                 <button type="button" class="btn-danger" onclick="showClearConfirm()">🗑️ مسح جميع البيانات</button>
             </form>
         </div>
@@ -1479,7 +1460,7 @@
         let currentReportData = null;
         let currentAdminReport = null;
         let isAdminLoggedIn = false;
-        let pendingSendType = null;
+
         let generatedPDFBlob = null;
 
         // Default admin credentials
@@ -1490,11 +1471,7 @@
         // All reports storage (sent to admin)
         let allReports = JSON.parse(localStorage.getItem('allAttendanceReports')) || [];
 
-        // Settings storage
-        let appSettings = JSON.parse(localStorage.getItem('attendanceSettings')) || {
-            targetEmail: '',
-            targetWhatsApp: ''
-        };
+        // Settings storage removed
 
         // Status options with full names - للعرض في القوائم المنسدلة
         const statusOptions = [
@@ -1526,9 +1503,7 @@
                 document.getElementById('shareBtn').style.display = 'flex';
             }
 
-            // Load saved settings
-            document.getElementById('targetEmail').value = appSettings.targetEmail || '';
-            document.getElementById('targetWhatsApp').value = appSettings.targetWhatsApp || '';
+            // Settings loading removed
 
             initializeDates();
 
@@ -1635,53 +1610,7 @@
             }
         }
 
-        // Settings Functions
-        function showSettingsModal() {
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        function closeSettingsModal() {
-            document.getElementById('settingsModal').classList.remove('active');
-            pendingSendType = null;
-        }
-
-        function saveSettingsAndSend() {
-            const email = document.getElementById('targetEmail').value;
-            const whatsapp = document.getElementById('targetWhatsApp').value;
-            const save = document.getElementById('saveSettings').checked;
-
-            if (save) {
-                appSettings.targetEmail = email;
-                appSettings.targetWhatsApp = whatsapp;
-                localStorage.setItem('attendanceSettings', JSON.stringify(appSettings));
-            }
-
-            closeSettingsModal();
-
-            if (pendingSendType === 'email') {
-                sendPDFByEmail(email);
-            } else if (pendingSendType === 'whatsapp') {
-                sendPDFByWhatsApp(whatsapp);
-            }
-        }
-
-        function showSettingsThenSend(type) {
-            pendingSendType = type;
-
-            // Check if we have saved settings
-            if (appSettings.targetEmail || appSettings.targetWhatsApp) {
-                // Use saved settings directly if available
-                if (type === 'email' && appSettings.targetEmail) {
-                    sendPDFByEmail(appSettings.targetEmail);
-                } else if (type === 'whatsapp' && appSettings.targetWhatsApp) {
-                    sendPDFByWhatsApp(appSettings.targetWhatsApp);
-                } else {
-                    showSettingsModal();
-                }
-            } else {
-                showSettingsModal();
-            }
-        }
+        // Settings Functions removed - not needed for user
 
         // Admin Functions
         function handleLogin(e) {
@@ -1958,7 +1887,17 @@
             }
 
             document.getElementById('modalTitle').textContent = '📤 تأكيد الإرسال';
-            document.getElementById('modalText').innerHTML = `هل أنت متأكد من إرسال تقرير الوحدة <strong>${unitName}</strong> إلى الإدمن؟<br><small>سيتم حفظ البيانات في قاعدة البيانات المركزية.</small>`;
+            document.getElementById('modalText').innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    هل أنت متأكد من إرسال تقرير الوحدة <strong>${unitName}</strong> إلى الإدمن؟
+                </div>
+                <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 0.9rem; color: #856404; text-align: right;">
+                    <strong>⚠️ تنبيه مهم:</strong><br>
+                    عند إرسال التقرير، سيتم حفظ البيانات في قاعدة البيانات المركزية فقط.<br>
+                    <strong>لن يتم إرسال أي ملفات أو معلومات خارج التطبيق.</strong><br>
+                    يمكنك لاحقاً مراجعة التقرير من خلال لوحة تحكم الإدمن.
+                </div>
+            `;
             document.getElementById('modalConfirmBtn').onclick = sendToAdmin;
             document.getElementById('confirmModal').classList.add('active');
         }
