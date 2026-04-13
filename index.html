@@ -10,6 +10,14 @@
 
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTmV6YXJ5aSBBdHRlbmRhbmNlIiwic2hvcnRfbmFtZSI6IkF0dGVuZGFuY2UiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzFlM2M3MiIsInRoZW1lX2NvbG9yIjoiIzFlM2M3MiJ9">
 
+    <!-- Libraries for Hijri Date Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_red.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -225,6 +233,94 @@
         .form-input:focus, .form-select:focus {
             outline: none;
             border-color: #c41e3a;
+        }
+
+        /* Date Picker Styles */
+        .date-picker-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .date-input {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            text-align: right;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #c41e3a;
+        }
+
+        .calendar-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #c41e3a;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .date-display {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .date-badge {
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .date-badge.hijri {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .date-badge.gregorian {
+            background: #d6eaf8;
+            color: #3498db;
+            border-color: #3498db;
+        }
+
+        .flatpickr-calendar {
+            font-family: 'Cairo', sans-serif !important;
+        }
+
+        .flatpickr-month {
+            height: 40px !important;
+        }
+
+        .flatpickr-current-month {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+        }
+
+        .flatpickr-weekday {
+            font-weight: 700 !important;
+            color: #c41e3a !important;
+        }
+
+        .flatpickr-day.selected {
+            background: #c41e3a !important;
+            border-color: #c41e3a !important;
+        }
+
+        .flatpickr-day:hover {
+            background: rgba(196, 30, 58, 0.1) !important;
         }
 
         .week-selector {
@@ -958,7 +1054,7 @@
         }
 
         @supports (-webkit-touch-callout: none) {
-            .form-input, .form-select, .status-select, .shift-select, .notes-input {
+            .form-input, .form-select, .status-select, .shift-select, .notes-input, .date-input {
                 font-size: 16px;
             }
         }
@@ -1035,12 +1131,31 @@
                     <input type="text" class="form-input" id="unitName" placeholder="أدخل اسم الوحدة أو القسم" required>
                 </div>
 
+                <!-- New Date Picker Section -->
                 <div class="form-group">
-                    <label class="form-label"><span class="required">*</span>الفترة (تلقائي حسب الأسبوع)</label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <input type="date" class="form-input" id="startDate" required readonly>
-                        <input type="date" class="form-input" id="endDate" required readonly>
+                    <label class="form-label"><span class="required">*</span>تاريخ بداية الأسبوع (ميلادي / هجري)</label>
+                    <div class="date-picker-wrapper">
+                        <input type="text" class="date-input" id="startDatePicker" placeholder="اختر التاريخ" readonly>
+                        <span class="calendar-icon">📅</span>
                     </div>
+                    <div class="date-display" id="startDateDisplay">
+                        <span class="date-badge gregorian" id="startGregorian"></span>
+                        <span class="date-badge hijri" id="startHijri"></span>
+                    </div>
+                    <input type="hidden" id="startDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><span class="required">*</span>تاريخ نهاية الأسبوع (ميلادي / هجري)</label>
+                    <div class="date-picker-wrapper">
+                        <input type="text" class="date-input" id="endDatePicker" placeholder="اختر التاريخ" readonly>
+                        <span class="calendar-icon">📅</span>
+                    </div>
+                    <div class="date-display" id="endDateDisplay">
+                        <span class="date-badge gregorian" id="endGregorian"></span>
+                        <span class="date-badge hijri" id="endHijri"></span>
+                    </div>
+                    <input type="hidden" id="endDate" required>
                 </div>
 
                 <div class="form-group">
@@ -1145,6 +1260,8 @@
         };
         let capturedImageBlob = null;
         let capturedImageDataUrl = null;
+        let startDatePickerInstance = null;
+        let endDatePickerInstance = null;
 
         // Fixed WhatsApp number
         const ADMIN_WHATSAPP = '9647711059176';
@@ -1193,13 +1310,95 @@
             'الأسبوع الرابع'
         ];
 
+        // Initialize Hijri Date Converter
+        function initHijriConverter() {
+            // Configure moment-hijri
+            moment.locale('ar');
+        }
+
+        // Convert Gregorian to Hijri
+        function gregorianToHijri(date) {
+            const m = moment(date);
+            const hijriDate = m.format('iYYYY/iMM/iDD');
+            const hijriMonth = m.format('iMMMM');
+            const hijriYear = m.format('iYYYY');
+            return {
+                full: hijriDate,
+                display: `${m.format('iDD')} ${hijriMonth} ${hijriYear} هـ`,
+                year: parseInt(m.format('iYYYY')),
+                month: parseInt(m.format('iMM')),
+                day: parseInt(m.format('iDD'))
+            };
+        }
+
+        // Initialize Date Pickers
+        function initDatePickers() {
+            // Start Date Picker
+            startDatePickerInstance = flatpickr("#startDatePicker", {
+                locale: "ar",
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "Y-m-d",
+                disableMobile: false,
+                static: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates[0]) {
+                        const date = selectedDates[0];
+                        const hijri = gregorianToHijri(date);
+                        const gregorianStr = moment(date).format('YYYY/MM/DD');
+
+                        document.getElementById('startDate').value = gregorianStr;
+                        document.getElementById('startGregorian').textContent = gregorianStr + ' م';
+                        document.getElementById('startHijri').textContent = hijri.display;
+
+                        // Auto calculate end date (6 days later)
+                        const endDate = new Date(date);
+                        endDate.setDate(endDate.getDate() + 6);
+                        endDatePickerInstance.setDate(endDate);
+
+                        // Update end date display
+                        const endHijri = gregorianToHijri(endDate);
+                        const endGregorianStr = moment(endDate).format('YYYY/MM/DD');
+                        document.getElementById('endDate').value = endGregorianStr;
+                        document.getElementById('endGregorian').textContent = endGregorianStr + ' م';
+                        document.getElementById('endHijri').textContent = endHijri.display;
+                    }
+                }
+            });
+
+            // End Date Picker
+            endDatePickerInstance = flatpickr("#endDatePicker", {
+                locale: "ar",
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "Y-m-d",
+                disableMobile: false,
+                static: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates[0]) {
+                        const date = selectedDates[0];
+                        const hijri = gregorianToHijri(date);
+                        const gregorianStr = moment(date).format('YYYY/MM/DD');
+
+                        document.getElementById('endDate').value = gregorianStr;
+                        document.getElementById('endGregorian').textContent = gregorianStr + ' م';
+                        document.getElementById('endHijri').textContent = hijri.display;
+                    }
+                }
+            });
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            initHijriConverter();
+            initDatePickers();
+
             const savedMonthly = localStorage.getItem('monthlyAttendance');
             if (savedMonthly) {
                 monthlyData = JSON.parse(savedMonthly);
                 updateSavedWeeksIndicator();
             }
+
             initializeMonthDates();
             loadWeekData(currentWeek);
         });
@@ -1207,32 +1406,42 @@
         function initializeMonthDates() {
             const today = new Date();
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            // Find first Saturday
             while (firstDay.getDay() !== 6) {
                 firstDay.setDate(firstDay.getDate() + 1);
             }
+
+            // Set initial date based on current week
+            const weekStart = new Date(firstDay);
+            weekStart.setDate(firstDay.getDate() + ((currentWeek - 1) * 7));
+
+            // Set to date picker
+            if (startDatePickerInstance) {
+                startDatePickerInstance.setDate(weekStart);
+            }
+
             monthlyData.monthStart = firstDay.toISOString().split('T')[0];
-            updateWeekDates();
-        }
-
-        function updateWeekDates() {
-            const monthStart = new Date(monthlyData.monthStart || new Date());
-            const weekStart = new Date(monthStart);
-            weekStart.setDate(monthStart.getDate() + ((currentWeek - 1) * 7));
-            const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekStart.getDate() + 6);
-
-            document.getElementById('startDate').value = weekStart.toISOString().split('T')[0];
-            document.getElementById('endDate').value = weekEnd.toISOString().split('T')[0];
         }
 
         function selectWeek(weekNum) {
             saveCurrentWeekData();
             currentWeek = weekNum;
+
             document.querySelectorAll('.week-btn').forEach((btn, idx) => {
                 btn.classList.remove('active');
                 if (idx + 1 === weekNum) btn.classList.add('active');
             });
-            updateWeekDates();
+
+            // Update dates for selected week
+            const monthStart = new Date(monthlyData.monthStart || new Date());
+            const weekStart = new Date(monthStart);
+            weekStart.setDate(monthStart.getDate() + ((currentWeek - 1) * 7));
+
+            if (startDatePickerInstance) {
+                startDatePickerInstance.setDate(weekStart);
+            }
+
             loadWeekData(weekNum);
         }
 
@@ -1242,7 +1451,7 @@
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
 
-            if (!unitName) return;
+            if (!unitName || !startDate) return;
 
             monthlyData.unitName = unitName;
             monthlyData.supervisor = supervisor;
@@ -1294,6 +1503,11 @@
 
             if (weekData && weekData.employees) {
                 weekData.employees.forEach(emp => addEmployeeRow(emp));
+
+                // Restore dates
+                if (weekData.startDate && startDatePickerInstance) {
+                    startDatePickerInstance.setDate(weekData.startDate);
+                }
             } else {
                 for(let i = 0; i < 5; i++) addNewRow();
             }
@@ -1408,7 +1622,6 @@
             }
             generateMonthlyReportView();
             showSection('dashboard');
-            // Auto capture image when report is shown
             setTimeout(() => captureReportImage(), 800);
         }
 
@@ -1421,22 +1634,34 @@
             if (weeks.length > 0) {
                 const firstWeek = weeks[0];
                 const lastWeek = weeks[weeks.length - 1];
-                document.getElementById('monthlyPeriod').textContent = `${firstWeek.startDate} إلى ${lastWeek.endDate}`;
+
+                // Format dates with Hijri
+                const startHijri = gregorianToHijri(firstWeek.startDate);
+                const endHijri = gregorianToHijri(lastWeek.endDate);
+
+                document.getElementById('monthlyPeriod').textContent =
+                    `${firstWeek.startDate} (${startHijri.display}) إلى ${lastWeek.endDate} (${endHijri.display})`;
             }
             document.getElementById('monthlyReportDate').textContent = new Date().toLocaleDateString('ar-SA');
 
             const savedList = document.getElementById('monthlySavedList');
-            savedList.innerHTML = weeks.map(w => `<span class="saved-week-tag">${weekNames[w.weekNumber-1]} (${w.startDate})</span>`).join('');
+            savedList.innerHTML = weeks.map(w => {
+                const wh = gregorianToHijri(w.startDate);
+                return `<span class="saved-week-tag">${weekNames[w.weekNumber-1]} (${wh.display})</span>`;
+            }).join('');
 
             weeks.forEach(weekData => {
                 const weekDiv = document.createElement('div');
                 weekDiv.className = 'monthly-week';
 
+                const weekHijri = gregorianToHijri(weekData.startDate);
+                const weekEndHijri = gregorianToHijri(weekData.endDate);
+
                 const weekHeader = document.createElement('div');
                 weekHeader.className = 'week-header';
                 weekHeader.innerHTML = `
                     <span>${weekNames[weekData.weekNumber-1]}</span>
-                    <span class="week-date">${weekData.startDate} إلى ${weekData.endDate}</span>
+                    <span class="week-date">${weekData.startDate} (${weekHijri.display}) - ${weekData.endDate} (${weekEndHijri.display})</span>
                 `;
                 weekDiv.appendChild(weekHeader);
 
@@ -1507,7 +1732,6 @@
             showSection('form');
         }
 
-        // Capture report as image
         async function captureReportImage() {
             showLoading(true);
             try {
@@ -1525,7 +1749,6 @@
 
                 capturedImageDataUrl = canvas.toDataURL('image/png');
 
-                // Convert to blob for sharing
                 const response = await fetch(capturedImageDataUrl);
                 capturedImageBlob = await response.blob();
 
@@ -1538,7 +1761,6 @@
             }
         }
 
-        // Save report image to device
         async function saveReportImage() {
             if (!capturedImageDataUrl) {
                 await captureReportImage();
@@ -1553,7 +1775,6 @@
             }
         }
 
-        // Share to WhatsApp automatically as image
         async function shareToWhatsAppAuto() {
             if (!capturedImageBlob) {
                 showLoading(true);
@@ -1567,7 +1788,6 @@
             }
 
             try {
-                // Try Web Share API with files (works on mobile Chrome/Safari)
                 if (navigator.share && navigator.canShare) {
                     const file = new File([capturedImageBlob], 'تقرير_الحضور.png', { type: 'image/png' });
 
@@ -1582,17 +1802,14 @@
                     }
                 }
 
-                // Fallback: Open WhatsApp with text and provide image download
                 const message = `تقرير الحضور الشهري - ${monthlyData.unitName || 'النصاريح'}`;
                 const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-                // Save image first
                 const link = document.createElement('a');
                 link.download = `تقرير_حضور.png`;
                 link.href = capturedImageDataUrl;
                 link.click();
 
-                // Then open WhatsApp
                 setTimeout(() => {
                     window.open(whatsappUrl, '_blank');
                     showToast('📱 تم حفظ الصورة وفتح واتساب - أرسل الصورة يدوياً');
@@ -1600,7 +1817,6 @@
 
             } catch (error) {
                 console.error('Share Error:', error);
-                // Final fallback
                 const message = `تقرير الحضور الشهري - ${monthlyData.unitName || 'النصاريح'}`;
                 window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
                 showToast('📱 جاري فتح واتساب');
