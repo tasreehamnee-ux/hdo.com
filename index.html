@@ -488,18 +488,6 @@
             box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
         }
 
-        .action-btn.whatsapp {
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-        }
-
-        .action-btn.email {
-            background: linear-gradient(135deg, #ea4335 0%, #c5221f 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(234, 67, 53, 0.3);
-        }
-
         .action-btn.send-admin {
             background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
             color: white;
@@ -1154,6 +1142,93 @@
                 font-size: 16px;
             }
         }
+
+        /* Database Management Styles */
+        .db-management {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .db-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .db-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .db-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        .db-btn.export-json {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+        .db-btn.import-json {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+        .db-btn.clear-db {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        .db-btn.view-raw {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+        }
+        .db-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        .db-info strong {
+            color: #212529;
+        }
+        .json-preview {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            direction: ltr;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .hidden-temp-div {
+            position: fixed;
+            left: -9999px;
+            top: 0;
+            width: 1200px;
+            background: white;
+            padding: 20px;
+            z-index: -9999;
+        }
+
     </style>
 <base target="_blank">
 <base target="_blank">
@@ -1308,8 +1383,39 @@
                 <div class="action-buttons">
                     <button class="action-btn pdf" onclick="downloadCurrentReport()">📄 تحميل PDF</button>
                     <button class="action-btn print" onclick="printCurrentReport()">🖨️ طباعة</button>
+                    </div>
+            </div>
 
 
+            <!-- Database Management -->
+            <div class="admin-section">
+                <h3 class="section-title">🗄️ إدارة قاعدة البيانات</h3>
+                <div class="db-management">
+                    <div class="db-info">
+                        <strong>📊 معلومات قاعدة البيانات:</strong><br>
+                        جميع البيانات مخزنة محلياً في متصفحك (LocalStorage). يمكنك تصديرها لعمل نسخة احتياطية أو استيرادها في جهاز آخر.
+                    </div>
+
+                    <div class="db-actions">
+                        <button class="db-btn view-raw" onclick="viewRawData()">
+                            <span>👁️</span> عرض البيانات الخام
+                        </button>
+                        <button class="db-btn export-json" onclick="exportDatabase()">
+                            <span>💾</span> تصدير قاعدة البيانات
+                        </button>
+                        <button class="db-btn import-json" onclick="document.getElementById('dbFileInput').click()">
+                            <span>📥</span> استيراد قاعدة البيانات
+                        </button>
+                        <input type="file" id="dbFileInput" accept=".json" onchange="importDatabase(this)" style="display: none;">
+                        <button class="db-btn clear-db" onclick="clearAllDatabase()">
+                            <span>🗑️</span> مسح قاعدة البيانات
+                        </button>
+                    </div>
+
+                    <div id="rawDataPreview" style="display: none;">
+                        <h4 style="margin: 15px 0; color: #333;">👁️ معاينة البيانات الخام:</h4>
+                        <div class="json-preview" id="rawDataContent"></div>
+                    </div>
                 </div>
             </div>
 
@@ -1460,7 +1566,7 @@
         let currentReportData = null;
         let currentAdminReport = null;
         let isAdminLoggedIn = false;
-
+        let pendingSendType = null;
         let generatedPDFBlob = null;
 
         // Default admin credentials
@@ -1471,7 +1577,11 @@
         // All reports storage (sent to admin)
         let allReports = JSON.parse(localStorage.getItem('allAttendanceReports')) || [];
 
-        // Settings storage removed
+        // Settings storage
+        let appSettings = JSON.parse(localStorage.getItem('attendanceSettings')) || {
+            targetEmail: '',
+            targetWhatsApp: ''
+        };
 
         // Status options with full names - للعرض في القوائم المنسدلة
         const statusOptions = [
@@ -1503,7 +1613,9 @@
                 document.getElementById('shareBtn').style.display = 'flex';
             }
 
-            // Settings loading removed
+            // Load saved settings
+            document.getElementById('targetEmail').value = appSettings.targetEmail || '';
+            document.getElementById('targetWhatsApp').value = appSettings.targetWhatsApp || '';
 
             initializeDates();
 
@@ -1610,7 +1722,53 @@
             }
         }
 
-        // Settings Functions removed - not needed for user
+        // Settings Functions
+        function showSettingsModal() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('active');
+            pendingSendType = null;
+        }
+
+        function saveSettingsAndSend() {
+            const email = document.getElementById('targetEmail').value;
+            const whatsapp = document.getElementById('targetWhatsApp').value;
+            const save = document.getElementById('saveSettings').checked;
+
+            if (save) {
+                appSettings.targetEmail = email;
+                appSettings.targetWhatsApp = whatsapp;
+                localStorage.setItem('attendanceSettings', JSON.stringify(appSettings));
+            }
+
+            closeSettingsModal();
+
+            if (pendingSendType === 'email') {
+                sendPDFByEmail(email);
+            } else if (pendingSendType === 'whatsapp') {
+                sendPDFByWhatsApp(whatsapp);
+            }
+        }
+
+        function showSettingsThenSend(type) {
+            pendingSendType = type;
+
+            // Check if we have saved settings
+            if (appSettings.targetEmail || appSettings.targetWhatsApp) {
+                // Use saved settings directly if available
+                if (type === 'email' && appSettings.targetEmail) {
+                    sendPDFByEmail(appSettings.targetEmail);
+                } else if (type === 'whatsapp' && appSettings.targetWhatsApp) {
+                    sendPDFByWhatsApp(appSettings.targetWhatsApp);
+                } else {
+                    showSettingsModal();
+                }
+            } else {
+                showSettingsModal();
+            }
+        }
 
         // Admin Functions
         function handleLogin(e) {
@@ -1871,7 +2029,113 @@
             select.classList.add(select.value);
         }
 
-        // Clear Data Functions
+
+        // Database Management Functions
+        function viewRawData() {
+            const preview = document.getElementById('rawDataPreview');
+            const content = document.getElementById('rawDataContent');
+
+            const dbData = {
+                attendanceReports: allReports,
+                adminUsers: adminUsers,
+                currentReport: currentReportData,
+                exportDate: new Date().toISOString(),
+                appVersion: '1.0'
+            };
+
+            content.textContent = JSON.stringify(dbData, null, 2);
+            preview.style.display = 'block';
+            preview.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exportDatabase() {
+            const dbData = {
+                attendanceReports: allReports,
+                adminUsers: adminUsers,
+                currentReport: currentReportData,
+                exportDate: new Date().toISOString(),
+                appVersion: '1.0'
+            };
+
+            const dataStr = JSON.stringify(dbData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'attendance_db_backup_' + new Date().toISOString().split('T')[0] + '.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast('✅ تم تصدير قاعدة البيانات بنجاح');
+        }
+
+        function importDatabase(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const dbData = JSON.parse(e.target.result);
+
+                    if (confirm('هل أنت متأكد من استيراد قاعدة البيانات؟\nسيتم دمج البيانات المستوردة مع البيانات الحالية.\n\nعدد التقارير المستوردة: ' + (dbData.attendanceReports?.length || 0) + '\nعدد المسؤولين المستوردين: ' + (dbData.adminUsers?.length || 0))) {
+
+                        if (dbData.attendanceReports && Array.isArray(dbData.attendanceReports)) {
+                            dbData.attendanceReports.forEach(function(newReport) {
+                                const exists = allReports.some(function(r) {
+                                    return r.unitName === newReport.unitName && r.startDate === newReport.startDate;
+                                });
+                                if (!exists) {
+                                    allReports.push(newReport);
+                                }
+                            });
+                            localStorage.setItem('allAttendanceReports', JSON.stringify(allReports));
+                        }
+
+                        if (dbData.adminUsers && Array.isArray(dbData.adminUsers)) {
+                            dbData.adminUsers.forEach(function(newUser) {
+                                if (!adminUsers.some(function(u) { return u.username === newUser.username; })) {
+                                    adminUsers.push(newUser);
+                                }
+                            });
+                            localStorage.setItem('adminUsers', JSON.stringify(adminUsers));
+                        }
+
+                        loadAdminDashboard();
+                        showToast('✅ تم استيراد قاعدة البيانات بنجاح');
+                    }
+                } catch (error) {
+                    console.error(error);
+                    showToast('❌ خطأ في قراءة الملف: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        function clearAllDatabase() {
+            if (confirm('⚠️ تحذير شديد!\n\nهل أنت متأكد من مسح جميع البيانات؟\nسيتم حذف جميع التقارير والمستخدمين بشكل نهائي ولا يمكن التراجع عن هذا الإجراء.\n\nهل تريد الاستمرار؟')) {
+                if (confirm('تأكيد نهائي: هل أنت متأكد تماماً؟')) {
+                    localStorage.removeItem('allAttendanceReports');
+                    localStorage.removeItem('adminUsers');
+                    localStorage.removeItem('attendanceReport');
+
+                    allReports = [];
+                    adminUsers = [{ username: 'admin', password: 'admin123', role: 'super_admin' }];
+                    currentReportData = null;
+
+                    loadAdminDashboard();
+                    showToast('🗑️ تم مسح قاعدة البيانات بالكامل');
+
+                    document.getElementById('rawDataPreview').style.display = 'none';
+                }
+            }
+        }
+
+// Clear Data Functions
         function showClearConfirm() {
             document.getElementById('modalTitle').textContent = '⚠️ تأكيد المسح';
             document.getElementById('modalText').innerHTML = 'هل أنت متأكد من مسح جميع البيانات؟<br><small>سيتم حذف جميع المعلومات المدخلة ولا يمكن التراجع عن هذا الإجراء.</small>';
@@ -1887,17 +2151,16 @@
             }
 
             document.getElementById('modalTitle').textContent = '📤 تأكيد الإرسال';
-            document.getElementById('modalText').innerHTML = `
-                <div style="margin-bottom: 15px;">
-                    هل أنت متأكد من إرسال تقرير الوحدة <strong>${unitName}</strong> إلى الإدمن؟
-                </div>
-                <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 0.9rem; color: #856404; text-align: right;">
-                    <strong>⚠️ تنبيه مهم:</strong><br>
-                    عند إرسال التقرير، سيتم حفظ البيانات في قاعدة البيانات المركزية فقط.<br>
-                    <strong>لن يتم إرسال أي ملفات أو معلومات خارج التطبيق.</strong><br>
-                    يمكنك لاحقاً مراجعة التقرير من خلال لوحة تحكم الإدمن.
-                </div>
-            `;
+            document.getElementById('modalText').innerHTML =
+                '<div style="margin-bottom: 15px;">' +
+                'هل أنت متأكد من إرسال تقرير الوحدة <strong>' + unitName + '</strong> إلى الإدمن؟' +
+                '</div>' +
+                '<div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 0.9rem; color: #856404; text-align: right;">' +
+                '<strong>⚠️ تنبيه مهم:</strong><br>' +
+                'عند إرسال التقرير، سيتم حفظ البيانات في قاعدة البيانات المركزية فقط.<br>' +
+                '<strong>لن يتم إرسال أي ملفات أو معلومات خارج التطبيق.</strong><br>' +
+                'يمكنك لاحقاً مراجعة التقرير من خلال لوحة تحكم الإدمن.' +
+                '</div>';
             document.getElementById('modalConfirmBtn').onclick = sendToAdmin;
             document.getElementById('confirmModal').classList.add('active');
         }
@@ -2356,91 +2619,78 @@
         }
 
         async function exportAllToPDF() {
+            if (allReports.length === 0) {
+                showToast('❌ لا توجد تقارير للتصدير');
+                return;
+            }
+
             showLoading(true);
-            document.getElementById('loadingText').textContent = 'جاري تصدير جميع التقارير...';
+            document.getElementById('loadingText').textContent = 'جاري إعداد التقارير...';
 
             try {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('l', 'mm', 'a4');
 
-                // Title
-                pdf.setFontSize(18);
-                pdf.text('تقرير الحضور والغياب - النصاريح الأمنية', 148.5, 20, { align: 'center' });
+                // إنشاء div مؤقت
+                const tempDiv = document.createElement('div');
+                tempDiv.className = 'hidden-temp-div';
+                tempDiv.id = 'tempExportContainer';
+                document.body.appendChild(tempDiv);
 
-                pdf.setFontSize(12);
-                pdf.text(`تاريخ التصدير: ${new Date().toLocaleDateString('ar-SA')}`, 148.5, 30, { align: 'center' });
-                pdf.text(`إجمالي التقارير: ${allReports.length}`, 148.5, 40, { align: 'center' });
-
-                let yPosition = 55;
-
-                const sortedReports = [...allReports].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                const sortedReports = allReports.slice().sort(function(a, b) {
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                });
 
                 for (let idx = 0; idx < sortedReports.length; idx++) {
                     const report = sortedReports[idx];
 
-                    if (yPosition > 160) {
+                    document.getElementById('loadingText').textContent = 'جاري معالجة التقرير ' + (idx + 1) + ' من ' + sortedReports.length + '...';
+
+                    // إنشاء محتوى التقرير
+                    tempDiv.innerHTML = generateReportHTML(report);
+
+                    // انتظار تحميل الخطوط
+                    await new Promise(function(resolve) { setTimeout(resolve, 500); });
+
+                    // استخدام html2canvas
+                    const canvas = await html2canvas(tempDiv, {
+                        scale: 2,
+                        useCORS: true,
+                        backgroundColor: '#ffffff',
+                        logging: false,
+                        width: tempDiv.scrollWidth,
+                        height: tempDiv.scrollHeight
+                    });
+
+                    if (idx > 0) {
                         pdf.addPage();
-                        yPosition = 20;
                     }
 
-                    pdf.setFontSize(14);
-                    pdf.setTextColor(196, 30, 58);
-                    pdf.text(`${idx + 1}. ${report.unitName}`, 20, yPosition);
-                    yPosition += 8;
+                    const imgData = canvas.toDataURL('image/png', 1.0);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
 
-                    pdf.setFontSize(10);
-                    pdf.setTextColor(0, 0, 0);
-                    pdf.text(`الفترة: ${report.startDate} إلى ${report.endDate} | المشرف: ${report.supervisor || '-'}`, 25, yPosition);
-                    yPosition += 6;
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min((pdfWidth - 20) / imgWidth, (pdfHeight - 20) / imgHeight);
 
-                    // Table
-                    pdf.setFillColor(240, 240, 240);
-                    pdf.rect(20, yPosition, 255, 8, 'F');
-                    pdf.setFontSize(9);
-                    pdf.text('#', 25, yPosition + 5);
-                    pdf.text('الاسم', 40, yPosition + 5);
+                    const imgX = 10 + (pdfWidth - 20 - imgWidth * ratio) / 2;
+                    const imgY = 10;
 
-                    const days = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
-                    let xPos = 120;
-                    days.forEach(day => {
-                        pdf.text(day.substring(0, 3), xPos, yPosition + 5);
-                        xPos += 20;
-                    });
-
-                    pdf.text('ملاحظات', 250, yPosition + 5);
-                    yPosition += 8;
-
-                    report.employees.forEach((emp, empIdx) => {
-                        if (yPosition > 180) {
-                            pdf.addPage();
-                            yPosition = 20;
-                        }
-
-                        pdf.setFontSize(8);
-                        pdf.text(`${emp.id}`, 25, yPosition + 4);
-                        pdf.text(emp.name.substring(0, 25), 40, yPosition + 4);
-
-                        xPos = 120;
-                        emp.days.forEach(d => {
-                            const dayName = statusFullNames[d];
-                            pdf.text(dayName.substring(0, 4), xPos, yPosition + 4);
-                            xPos += 20;
-                        });
-
-                        const notes = emp.notes ? emp.notes.substring(0, 15) : '-';
-                        pdf.text(notes, 250, yPosition + 4);
-
-                        yPosition += 6;
-                    });
-
-                    yPosition += 10;
+                    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
                 }
 
-                pdf.save(`تقرير_الحضور_الكامل_${new Date().toISOString().split('T')[0]}.pdf`);
-                showToast('✅ تم تصدير جميع التقارير');
+                // إزالة العنصر المؤقت
+                document.body.removeChild(tempDiv);
+
+                pdf.save('تقرير_الحضور_الكامل_' + new Date().toISOString().split('T')[0] + '.pdf');
+                showToast('✅ تم تصدير ' + sortedReports.length + ' تقرير بنجاح');
+
             } catch (error) {
-                console.error(error);
-                showToast('❌ حدث خطأ أثناء التصدير');
+                console.error('Export Error:', error);
+                showToast('❌ حدث خطأ أثناء التصدير: ' + error.message);
+                var tempDiv = document.getElementById('tempExportContainer');
+                if (tempDiv) document.body.removeChild(tempDiv);
             } finally {
                 document.getElementById('loadingText').textContent = 'جاري معالجة الطلب...';
                 showLoading(false);
@@ -2611,7 +2861,94 @@
                             border-right: 4px solid #c41e3a;
                             width: 100%;
                         }
-                    </style>
+
+        /* Database Management Styles */
+        .db-management {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .db-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .db-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .db-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        .db-btn.export-json {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+        .db-btn.import-json {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+        .db-btn.clear-db {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        .db-btn.view-raw {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            color: white;
+        }
+        .db-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        .db-info strong {
+            color: #212529;
+        }
+        .json-preview {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            direction: ltr;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .hidden-temp-div {
+            position: fixed;
+            left: -9999px;
+            top: 0;
+            width: 1200px;
+            background: white;
+            padding: 20px;
+            z-index: -9999;
+        }
+
+    </style>
                 </head>
                 <body>${content}</body>
                 </html>
