@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -540,11 +541,23 @@
 
         .btn-secondary:active { transform: scale(0.98); }
 
+        .action-btn.pdf {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
         .action-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
             margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         .action-btn {
@@ -1062,6 +1075,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -1223,6 +1237,10 @@
                 <button class="action-btn print" onclick="printReport()">
                     <span>🖨️</span>
                     طباعة
+                </button>
+                <button class="action-btn pdf" onclick="saveReportPDF()">
+                    <span>📄</span>
+                    حفظ PDF
                 </button>
                 <button class="action-btn back" onclick="backToForm()">
                     <span>⬅️</span>
@@ -1837,6 +1855,63 @@
 
         function printReport() {
             window.print();
+        }
+
+        async function saveReportPDF() {
+            showLoading(true);
+            showToast('⏳ جاري إنشاء ملف PDF...');
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const reportContent = document.getElementById('reportContent');
+
+                // Capture the report as canvas
+                const canvas = await html2canvas(reportContent, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    windowWidth: reportContent.scrollWidth,
+                    windowHeight: reportContent.scrollHeight,
+                    logging: false
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+
+                // Calculate dimensions for A4
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 297; // A4 height in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                // Create PDF
+                const pdf = new jsPDF('p', 'mm', 'a4');
+
+                // Add first page
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // Add additional pages if content is longer than one page
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                // Save the PDF
+                const fileName = `تقرير_حضور_${monthlyData.unitName || 'النصاريح'}_${new Date().toISOString().split('T')[0]}.pdf`;
+                pdf.save(fileName);
+
+                showToast('✅ تم حفظ ملف PDF بنجاح');
+            } catch (error) {
+                console.error('PDF Error:', error);
+                showToast('❌ فشل إنشاء ملف PDF');
+            } finally {
+                showLoading(false);
+            }
         }
 
         function showClearConfirm() {
