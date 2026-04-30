@@ -1270,8 +1270,7 @@
             supervisor: '',
             weeks: {}
         };
-        let capturedImageBlob = null;
-        let capturedImageDataUrl = null;
+        let capturedPdfBlob = null;
         let startDatePickerInstance = null;
         let endDatePickerInstance = null;
 
@@ -1634,7 +1633,6 @@
             }
             generateMonthlyReportView();
             showSection('dashboard');
-            setTimeout(() => captureReportImage(), 800);
         }
 
         function generateMonthlyReportView() {
@@ -1751,73 +1749,47 @@
             showSection('form');
         }
 
-        async function captureReportImage() {
-            showLoading(true);
-            try {
-                const reportContent = document.getElementById('reportContent');
-
-                const canvas = await html2canvas(reportContent, {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    windowWidth: reportContent.scrollWidth,
-                    windowHeight: reportContent.scrollHeight,
-                    logging: false
-                });
-
-                capturedImageDataUrl = canvas.toDataURL('image/png');
-
-                const response = await fetch(capturedImageDataUrl);
-                capturedImageBlob = await response.blob();
-
-                showToast('✅ تم التقاط الصورة جاهزة للمشاركة');
-            } catch (error) {
-                console.error('Capture Error:', error);
-                showToast('❌ فشل التقاط الصورة');
-            } finally {
-                showLoading(false);
-            }
-        }
-
         async function shareToWhatsAppAuto() {
-            if (!capturedImageBlob) {
-                showLoading(true);
-                await captureReportImage();
-                showLoading(false);
-            }
-
-            if (!capturedImageBlob) {
-                showToast('❌ فشل إعداد الصورة');
-                return;
-            }
+            showLoading(true);
+            showToast('⏳ جاري إعداد ملف PDF للإرسال...');
 
             try {
-                if (navigator.share && navigator.canShare) {
-                    const file = new File([capturedImageBlob], 'تقرير_الحضور.png', { type: 'image/png' });
+                const { pdf } = await generateReportPDF();
 
-                    if (navigator.canShare({ files: [file] })) {
+                // Get PDF as blob
+                const pdfBlob = pdf.output('blob');
+                // Use English filename to avoid WhatsApp encoding issues
+                const safeUnitName = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
+                const pdfFile = new File([pdfBlob], `attendance_report_${safeUnitName}_${new Date().toISOString().split('T')[0]}.pdf`, { type: 'application/pdf' });
+
+                // Try native share with PDF
+                if (navigator.share && navigator.canShare) {
+                    if (navigator.canShare({ files: [pdfFile] })) {
                         await navigator.share({
                             title: 'تقرير الحضور الشهري',
                             text: `تقرير الحضور - ${monthlyData.unitName || 'النصاريح'}`,
-                            files: [file]
+                            files: [pdfFile]
                         });
-                        showToast('✅ تم فتح مشاركة الصورة');
+                        showToast('✅ تم فتح مشاركة ملف PDF');
+                        showLoading(false);
                         return;
                     }
                 }
 
+                // Fallback: download PDF and open WhatsApp
+                const pdfUrl = URL.createObjectURL(pdfBlob);
+                const link = document.createElement('a');
+                const safeUnitName2 = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
+                link.download = `attendance_report_${safeUnitName2}_${new Date().toISOString().split('T')[0]}.pdf`;
+                link.href = pdfUrl;
+                link.click();
+
                 const message = `تقرير الحضور الشهري - ${monthlyData.unitName || 'النصاريح'}`;
                 const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-                const link = document.createElement('a');
-                link.download = `تقرير_حضور.png`;
-                link.href = capturedImageDataUrl;
-                link.click();
-
                 setTimeout(() => {
                     window.open(whatsappUrl, '_blank');
-                    showToast('📱 تم حفظ الصورة وفتح واتساب - أرسل الصورة يدوياً');
+                    showToast('📱 تم حفظ ملف PDF وفتح واتساب - أرسل الملف يدوياً');
                 }, 1000);
 
             } catch (error) {
@@ -1825,6 +1797,8 @@
                 const message = `تقرير الحضور الشهري - ${monthlyData.unitName || 'النصاريح'}`;
                 window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
                 showToast('📱 جاري فتح واتساب');
+            } finally {
+                showLoading(false);
             }
         }
 
@@ -1832,55 +1806,86 @@
             window.print();
         }
 
+        async function generateReportPDF() {
+            const { jsPDF } = window.jspdf;
+            const reportContent = document.getElementById('reportContent');
+
+            // Capture the report as canvas with high quality
+            const canvas = await html2canvas(reportContent, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#ffffff',
+                windowWidth: reportContent.scrollWidth,
+                windowHeight: reportContent.scrollHeight,
+                logging: false
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+
+            // A4 dimensions in mm
+            const pdfWidth = 210;
+            const pdfHeight = 297;
+
+            // Margins
+            const topMargin = 10;
+            const bottomMargin = 10;
+            const contentHeight = pdfHeight - topMargin - bottomMargin;
+
+            // Calculate image dimensions to fit width
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const scale = pdfWidth / imgWidth;
+            const scaledHeight = imgHeight * scale;
+
+            // Create PDF
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            let heightLeft = scaledHeight;
+            let position = topMargin;
+            let pageCount = 1;
+
+            // Add first page
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
+
+            // Add white margins to cover overflow
+            pdf.setFillColor(255, 255, 255);
+            pdf.rect(0, 0, pdfWidth, topMargin, 'F');
+            pdf.rect(0, pdfHeight - bottomMargin, pdfWidth, bottomMargin, 'F');
+
+            heightLeft -= contentHeight;
+
+            // Add additional pages if content is longer than one page
+            while (heightLeft > 0) {
+                position -= contentHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
+
+                // Add white margins for each page
+                pdf.setFillColor(255, 255, 255);
+                pdf.rect(0, 0, pdfWidth, topMargin, 'F');
+                pdf.rect(0, pdfHeight - bottomMargin, pdfWidth, bottomMargin, 'F');
+
+                heightLeft -= contentHeight;
+                pageCount++;
+            }
+
+            return { pdf, pageCount };
+        }
+
         async function saveReportPDF() {
             showLoading(true);
             showToast('⏳ جاري إنشاء ملف PDF...');
 
             try {
-                const { jsPDF } = window.jspdf;
-                const reportContent = document.getElementById('reportContent');
+                const { pdf, pageCount } = await generateReportPDF();
 
-                // Capture the report as canvas
-                const canvas = await html2canvas(reportContent, {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    backgroundColor: '#ffffff',
-                    windowWidth: reportContent.scrollWidth,
-                    windowHeight: reportContent.scrollHeight,
-                    logging: false
-                });
-
-                const imgData = canvas.toDataURL('image/png');
-
-                // Calculate dimensions for A4
-                const imgWidth = 210; // A4 width in mm
-                const pageHeight = 297; // A4 height in mm
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-                let heightLeft = imgHeight;
-                let position = 0;
-
-                // Create PDF
-                const pdf = new jsPDF('p', 'mm', 'a4');
-
-                // Add first page
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-
-                // Add additional pages if content is longer than one page
-                while (heightLeft > 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                }
-
-                // Save the PDF
-                const fileName = `تقرير_حضور_${monthlyData.unitName || 'النصاريح'}_${new Date().toISOString().split('T')[0]}.pdf`;
+                // Save the PDF - use English filename for compatibility
+                const safeUnitName = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
+                const fileName = `attendance_report_${safeUnitName}_${new Date().toISOString().split('T')[0]}.pdf`;
                 pdf.save(fileName);
 
-                showToast('✅ تم حفظ ملف PDF بنجاح');
+                showToast(`✅ تم حفظ ملف PDF بنجاح (${pageCount} صفحة)`);
             } catch (error) {
                 console.error('PDF Error:', error);
                 showToast('❌ فشل إنشاء ملف PDF');
