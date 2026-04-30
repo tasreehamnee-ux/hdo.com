@@ -580,13 +580,6 @@
 
         .action-btn:active { transform: scale(0.95); }
 
-        .action-btn.save {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-            grid-column: span 2;
-        }
-
         .action-btn.whatsapp {
             background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
             color: white;
@@ -1226,10 +1219,6 @@
             </div>
 
             <div class="action-buttons">
-                <button class="action-btn save" onclick="saveReportImage()">
-                    <span>💾</span>
-                    حفظ كصورة
-                </button>
                 <button class="action-btn whatsapp" onclick="shareToWhatsAppAuto()">
                     <span>💬</span>
                     إرسال لواتساب
@@ -1788,20 +1777,6 @@
                 showToast('❌ فشل التقاط الصورة');
             } finally {
                 showLoading(false);
-            }
-        }
-
-        async function saveReportImage() {
-            if (!capturedImageDataUrl) {
-                await captureReportImage();
-            }
-
-            if (capturedImageDataUrl) {
-                const link = document.createElement('a');
-                link.download = `تقرير_حضور_${monthlyData.unitName || 'النصاريح'}_${new Date().toISOString().split('T')[0]}.png`;
-                link.href = capturedImageDataUrl;
-                link.click();
-                showToast('✅ تم حفظ الصورة');
             }
         }
 
