@@ -433,6 +433,8 @@
         .status-select.tafreeg-taawidi { background: #ffeaa7; color: #fdcb6e; border-color: #fdcb6e; }
         .status-select.istiraha { background: #dfe6e9; color: #636e72; border-color: #636e72; }
         .status-select.wajib { background: #74b9ff; color: #0984e3; border-color: #0984e3; }
+        .status-select.egaza { background: #e8daef; color: #8e44ad; border-color: #8e44ad; }
+        .status-select.egaza_maradia { background: #fadbd8; color: #c0392b; border-color: #c0392b; }
 
         .shift-select {
             width: 100%;
@@ -1069,6 +1071,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -1288,7 +1291,8 @@
             {value: 'tafreeg-taawidi', text: 'تفريغ تعويضية', class: 'tafreeg-taawidi'},
             {value: 'istiraha', text: 'استراحة', class: 'istiraha'},
             {value: 'wajib', text: 'واجب', class: 'wajib'},
-            {value: 'egaza', text: 'اجازة اعتيادية', class: 'egaza'}
+            {value: 'egaza', text: 'اجازة اعتيادية', class: 'egaza'},
+              {value: 'egaza_maradia', text: 'اجازة مرضية', class:  'egaza_maradia'}
 
         ];
 
@@ -1308,7 +1312,8 @@
             'tafreeg-taawidi': 'تفريغ تعويضية',
             'istiraha': 'استراحة',
             'wajib': 'واجب',
-            'egaza': 'اجازة اعتيادية'
+            'egaza': 'اجاز اعتيادية',
+            'egaza_maradia': 'اجازة مرضية'
         };
 
         const shiftNames = {
@@ -1734,7 +1739,10 @@
                 'tafreeg': '#1abc9c',
                 'tafreeg-taawidi': '#fdcb6e',
                 'istiraha': '#636e72',
-                'wajib': '#0984e3'
+                'wajib': '#0984e3',
+                  'egaza': '#8e44ad',
+                'egaza_maradia': '#c0392b'
+
             };
             return colors[status] || '#000';
         }
@@ -1824,7 +1832,7 @@
                 logging: false
             });
 
-            const imgData = canvas.toDataURL('image/png');
+            const imgData = canvas.toDataURL('imag.jpg');
 
             // A4 dimensions in mm
             const pdfWidth = 210;
