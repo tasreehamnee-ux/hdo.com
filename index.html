@@ -735,27 +735,44 @@
         .monthly-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            table-layout: fixed;
+        }
+
+        .monthly-table thead {
+            display: table-header-group;
+        }
+
+        .monthly-table thead tr {
+            background: #f0f0f0;
         }
 
         .monthly-table th {
             background: #f0f0f0;
             color: #000;
-            padding: 8px 4px;
+            padding: 6px 2px;
             text-align: center;
             font-weight: 700;
             border: 1px solid #333;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .monthly-table td {
-            padding: 6px 3px;
+            padding: 5px 2px;
             border: 1px solid #333;
             text-align: center;
             vertical-align: middle;
             font-weight: 600;
-            height: 35px;
-            font-size: 0.75rem;
+            height: 30px;
+            font-size: 0.8rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .monthly-table tbody tr {
+            page-break-inside: avoid;
         }
 
         .monthly-table .notes-cell {
@@ -921,8 +938,8 @@
         /* Print Styles */
         @media print {
             @page {
-                size: A4 portrait;
-                margin: 10mm;
+                size: A4 landscape;
+                margin: 8mm;
             }
 
             * {
@@ -973,16 +990,21 @@
                 box-shadow: none !important;
                 border-radius: 0 !important;
                 width: 100% !important;
-                margin: 0 !important;
+                max-width: 281mm !important;
+                margin: 0 auto !important;
                 background: white !important;
                 position: static !important;
-                overflow: visible !important;
+                overflow: hidden !important;
+                padding: 0 !important;
             }
 
             #dashboardSection {
                 display: block !important;
                 position: static !important;
                 overflow: visible !important;
+                width: 100% !important;
+                max-width: 281mm !important;
+                margin: 0 auto !important;
             }
 
             #formSection {
@@ -991,44 +1013,61 @@
 
             .report-container {
                 box-shadow: none !important;
-                padding: 10px !important;
-                max-width: 100% !important;
-                margin: 0 !important;
+                padding: 3mm !important;
+                max-width: 281mm !important;
+                width: 100% !important;
+                margin: 0 auto !important;
                 page-break-inside: avoid;
                 position: static !important;
+                overflow: hidden !important;
             }
 
             .report-table, .monthly-table {
                 width: 100% !important;
+                max-width: 100% !important;
                 page-break-inside: auto;
-                font-size: 0.65rem;
+                font-size: 0.8rem;
                 border: 2px solid #000 !important;
                 margin: 0 !important;
+                table-layout: fixed !important;
+            }
+
+            .monthly-table thead {
+                display: table-header-group !important;
+            }
+
+            .monthly-table thead tr {
+                background-color: #d0d0d0 !important;
+                page-break-inside: avoid;
             }
 
             .report-table th, .monthly-table th {
                 background-color: #d0d0d0 !important;
                 border: 1px solid #000 !important;
-                font-size: 0.65rem;
-                padding: 4px 2px;
+                font-size: 0.75rem;
+                padding: 4px 2px !important;
+                word-wrap: break-word !important;
             }
 
             .report-table td, .monthly-table td {
                 border: 1px solid #000 !important;
-                font-size: 0.65rem;
-                padding: 3px 2px;
-                height: 30px;
+                font-size: 0.8rem;
+                padding: 3px 2px !important;
+                height: auto !important;
+                min-height: 25px;
+                word-wrap: break-word !important;
             }
 
-            .report-table tr, .monthly-table tr {
+            .monthly-table tbody tr {
                 page-break-inside: avoid;
-                page-break-after: auto;
             }
 
             .monthly-week {
                 page-break-inside: avoid;
-                margin-bottom: 15px;
+                margin-bottom: 8px;
                 border: 2px solid #000 !important;
+                max-width: 100% !important;
+                overflow: hidden !important;
             }
 
             .week-header {
@@ -1067,9 +1106,6 @@
             }
         }
     </style>
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -1653,7 +1689,6 @@
                 const firstWeek = weeks[0];
                 const lastWeek = weeks[weeks.length - 1];
 
-                // Format dates with Hijri
                 const startHijri = gregorianToHijri(firstWeek.startDate);
                 const endHijri = gregorianToHijri(lastWeek.endDate);
 
@@ -1671,6 +1706,8 @@
             weeks.forEach(weekData => {
                 const weekDiv = document.createElement('div');
                 weekDiv.className = 'monthly-week';
+                weekDiv.style.maxWidth = '100%';
+                weekDiv.style.overflow = 'hidden';
 
                 const weekHijri = gregorianToHijri(weekData.startDate);
                 const weekEndHijri = gregorianToHijri(weekData.endDate);
@@ -1683,45 +1720,59 @@
                 `;
                 weekDiv.appendChild(weekHeader);
 
+                // Create table with proper structure
                 const table = document.createElement('table');
                 table.className = 'monthly-table';
-                table.innerHTML = `
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>الاسم</th>
-                            <th>الدوام</th>
-                            <th>سبت</th>
-                            <th>أحد</th>
-                            <th>إثنين</th>
-                            <th>ثلاثاء</th>
-                            <th>أربعاء</th>
-                            <th>خميس</th>
-                            <th>جمعة</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                `;
+                table.style.tableLayout = 'fixed';
+                table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
 
-                const tbody = table.querySelector('tbody');
+                // Create thead - this will repeat on each page
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                headerRow.style.background = '#f0f0f0';
+                headerRow.innerHTML = `
+                    <th style="width: 4%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">ت</th>
+                    <th style="width: 16%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الاسم الثلاثي</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">السبت</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الأحد</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الإثنين</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الثلاثاء</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الأربعاء</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الخميس</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الجمعة</th>
+                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">ملاحظات</th>
+                `;
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Create tbody - data rows
+                const tbody = document.createElement('tbody');
                 weekData.employees.forEach(emp => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td>${emp.id}</td>
-                        <td>${emp.name}</td>
-                        <td style="font-weight: bold;">${shiftNames[emp.shift] || 'صباحي'}</td>
-                        ${emp.days.map(d => `<td style="color: ${getStatusColor(d)}; font-weight: bold;">${statusFullNames[d] || d}</td>`).join('')}
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem;">${emp.id}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; word-wrap: break-word;">${emp.name}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[0])}; font-weight: bold;">${statusFullNames[emp.days[0]] || emp.days[0]}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[1])}; font-weight: bold;">${statusFullNames[emp.days[1]] || emp.days[1]}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[2])}; font-weight: bold;">${statusFullNames[emp.days[2]] || emp.days[2]}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[3])}; font-weight: bold;">${statusFullNames[emp.days[3]] || emp.days[3]}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[4])}; font-weight: bold;">${statusFullNames[emp.days[4]] || emp.days[4]}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[5])}; font-weight: bold;">${statusFullNames[emp.days[5]] || emp.days[5]}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[6])}; font-weight: bold;">${statusFullNames[emp.days[6]] || emp.days[6]}</td>
+                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; word-wrap: break-word;"></td>
                     `;
                     tbody.appendChild(tr);
                 });
+                table.appendChild(tbody);
 
                 weekDiv.appendChild(table);
 
                 // Add week notes if exist
                 if (weekData.notes && weekData.notes.trim() !== '') {
                     const notesDiv = document.createElement('div');
-                    notesDiv.style.cssText = 'padding: 10px 15px; background: #f8f9fa; border-top: 1px solid #ddd; font-size: 0.85rem; color: #333;';
-                    notesDiv.innerHTML = `<strong>ملاحظات:</strong> ${weekData.notes}`;
+                    notesDiv.style.cssText = 'padding: 8px 10px; background: #f8f9fa; border-top: 1px solid #ddd; font-size: 0.8rem; color: #333;';
+                    notesDiv.innerHTML = `<strong>ملاحظات الأسبوع:</strong> ${weekData.notes}`;
                     weekDiv.appendChild(notesDiv);
                 }
 
