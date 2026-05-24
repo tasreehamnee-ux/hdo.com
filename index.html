@@ -2,1994 +2,880 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#1e3c72">
-    <title>نظام الحضور والغياب - النصاريح الأمنية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وحدة التصاريح الأمنية - استمارة الانشطة الشهرية - استمارة إلكترونية</title>
+        <title>استمارة الانشطة الشهرية</title>
 
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTmV6YXJ5aSBBdHRlbmRhbmNlIiwic2hvcnRfbmFtZSI6IkF0dGVuZGFuY2UiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzFlM2M3MiIsInRoZW1lX2NvbG9yIjoiIzFlM2M3MiJ9">
-
-    <!-- Libraries for Hijri Date Picker -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_red.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Arial', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 10px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        @media (max-width: 768px) {
-            body { padding: 5px; }
-            .top-header { padding: 8px 10px !important; }
-            .form-container { padding: 15px 10px !important; }
-            .entry-table { font-size: 0.75rem !important; }
-            .entry-table th, .entry-table td { padding: 6px 3px !important; }
-            .action-buttons { grid-template-columns: 1fr 1fr !important; }
-            .report-container { padding: 15px !important; }
-        }
-
-        @supports (padding-top: env(safe-area-inset-top)) {
-            body {
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
-                padding-left: env(safe-area-inset-left);
-                padding-right: env(safe-area-inset-right);
-            }
-        }
-
-        .top-header {
-            background: white;
-            padding: 12px 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border-bottom: 4px solid #c41e3a;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 8px;
-            z-index: 2;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
-            user-select: none;
-        }
-
-        .nav-btn:active { transform: scale(0.95); }
-
-        .nav-btn.primary {
-            background: #c41e3a;
-            color: white;
-            box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
-        }
-
-        .nav-btn.secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .nav-btn.danger {
-            background: #e74c3c;
-            color: white;
-            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
-        }
-
-        .logo-center {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 1;
-        }
-
-        .logo-img-top {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto;
-            border-radius: 50%;
-            background: white;
-            padding: 5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        @media (max-width: 480px) {
-            .logo-img-top { width: 50px; height: 50px; }
-            .logo-text-top { font-size: 0.7rem !important; }
-        }
-
-        .logo-text-top {
-            font-size: 0.75rem;
-            color: #c41e3a;
-            font-weight: 700;
-            margin-top: 5px;
+            padding: 20px;
         }
 
         .container {
-            width: 100%;
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 16px;
+            border-radius: 15px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
-            display: none;
         }
 
-        .container.active {
-            display: block;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .form-header {
-            background: #f8f9fa;
-            color: #333;
-            padding: 25px 20px;
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
             text-align: center;
-            border-bottom: 3px solid #c41e3a;
-        }
-
-        .header-logo-main {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 10px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 50%;
-            background: white;
-            padding: 5px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
-
-        @media (max-width: 480px) {
-            .header-logo-main { width: 70px; height: 70px; }
-        }
-
-        .form-container {
-            padding: 20px 15px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-        }
-
-        .required {
-            color: #c41e3a;
-            margin-right: 4px;
-        }
-
-        .form-input, .form-select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            background: white;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .form-input:focus, .form-select:focus {
-            outline: none;
-            border-color: #c41e3a;
-        }
-
-        /* Date Picker Styles */
-        .date-picker-wrapper {
             position: relative;
-            width: 100%;
         }
 
-        .date-input {
-            width: 100%;
-            padding: 12px 40px 12px 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            background: white;
-            cursor: pointer;
-            text-align: right;
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .date-input:focus {
-            outline: none;
-            border-color: #c41e3a;
+        .header .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
         }
 
-        .calendar-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #c41e3a;
-            font-size: 1.2rem;
-            pointer-events: none;
-        }
-
-        .date-display {
+        .controls {
             display: flex;
-            gap: 10px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .date-badge {
-            background: #f0f0f0;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #555;
-            border: 1px solid #ddd;
-        }
-
-        .date-badge.hijri {
-            background: #d5f4e6;
-            color: #27ae60;
-            border-color: #27ae60;
-        }
-
-        .date-badge.gregorian {
-            background: #d6eaf8;
-            color: #3498db;
-            border-color: #3498db;
-        }
-
-        .flatpickr-calendar {
-            font-family: 'Cairo', sans-serif !important;
-        }
-
-        .flatpickr-month {
-            height: 40px !important;
-        }
-
-        .flatpickr-current-month {
-            font-size: 1.1rem !important;
-            font-weight: 700 !important;
-        }
-
-        .flatpickr-weekday {
-            font-weight: 700 !important;
-            color: #c41e3a !important;
-        }
-
-        .flatpickr-day.selected {
-            background: #c41e3a !important;
-            border-color: #c41e3a !important;
-        }
-
-        .flatpickr-day:hover {
-            background: rgba(196, 30, 58, 0.1) !important;
-        }
-
-        .week-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
             justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
         }
 
-        .week-btn {
-            padding: 8px 16px;
-            border: 2px solid #c41e3a;
-            background: white;
-            color: #c41e3a;
-            border-radius: 20px;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.85rem;
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
-        .week-btn.active {
-            background: #c41e3a;
-            color: white;
+        .control-group label {
+            font-weight: bold;
+            color: #2a5298;
+            font-size: 14px;
         }
 
-        .week-btn.saved {
-            background: #27ae60;
-            border-color: #27ae60;
-            color: white;
-        }
-
-        .week-btn.saved::after {
-            content: " ✓";
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin: 10px 0;
+        select {
+            padding: 10px 15px;
+            border: 2px solid #2a5298;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .entry-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            min-width: 800px;
-        }
-
-        .entry-table th {
-            background: #c41e3a;
-            color: white;
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 700;
-            border: 1px solid #a01729;
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-
-        .entry-table td {
-            padding: 8px 5px;
-            border: 1px solid #ddd;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .notes-input {
-            width: 100%;
-            padding: 8px 5px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.85rem;
-            background: white;
-            min-width: 120px;
-        }
-
-        .notes-input:focus {
-            outline: none;
-            border-color: #c41e3a;
-        }
-
-        .status-select {
-            width: 100%;
-            padding: 8px 5px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 16px;
             background: white;
             cursor: pointer;
-            text-align: center;
-            -webkit-appearance: none;
-            appearance: none;
+            min-width: 180px;
+            transition: all 0.3s;
         }
 
-        .status-select.present { background: #d5f4e6; color: #27ae60; border-color: #27ae60; }
-        .status-select.absent { background: #fadbd8; color: #e74c3c; border-color: #e74c3c; }
-        .status-select.holiday { background: #d6eaf8; color: #3498db; border-color: #3498db; }
-        .status-select.rest { background: #fdebd0; color: #f39c12; border-color: #f39c12; }
-        .status-select.compensation { background: #e8daef; color: #9b59b6; border-color: #9b59b6; }
-        .status-select.tafreeg { background: #d1f2eb; color: #1abc9c; border-color: #1abc9c; }
-        .status-select.tafreeg-taawidi { background: #ffeaa7; color: #fdcb6e; border-color: #fdcb6e; }
-        .status-select.istiraha { background: #dfe6e9; color: #636e72; border-color: #636e72; }
-        .status-select.wajib { background: #74b9ff; color: #0984e3; border-color: #0984e3; }
-        .status-select.egaza { background: #e8daef; color: #8e44ad; border-color: #8e44ad; }
-        .status-select.egaza_maradia { background: #fadbd8; color: #c0392b; border-color: #c0392b; }
-
-        .shift-select {
-            width: 100%;
-            padding: 8px 5px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            background: white;
-            cursor: pointer;
-            text-align: center;
-            -webkit-appearance: none;
-            appearance: none;
+        select:hover, select:focus {
+            border-color: #1e3c72;
+            box-shadow: 0 0 10px rgba(42, 82, 152, 0.2);
         }
 
-        .shift-select.morning { background: #fff3cd; color: #856404; border-color: #ffc107; }
-        .shift-select.evening { background: #d1ecf1; color: #0c5460; border-color: #17a2b8; }
-        .shift-select.both { background: #d4edda; color: #155724; border-color: #28a745; }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
-            color: white;
+        .btn {
+            padding: 12px 25px;
             border: none;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 15px;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .submit-btn:active { transform: scale(0.98); }
-
-        .btn-secondary {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
         }
 
         .btn-success {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
         }
-
-        .btn-success:active { transform: scale(0.98); }
 
         .btn-warning {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
         }
 
-        .btn-danger {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
         }
 
-        .btn-danger:active { transform: scale(0.98); }
-
-        .btn-secondary:active { transform: scale(0.98); }
-
-        .action-btn.pdf {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        @media (max-width: 768px) {
-            .action-buttons {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .action-btn {
-            padding: 16px 12px;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            touch-action: manipulation;
-            transition: all 0.3s;
-            flex-direction: column;
-            min-height: 70px;
-        }
-
-        .action-btn:active { transform: scale(0.95); }
-
-        .action-btn.whatsapp {
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-            font-size: 1.1rem;
-        }
-
-        .action-btn.print {
-            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(52, 73, 94, 0.3);
-        }
-
-        .action-btn.back {
-            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
-        }
-
-        .action-btn span {
-            font-size: 1.5rem;
-        }
-
-        .report-container {
-            background: white;
-            border-radius: 12px;
+        .form-container {
             padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 100%;
-            margin-left: auto;
-            margin-right: auto;
+            overflow-x: auto;
         }
 
-        @media (max-width: 768px) {
-            .report-container { padding: 15px; }
-            .report-title { font-size: 1.2rem !important; }
-            .report-subtitle { font-size: 0.9rem !important; }
-        }
-
-        .report-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .report-header img {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
-            display: block;
-            object-fit: contain;
-        }
-
-        @media (max-width: 480px) {
-            .report-header img { width: 60px; height: 60px; }
-        }
-
-        .report-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #000;
-            margin-bottom: 10px;
-        }
-
-        .report-subtitle {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .report-unit {
-            text-align: right;
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-right: 4px solid #c41e3a;
-        }
-
-        .report-table {
+        /* الجدول يبدأ من اليمين إلى اليسار (RTL) */
+        table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 0.85rem;
-            border: 2px solid #333;
+            background: white;
+            direction: rtl;
         }
 
-        .report-table th {
-            background: #e0e0e0;
-            color: #000;
-            padding: 10px 6px;
+        th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px 10px;
             text-align: center;
-            font-weight: 700;
-            border: 1px solid #333;
-            font-size: 0.75rem;
+            font-weight: bold;
+            border: 2px solid #1e3c72;
+            font-size: 14px;
+            min-width: 120px;
         }
 
-        .report-table td {
-            padding: 8px 5px;
-            border: 1px solid #333;
+        td {
+            border: 2px solid #dee2e6;
+            padding: 8px;
             text-align: center;
-            vertical-align: middle;
-            font-weight: 600;
-            height: 40px;
-            font-size: 0.8rem;
+            vertical-align: top;
         }
 
-        .report-table .notes-cell {
-            text-align: right;
-            font-size: 0.75rem;
-            max-width: 150px;
-            word-wrap: break-word;
-        }
-
-        /* Monthly Report Styles */
-        .monthly-report {
-            margin-top: 30px;
-        }
-
-        .monthly-week {
-            margin-bottom: 30px;
-            page-break-inside: avoid;
-            border: 2px solid #333;
-            border-radius: 8px;
+        /* الحقول تتكيف مع المحتوى */
+        td input, td textarea {
+            width: 100%;
+            min-width: 120px;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+            transition: all 0.3s;
+            resize: none;
             overflow: hidden;
         }
 
-        .week-header {
-            background: #c41e3a;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: 700;
-            margin-bottom: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* textarea تتوسع تلقائياً */
+        td textarea {
+            min-height: 40px;
+            height: auto;
+            field-sizing: content;
+            overflow-y: hidden;
         }
 
-        .week-date {
-            font-size: 0.9rem;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
-            border-radius: 20px;
+        td input:focus, td textarea:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 8px rgba(42, 82, 152, 0.2);
+            outline: none;
         }
 
-        .monthly-table {
+        /* input من نوع text يتوسع تلقائياً */
+        td input[type="text"] {
+            min-width: 120px;
             width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            table-layout: fixed;
         }
 
-        .monthly-table thead {
-            display: table-header-group;
-        }
-
-        .monthly-table thead tr {
-            background: #f0f0f0;
-        }
-
-        .monthly-table th {
-            background: #f0f0f0;
-            color: #000;
-            padding: 6px 2px;
+        /* عمود التسلسل - عرض مخفض */
+        .row-number {
+            background: #e9ecef;
+            font-weight: bold;
+            color: #2a5298;
+            width: 35px;          /* عرض مخفض من 50px إلى 35px */
+            min-width: 35px;      /* عرض أدنى مخفض */
+            max-width: 35px;      /* عرض أقصى مخفض */
             text-align: center;
-            font-weight: 700;
-            border: 1px solid #333;
-            font-size: 0.75rem;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            font-size: 13px;      /* خط أصغر قليلاً */
+            padding: 8px 2px;     /* هوامش أقل جانبياً */
         }
 
-        .monthly-table td {
-            padding: 5px 2px;
-            border: 1px solid #333;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: 600;
-            height: 30px;
-            font-size: 0.8rem;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+        /* تعديل عرض العمود الأول في thead */
+        th:first-child {
+            width: 35px;
+            min-width: 35px;
+            max-width: 35px;
+            padding: 15px 2px;
+            font-size: 13px;
         }
 
-        .monthly-table tbody tr {
-            page-break-inside: avoid;
+        .add-row-btn {
+            margin: 20px auto;
+            display: block;
         }
 
-        .monthly-table .notes-cell {
-            text-align: right;
-            font-size: 0.7rem;
-            max-width: 100px;
-            word-wrap: break-word;
-        }
-
-        .saved-weeks-indicator {
-            background: #d5f4e6;
-            border: 2px solid #27ae60;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .saved-weeks-indicator h4 {
-            color: #27ae60;
-            margin-bottom: 10px;
-        }
-
-        .saved-weeks-list {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .saved-week-tag {
-            background: #27ae60;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-        }
-
-        .loading-overlay {
+        .notification {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            flex-direction: column;
-        }
-
-        .loading-overlay.active { display: flex; }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #c41e3a;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .loading-text {
+            top: 20px;
+            right: 20px;
+            background: #ff6b6b;
             color: white;
-            margin-top: 20px;
-            font-size: 1.1rem;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
         }
 
-        .toast {
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .notification.success {
+            background: #38ef7d;
+        }
+
+        .notification.info {
+            background: #4facfe;
+        }
+
+        .auto-save-indicator {
             position: fixed;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
+            left: 20px;
+            background: #38ef7d;
             color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            z-index: 10000;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .toast.show { opacity: 1; }
-
-        /* Confirmation Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-        }
-
-        .modal-overlay.active { display: flex; }
-
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            animation: modalSlide 0.3s ease-out;
-        }
-
-        @keyframes modalSlide {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #e74c3c;
-            margin-bottom: 15px;
-        }
-
-        .modal-text {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .modal-btn {
             padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+            border-radius: 20px;
+            display: none;
+            z-index: 1000;
+            font-size: 14px;
         }
 
-        .modal-btn.confirm {
-            background: #e74c3c;
-            color: white;
+        .auto-save-indicator.show {
+            display: block;
+            animation: fadeInOut 2s ease;
         }
 
-        .modal-btn.cancel {
-            background: #95a5a6;
-            color: white;
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
 
-        /* Print Styles */
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%) !important;
+        }
+
+        /* خلايا الجدول تتكيف مع المحتوى */
+        td {
+            height: auto;
+            min-height: 40px;
+        }
+
         @media print {
-            @page {
-                size: A4 landscape;
-                margin: 8mm;
+            body {
+                background: white;
             }
-
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            html, body {
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                height: auto !important;
-                overflow: visible !important;
-            }
-
-            head, meta, script, link {
+            .controls, .add-row-btn, .notification, .auto-save-indicator {
                 display: none !important;
             }
-
-            .top-header,
-            .action-buttons,
-            .nav-buttons,
-            .submit-btn,
-            .btn-danger,
-            .btn-secondary,
-            .btn-success,
-            .btn-warning,
-            .loading-overlay,
-            .modal-overlay,
-            .toast,
-            #formSection,
-            .form-container form,
-            .week-selector,
-            .saved-weeks-indicator,
-            iframe,
-            object,
-            embed {
-                display: none !important;
-                visibility: hidden !important;
-            }
-
-            body > *:not(.container) {
-                display: none !important;
-            }
-
             .container {
-                display: block !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                width: 100% !important;
-                max-width: 281mm !important;
-                margin: 0 auto !important;
-                background: white !important;
-                position: static !important;
-                overflow: hidden !important;
-                padding: 0 !important;
+                box-shadow: none;
             }
-
-            #dashboardSection {
-                display: block !important;
-                position: static !important;
+            td textarea, td input {
                 overflow: visible !important;
-                width: 100% !important;
-                max-width: 281mm !important;
-                margin: 0 auto !important;
-            }
-
-            #formSection {
-                display: none !important;
-            }
-
-            .report-container {
-                box-shadow: none !important;
-                padding: 3mm !important;
-                max-width: 281mm !important;
-                width: 100% !important;
-                margin: 0 auto !important;
-                page-break-inside: avoid;
-                position: static !important;
-                overflow: hidden !important;
-            }
-
-            .report-table, .monthly-table {
-                width: 100% !important;
-                max-width: 100% !important;
-                page-break-inside: auto;
-                font-size: 0.8rem;
-                border: 2px solid #000 !important;
-                margin: 0 !important;
-                table-layout: fixed !important;
-            }
-
-            .monthly-table thead {
-                display: table-header-group !important;
-            }
-
-            .monthly-table thead tr {
-                background-color: #d0d0d0 !important;
-                page-break-inside: avoid;
-            }
-
-            .report-table th, .monthly-table th {
-                background-color: #d0d0d0 !important;
-                border: 1px solid #000 !important;
-                font-size: 0.75rem;
-                padding: 4px 2px !important;
-                word-wrap: break-word !important;
-            }
-
-            .report-table td, .monthly-table td {
-                border: 1px solid #000 !important;
-                font-size: 0.8rem;
-                padding: 3px 2px !important;
                 height: auto !important;
-                min-height: 25px;
-                word-wrap: break-word !important;
-            }
-
-            .monthly-table tbody tr {
-                page-break-inside: avoid;
-            }
-
-            .monthly-week {
-                page-break-inside: avoid;
-                margin-bottom: 8px;
-                border: 2px solid #000 !important;
-                max-width: 100% !important;
-                overflow: hidden !important;
-            }
-
-            .week-header {
-                page-break-after: avoid;
-                background-color: #c41e3a !important;
-                color: white !important;
-            }
-
-            .report-title {
-                font-size: 1.1rem;
-            }
-
-            .report-subtitle {
-                font-size: 0.85rem;
-            }
-
-            .report-header img {
-                width: 50px;
-                height: 50px;
-            }
-
-            a[href]:after {
-                content: none !important;
-            }
-
-            .report-container::before,
-            .report-container::after {
-                content: none !important;
-                display: none !important;
+                resize: none !important;
+                border: none !important;
+                background: transparent !important;
             }
         }
 
-        @supports (-webkit-touch-callout: none) {
-            .form-input, .form-select, .status-select, .shift-select, .notes-input, .date-input {
-                font-size: 16px;
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            th, td {
+                font-size: 12px;
+                padding: 5px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            /* عرض أصغر للشاشات الصغيرة */
+            .row-number, th:first-child {
+                width: 30px;
+                min-width: 30px;
+                max-width: 30px;
+                font-size: 11px;
             }
         }
     </style>
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
 </head>
 <body>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <div class="loading-text">جاري معالجة الطلب...</div>
+    <div class="notification" id="notification">
+        ⚠️ تنبيه: نهاية الشهر! يرجى سحب الاستمارة وإرسالها
     </div>
 
-    <!-- Confirmation Modal -->
-    <div class="modal-overlay" id="confirmModal">
-        <div class="modal-content">
-            <div class="modal-title">⚠️ تأكيد المسح</div>
-            <div class="modal-text" id="modalText">
-                هل أنت متأكد من مسح جميع البيانات؟<br>
-                <small>سيتم حذف جميع المعلومات المدخلة ولا يمكن التراجع عن هذا الإجراء.</small>
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn confirm" onclick="confirmClear()">نعم، امسح</button>
-                <button class="modal-btn cancel" onclick="closeModal()">إلغاء</button>
-            </div>
-        </div>
+    <div class="auto-save-indicator" id="autoSaveIndicator">
+        ✅ تم الحفظ تلقائياً
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <div class="top-header">
-        <div class="header-content">
-            <div class="nav-buttons" style="margin-right: auto;">
-                <button class="nav-btn primary" onclick="showSection('form')">📝 تسجيل</button>
-                <button class="nav-btn secondary" onclick="showSection('dashboard')">📊 عرض التقارير</button>
-            </div>
-            <div class="logo-center">
-                <img src="image.jpeg" alt="شعار النصاريح الأمنية" class="logo-img-top">
-                <div class="logo-text-top">النصاريح الأمنية</div>
-            </div>
-            <div style="margin-left: auto; width: 150px;"></div>
-        </div>
-    </div>
-
-    <!-- Form Section -->
-    <div class="container active" id="formSection">
-        <div class="form-header">
-            <img src="image.jpeg" alt="Logo" class="header-logo-main">
-            <h2>نموذج تسجيل الحضور والغياب</h2>
-            <p>النصاريح الأمنية - نظام إدارة الموارد البشرية</p>
+    <div class="container">
+        <div class="header">
+            <h1>وحدة التصاريح الأمنية</h1>
+            <h2 style="font-size: 22px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">استمارة الانشطة الشهرية</h2>
+            <div class="subtitle">محافظة <span id="selectedGovernorate">( )</span> - لشهر <span id="selectedMonth">( )</span></div>
         </div>
 
-        <div class="form-container">
-            <!-- Week Selector -->
-            <div class="week-selector" id="weekSelector">
-                <button class="week-btn active" onclick="selectWeek(1)" id="week1">الأسبوع 1</button>
-                <button class="week-btn" onclick="selectWeek(2)" id="week2">الأسبوع 2</button>
-                <button class="week-btn" onclick="selectWeek(3)" id="week3">الأسبوع 3</button>
-                <button class="week-btn" onclick="selectWeek(4)" id="week4">الأسبوع 4</button>
+        <div class="controls">
+            <div class="control-group">
+                <label>المحافظة:</label>
+                <select id="governorateSelect">
+                    <option value="">اختر المحافظة</option>
+                    <option value="بغداد">بغداد</option>
+                    <option value="البصرة">البصرة</option>
+                    <option value="نينوى">نينوى</option>
+                    <option value="النجف">النجف</option>
+                    <option value="ذي قار">ذي قار</option>
+                    <option value="كركوك">كركوك</option>
+                    <option value="الأنبار">الأنبار</option>
+                    <option value="ديالى">ديالى</option>
+                    <option value="المثنى">المثنى</option>
+                    <option value="القادسية">القادسية</option>
+                    <option value="ميسان">ميسان</option>
+                    <option value="واسط">واسط</option>
+                    <option value="صلاح الدين">صلاح الدين</option>
+                    <option value="بابل">بابل</option>
+                    <option value="كربلاء">كربلاء</option>
+                </select>
             </div>
 
-            <!-- Saved Weeks Indicator -->
-            <div class="saved-weeks-indicator" id="savedWeeksIndicator" style="display: none;">
-                <h4>✓ الأسابيع المحفوظة:</h4>
-                <div class="saved-weeks-list" id="savedWeeksList"></div>
+            <div class="control-group">
+                <label>الشهر:</label>
+                <select id="monthSelect">
+                    <option value="">اختر الشهر</option>
+                    <option value="كانون الثاني">كانون الثاني</option>
+                    <option value="شباط">شباط</option>
+                    <option value="آذار">آذار</option>
+                    <option value="نيسان">نيسان</option>
+                    <option value="أيار">أيار</option>
+                    <option value="حزيران">حزيران</option>
+                    <option value="تموز">تموز</option>
+                    <option value="آب">آب</option>
+                    <option value="أيلول">أيلول</option>
+                    <option value="تشرين الأول">تشرين الأول</option>
+                    <option value="تشرين الثاني">تشرين الثاني</option>
+                    <option value="كانون الأول">كانون الأول</option>
+                </select>
             </div>
 
-            <form id="attendanceForm">
-                <div class="form-group">
-                    <label class="form-label"><span class="required">*</span>الوحدة/القسم</label>
-                    <input type="text" class="form-input" id="unitName" placeholder="أدخل اسم الوحدة أو القسم" required>
-                </div>
+            <button class="btn btn-primary" onclick="addRow()">
+                ➕ إضافة صف
+            </button>
 
-                <!-- New Date Picker Section -->
-                <div class="form-group">
-                    <label class="form-label"><span class="required">*</span>تاريخ بداية الأسبوع (ميلادي / هجري)</label>
-                    <div class="date-picker-wrapper">
-                        <input type="text" class="date-input" id="startDatePicker" placeholder="اختر التاريخ" readonly>
-                        <span class="calendar-icon">📅</span>
-                    </div>
-                    <div class="date-display" id="startDateDisplay">
-                        <span class="date-badge gregorian" id="startGregorian"></span>
-                        <span class="date-badge hijri" id="startHijri"></span>
-                    </div>
-                    <input type="hidden" id="startDate" required>
-                </div>
+            <button class="btn btn-success" onclick="savePDF()" id="savePdfBtn">
+                💾 حفظ PDF
+            </button>
 
-                <div class="form-group">
-                    <label class="form-label"><span class="required">*</span>تاريخ نهاية الأسبوع (ميلادي / هجري)</label>
-                    <div class="date-picker-wrapper">
-                        <input type="text" class="date-input" id="endDatePicker" placeholder="اختر التاريخ" readonly>
-                        <span class="calendar-icon">📅</span>
-                    </div>
-                    <div class="date-display" id="endDateDisplay">
-                        <span class="date-badge gregorian" id="endGregorian"></span>
-                        <span class="date-badge hijri" id="endHijri"></span>
-                    </div>
-                    <input type="hidden" id="endDate" required>
-                </div>
+            <button class="btn btn-info" onclick="exportToPDF()" id="exportPdfBtn">
+                📄 تصدير PDF
+            </button>
 
-                <div class="form-group">
-                    <label class="form-label"><span class="required">*</span>المشرف/المدير</label>
-                    <input type="text" class="form-input" id="supervisorName" placeholder="اسم المشرف المسؤول" required>
-                </div>
 
-                <div class="table-responsive">
-                    <table class="entry-table" id="attendanceTable">
-                        <thead>
-                            <tr>
-                                <th>ت</th>
-                                <th>الاسم الثلاثي</th>
-                                <th>حالة الدوام</th>
-                                <th>السبت</th>
-                                <th>الأحد</th>
-                                <th>الإثنين</th>
-                                <th>الثلاثاء</th>
-                                <th>الأربعاء</th>
-                                <th>الخميس</th>
-                                <th>الجمعة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Rows will be generated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="form-group" style="margin-top: 20px;">
-                    <label class="form-label">ملاحظات</label>
-                    <textarea class="form-input" id="weekNotes" rows="4" placeholder="اكتب الملاحظات هنا..." style="resize: vertical; min-height: 80px;"></textarea>
-                </div>
-
-                <button type="button" class="submit-btn" onclick="addNewRow()">+ إضافة موظف جديد</button>
-                <button type="submit" class="btn-success" style="margin-top: 10px;">💾 حفظ بيانات الأسبوع</button>
-                <button type="button" class="btn-warning" onclick="showMonthlyReport()" style="margin-top: 10px;">📆 عرض التقرير الشهري</button>
-                <button type="button" class="btn-danger" onclick="showClearConfirm()">🗑️ مسح جميع البيانات</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Dashboard/Report Section -->
-    <div class="container" id="dashboardSection">
-        <div class="form-header">
-            <h2>📊 التقرير الشهري التراكمي</h2>
+            <button class="btn btn-primary" onclick="clearAll()">
+                🗑️ مسح الكل
+            </button>
         </div>
 
-        <div class="form-container">
-            <div class="saved-weeks-indicator" id="monthlySavedIndicator">
-                <h4>الأسابيع المحفوظة في هذا التقرير:</h4>
-                <div class="saved-weeks-list" id="monthlySavedList"></div>
-            </div>
+        <div class="form-container" id="formContainer">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>ت</th>
+                        <th>المهام والواجبات</th>
+                        <th>عدد الموظفين القائمين بالخدمة</th>
+                        <th>عدد الأعمال ضمن الخطة</th>
+                        <th>نسبة الإنجاز أو عدد المنجز</th>
+                        <th>القسم</th>
+                        <th>الشعبة</th>
+                        <th>الجهة المستفيدة</th>
+                        <th>الجهة الساندة</th>
+                        <th>تاريخ التنفيذ</th>
 
-            <div class="action-buttons">
-                <button class="action-btn whatsapp" onclick="shareToWhatsAppAuto()">
-                    <span>💬</span>
-                    إرسال لواتساب
-                </button>
-                <button class="action-btn print" onclick="printReport()">
-                    <span>🖨️</span>
-                    طباعة
-                </button>
-                <button class="action-btn pdf" onclick="saveReportPDF()">
-                    <span>📄</span>
-                    حفظ PDF
-                </button>
-                <button class="action-btn back" onclick="backToForm()">
-                    <span>⬅️</span>
-                    عودة
-                </button>
-            </div>
-
-            <div class="report-container" id="reportContent">
-                <div class="report-header">
-                    <img src="image.jpeg" alt="شعار المتابعة">
-                    <div class="report-title">التقرير الشهري التراكمي</div>
-                    <div class="report-subtitle">النصاريح الأمنية - قسم المتابعة</div>
-                    <div class="report-unit" id="monthlyReportUnit">الوحدة: <span></span></div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem;">
-                        <div>الفترة: <span id="monthlyPeriod"></span></div>
-                        <div>تاريخ التقرير: <span id="monthlyReportDate"></span></div>
-                    </div>
-                </div>
-
-                <!-- Monthly Report -->
-                <div id="monthlyReportContainer" class="monthly-report">
-                    <!-- Weeks will be generated here -->
-                </div>
-
-                <div style="margin-top: 30px; display: flex; justify-content: space-between; font-weight: bold;">
-                    <div>توقيع المشرف: _________________</div>
-                    <div>الختم الرسمي: _________________</div>
-                </div>
-            </div>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        // Global Data Storage
-        let currentWeek = 1;
-        let monthlyData = {
-            unitName: '',
-            supervisor: '',
-            weeks: {}
-        };
-        let capturedPdfBlob = null;
-        let startDatePickerInstance = null;
-        let endDatePickerInstance = null;
+        const { jsPDF } = window.jspdf;
+                let accumulatedPDFData = { governorate: '', month: '', rows: [] };
 
-        // Fixed WhatsApp number
-        const ADMIN_WHATSAPP = '9647711059176';
-
-        // Status options
-        const statusOptions = [
-            {value: 'present', text: 'حاضر', class: 'present'},
-            {value: 'absent', text: 'غائب', class: 'absent'},
-            {value: 'holiday', text: 'عطلة رسمية', class: 'holiday'},
-            {value: 'rest', text: 'عطلة اسبوعية', class: 'rest'},
-            {value: 'compensation', text: 'تعويضية', class: 'compensation'},
-            {value: 'tafreeg', text: 'تفرغ', class: 'tafreeg'},
-            {value: 'tafreeg-taawidi', text: 'تفريغ تعويضية', class: 'tafreeg-taawidi'},
-            {value: 'istiraha', text: 'استراحة', class: 'istiraha'},
-            {value: 'wajib', text: 'واجب', class: 'wajib'},
-            {value: 'egaza', text: 'اجازة اعتيادية', class: 'egaza'},
-              {value: 'egaza_maradia', text: 'اجازة مرضية', class:  'egaza_maradia'}
-
-        ];
-
-        const shiftOptions = [
-            {value: 'morning', text: 'صباحي', class: 'morning'},
-            {value: 'evening', text: 'مسائي', class: 'evening'},
-            {value: 'both', text: 'كلاهما', class: 'both'}
-        ];
-
-        const statusFullNames = {
-            'present': 'حاضر',
-            'absent': 'غائب',
-            'holiday': 'عطلة رسمية',
-            'rest': 'عطلة اسبوعية',
-            'compensation': 'تعويضية',
-            'tafreeg': 'تفرغ',
-            'tafreeg-taawidi': 'تفريغ تعويضية',
-            'istiraha': 'استراحة',
-            'wajib': 'واجب',
-            'egaza': 'اجاز اعتيادية',
-            'egaza_maradia': 'اجازة مرضية'
-        };
-
-        const shiftNames = {
-            'morning': 'صباحي',
-            'evening': 'مسائي',
-            'both': 'كلاهما'
-        };
-
-        const weekNames = [
-            'الأسبوع الأول',
-            'الأسبوع الثاني',
-            'الأسبوع الثالث',
-            'الأسبوع الرابع'
-        ];
-
-        // Initialize Hijri Date Converter
-        function initHijriConverter() {
-            // Configure moment-hijri
-            moment.locale('ar');
+        function autoResizeTextarea(element) {
+            element.style.height = 'auto';
+            element.style.height = element.scrollHeight + 'px';
         }
 
-        // Convert Gregorian to Hijri
-        function gregorianToHijri(date) {
-            const m = moment(date);
-            const hijriDate = m.format('iYYYY/iMM/iDD');
-            const hijriMonth = m.format('iMMMM');
-            const hijriYear = m.format('iYYYY');
-            return {
-                full: hijriDate,
-                display: `${m.format('iDD')} ${hijriMonth} ${hijriYear} هـ`,
-                year: parseInt(m.format('iYYYY')),
-                month: parseInt(m.format('iMM')),
-                day: parseInt(m.format('iDD'))
-            };
+        function autoResizeInput(element) {
+            const tempSpan = document.createElement('span');
+            tempSpan.style.cssText = 'visibility:hidden;position:absolute;white-space:nowrap;';
+            tempSpan.style.fontSize = window.getComputedStyle(element).fontSize;
+            tempSpan.style.fontFamily = window.getComputedStyle(element).fontFamily;
+            tempSpan.textContent = element.value || element.placeholder;
+            document.body.appendChild(tempSpan);
+            const newWidth = Math.max(tempSpan.offsetWidth + 30, 120);
+            element.style.width = newWidth + 'px';
+            document.body.removeChild(tempSpan);
         }
 
-        // Initialize Date Pickers
-        function initDatePickers() {
-            // Start Date Picker
-            startDatePickerInstance = flatpickr("#startDatePicker", {
-                locale: "ar",
-                dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "Y-m-d",
-                disableMobile: false,
-                static: false,
-                onChange: function(selectedDates, dateStr, instance) {
-                    if (selectedDates[0]) {
-                        const date = selectedDates[0];
-                        const hijri = gregorianToHijri(date);
-                        const gregorianStr = moment(date).format('YYYY/MM/DD');
-
-                        document.getElementById('startDate').value = gregorianStr;
-                        document.getElementById('startGregorian').textContent = gregorianStr + ' م';
-                        document.getElementById('startHijri').textContent = hijri.display;
-
-                        // Auto calculate end date (6 days later)
-                        const endDate = new Date(date);
-                        endDate.setDate(endDate.getDate() + 6);
-                        endDatePickerInstance.setDate(endDate);
-
-                        // Update end date display
-                        const endHijri = gregorianToHijri(endDate);
-                        const endGregorianStr = moment(endDate).format('YYYY/MM/DD');
-                        document.getElementById('endDate').value = endGregorianStr;
-                        document.getElementById('endGregorian').textContent = endGregorianStr + ' م';
-                        document.getElementById('endHijri').textContent = endHijri.display;
+        function loadSavedData() {
+            try {
+                const saved = localStorage.getItem('securityFormData');
+                const savedPDF = localStorage.getItem('accumulatedPDFData');
+                if (savedPDF) accumulatedPDFData = JSON.parse(savedPDF);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    document.getElementById('governorateSelect').value = data.governorate || '';
+                    document.getElementById('monthSelect').value = data.month || '';
+                    updateHeader();
+                    if (data.rows && data.rows.length > 0) {
+                        data.rows.forEach(row => addRowWithData(row));
+                    } else {
+                        addRow();
                     }
+                } else {
+                    addRow();
                 }
-            });
-
-            // End Date Picker
-            endDatePickerInstance = flatpickr("#endDatePicker", {
-                locale: "ar",
-                dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "Y-m-d",
-                disableMobile: false,
-                static: false,
-                onChange: function(selectedDates, dateStr, instance) {
-                    if (selectedDates[0]) {
-                        const date = selectedDates[0];
-                        const hijri = gregorianToHijri(date);
-                        const gregorianStr = moment(date).format('YYYY/MM/DD');
-
-                        document.getElementById('endDate').value = gregorianStr;
-                        document.getElementById('endGregorian').textContent = gregorianStr + ' م';
-                        document.getElementById('endHijri').textContent = hijri.display;
-                    }
-                }
-            });
+            } catch (e) {
+                console.error('Error loading saved data:', e);
+                addRow();
+            }
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            initHijriConverter();
-            initDatePickers();
-
-            const savedMonthly = localStorage.getItem('monthlyAttendance');
-            if (savedMonthly) {
-                monthlyData = JSON.parse(savedMonthly);
-                updateSavedWeeksIndicator();
-            }
-
-            initializeMonthDates();
-            loadWeekData(currentWeek);
-        });
-
-        function initializeMonthDates() {
-            const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-
-            // Find first Saturday
-            while (firstDay.getDay() !== 6) {
-                firstDay.setDate(firstDay.getDate() + 1);
-            }
-
-            // Set initial date based on current week
-            const weekStart = new Date(firstDay);
-            weekStart.setDate(firstDay.getDate() + ((currentWeek - 1) * 7));
-
-            // Set to date picker
-            if (startDatePickerInstance) {
-                startDatePickerInstance.setDate(weekStart);
-            }
-
-            monthlyData.monthStart = firstDay.toISOString().split('T')[0];
-        }
-
-        function selectWeek(weekNum) {
-            saveCurrentWeekData();
-            currentWeek = weekNum;
-
-            document.querySelectorAll('.week-btn').forEach((btn, idx) => {
-                btn.classList.remove('active');
-                if (idx + 1 === weekNum) btn.classList.add('active');
-            });
-
-            // Update dates for selected week
-            const monthStart = new Date(monthlyData.monthStart || new Date());
-            const weekStart = new Date(monthStart);
-            weekStart.setDate(monthStart.getDate() + ((currentWeek - 1) * 7));
-
-            if (startDatePickerInstance) {
-                startDatePickerInstance.setDate(weekStart);
-            }
-
-            loadWeekData(weekNum);
-        }
-
-        function saveCurrentWeekData() {
-            const unitName = document.getElementById('unitName').value;
-            const supervisor = document.getElementById('supervisorName').value;
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-
-            if (!unitName || !startDate) return;
-
-            monthlyData.unitName = unitName;
-            monthlyData.supervisor = supervisor;
-
-            const rows = document.getElementById('tableBody').querySelectorAll('tr');
-            const employees = [];
-
-            rows.forEach((row, index) => {
-                const cells = row.querySelectorAll('td');
-                if (cells.length > 2) {
-                    const name = cells[1].querySelector('input')?.value || '';
-                    const shift = cells[2].querySelector('select')?.value || 'morning';
-
-                    if (name.trim() !== '') {
-                        const days = [];
-                        for (let i = 3; i < 10; i++) {
-                            days.push(cells[i].querySelector('select')?.value || 'present');
-                        }
-
-                        employees.push({
-                            id: index + 1,
-                            name: name,
-                            shift: shift,
-                            days: days
-                        });
-                    }
-                }
-            });
-
-            if (employees.length > 0) {
-                monthlyData.weeks[currentWeek] = {
-                    weekNumber: currentWeek,
-                    startDate: startDate,
-                    endDate: endDate,
-                    employees: employees,
-                    notes: document.getElementById('weekNotes').value || ''
+        function autoSave() {
+            try {
+                const rows = [];
+                const tbody = document.getElementById('tableBody');
+                const trs = tbody.querySelectorAll('tr');
+                trs.forEach(tr => {
+                    const inputs = tr.querySelectorAll('input, textarea');
+                    rows.push({
+                        rowNum: tr.querySelector('.row-number').textContent,
+                        tasks: inputs[0].value,
+                        employees: inputs[1].value,
+                        planned: inputs[2].value,
+                        completion: inputs[3].value,
+                        section: inputs[4].value,
+                        department: inputs[5].value,
+                        beneficiary: inputs[6].value,
+                        supporting: inputs[7].value,
+                        date: inputs[8].value,
+                    });
+                });
+                const data = {
+                    governorate: document.getElementById('governorateSelect').value,
+                    month: document.getElementById('monthSelect').value,
+                    rows: rows,
+                    lastSaved: new Date().toISOString()
                 };
-                localStorage.setItem('monthlyAttendance', JSON.stringify(monthlyData));
-                updateSavedWeeksIndicator();
-                document.getElementById(`week${currentWeek}`).classList.add('saved');
+                localStorage.setItem('securityFormData', JSON.stringify(data));
+                const indicator = document.getElementById('autoSaveIndicator');
+                indicator.classList.add('show');
+                setTimeout(() => indicator.classList.remove('show'), 2000);
+            } catch (e) {
+                console.error('Error saving data:', e);
             }
         }
 
-        function loadWeekData(weekNum) {
-            const weekData = monthlyData.weeks[weekNum];
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-
-            if (weekData && weekData.employees) {
-                weekData.employees.forEach(emp => addEmployeeRow(emp));
-
-                // Restore dates
-                if (weekData.startDate && startDatePickerInstance) {
-                    startDatePickerInstance.setDate(weekData.startDate);
-                }
-                // Restore notes
-                document.getElementById('weekNotes').value = weekData.notes || '';
-            } else {
-                for(let i = 0; i < 5; i++) addNewRow();
-                document.getElementById('weekNotes').value = '';
-            }
-
-            if (monthlyData.unitName) document.getElementById('unitName').value = monthlyData.unitName;
-            if (monthlyData.supervisor) document.getElementById('supervisorName').value = monthlyData.supervisor;
-        }
-
-        function updateSavedWeeksIndicator() {
-            const indicator = document.getElementById('savedWeeksIndicator');
-            const list = document.getElementById('savedWeeksList');
-            const savedWeeks = Object.keys(monthlyData.weeks).map(Number).sort();
-
-            if (savedWeeks.length > 0) {
-                indicator.style.display = 'block';
-                list.innerHTML = savedWeeks.map(w => `<span class="saved-week-tag">${weekNames[w-1]}</span>`).join('');
-                savedWeeks.forEach(w => document.getElementById(`week${w}`).classList.add('saved'));
-            } else {
-                indicator.style.display = 'none';
-            }
-        }
-
-        function addEmployeeRow(empData) {
+        function addRow() {
             const tbody = document.getElementById('tableBody');
             const rowCount = tbody.children.length + 1;
-            const days = empData.days || ['rest', 'present', 'present', 'present', 'present', 'present', 'rest'];
-
-            let statusHtml = '';
-            days.forEach((dayVal) => {
-                let optionsHtml = '';
-                statusOptions.forEach(opt => {
-                    const selected = opt.value === dayVal ? 'selected' : '';
-                    optionsHtml += `<option value="${opt.value}" class="${opt.class}" ${selected}>${opt.text}</option>`;
-                });
-                statusHtml += `<td><select class="status-select ${dayVal}" onchange="updateSelectStyle(this)">${optionsHtml}</select></td>`;
-            });
-
-            let shiftHtml = '';
-            const currentShift = empData.shift || 'morning';
-            shiftOptions.forEach((opt) => {
-                const selected = opt.value === currentShift ? 'selected' : '';
-                shiftHtml += `<option value="${opt.value}" class="${opt.class}" ${selected}>${opt.text}</option>`;
-            });
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${rowCount}</td>
-                <td><input type="text" class="form-input" style="width: 100%; min-width: 140px;" placeholder="الاسم الثلاثي" value="${empData.name || ''}"></td>
-                <td><select class="shift-select ${currentShift}" onchange="updateShiftStyle(this)" style="min-width: 100px;">${shiftHtml}</select></td>
-                ${statusHtml}
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="row-number">${rowCount}</td>
+                <td><textarea placeholder="المهام والواجبات" oninput="autoSave(); autoResizeTextarea(this)"></textarea></td>
+                <td><input type="number" oninput="autoSave()" placeholder="عدد الموظفين"></td>
+                <td><input type="number" oninput="autoSave()" placeholder="عدد الأعمال"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" placeholder="نسبة الإنجاز"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" placeholder="القسم"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" placeholder="الشعبة"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" placeholder="الجهة المستفيدة"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" placeholder="الجهة الساندة"></td>
+                <td><input type="date" onchange="autoSave()" placeholder="تاريخ التنفيذ"></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(tr);
+            autoSave();
         }
 
-        function addNewRow() {
+        function addRowWithData(data) {
             const tbody = document.getElementById('tableBody');
             const rowCount = tbody.children.length + 1;
-            const defaultDays = ['rest', 'present', 'present', 'present', 'present', 'present', 'rest'];
-
-            let statusHtml = '';
-            defaultDays.forEach((defaultVal) => {
-                let optionsHtml = '';
-                statusOptions.forEach(opt => {
-                    const selected = opt.value === defaultVal ? 'selected' : '';
-                    optionsHtml += `<option value="${opt.value}" class="${opt.class}" ${selected}>${opt.text}</option>`;
-                });
-                statusHtml += `<td><select class="status-select ${defaultVal}" onchange="updateSelectStyle(this)">${optionsHtml}</select></td>`;
-            });
-
-            let shiftHtml = '';
-            shiftOptions.forEach((opt, idx) => {
-                const selected = idx === 0 ? 'selected' : '';
-                shiftHtml += `<option value="${opt.value}" class="${opt.class}" ${selected}>${opt.text}</option>`;
-            });
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${rowCount}</td>
-                <td><input type="text" class="form-input" style="width: 100%; min-width: 140px;" placeholder="الاسم الثلاثي"></td>
-                <td><select class="shift-select morning" onchange="updateShiftStyle(this)" style="min-width: 100px;">${shiftHtml}</select></td>
-                ${statusHtml}
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="row-number">${rowCount}</td>
+                <td><textarea placeholder="المهام والواجبات" oninput="autoSave(); autoResizeTextarea(this)">${data.tasks || ''}</textarea></td>
+                <td><input type="number" oninput="autoSave()" value="${data.employees || ''}" placeholder="عدد الموظفين"></td>
+                <td><input type="number" oninput="autoSave()" value="${data.planned || ''}" placeholder="عدد الأعمال"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" value="${data.completion || ''}" placeholder="نسبة الإنجاز"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" value="${data.section || ''}" placeholder="القسم"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" value="${data.department || ''}" placeholder="الشعبة"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" value="${data.beneficiary || ''}" placeholder="الجهة المستفيدة"></td>
+                <td><input type="text" oninput="autoSave(); autoResizeInput(this)" value="${data.supporting || ''}" placeholder="الجهة الساندة"></td>
+                <td><input type="date" onchange="autoSave()" value="${data.date || ''}"></td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(tr);
+            setTimeout(() => {
+                tr.querySelectorAll('textarea').forEach(ta => autoResizeTextarea(ta));
+                tr.querySelectorAll('input[type="text"]').forEach(inp => autoResizeInput(inp));
+            }, 10);
         }
 
-        function updateSelectStyle(select) {
-            statusOptions.forEach(opt => select.classList.remove(opt.value));
-            select.classList.add(select.value);
+        function updateHeader() {
+            const gov = document.getElementById('governorateSelect').value || '( )';
+            const month = document.getElementById('monthSelect').value || '( )';
+            document.getElementById('selectedGovernorate').textContent = gov;
+            document.getElementById('selectedMonth').textContent = month;
+            autoSave();
         }
 
-        function updateShiftStyle(select) {
-            shiftOptions.forEach(opt => select.classList.remove(opt.value));
-            select.classList.add(select.value);
-        }
-
-        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            saveCurrentWeekData();
-            showToast(`✅ تم حفظ بيانات ${weekNames[currentWeek-1]} بنجاح`);
-            document.getElementById(`week${currentWeek}`).classList.add('saved');
-            updateSavedWeeksIndicator();
-        });
-
-        function showMonthlyReport() {
-            saveCurrentWeekData();
-            const savedWeeks = Object.keys(monthlyData.weeks);
-            if (savedWeeks.length === 0) {
-                showToast('❌ لا توجد بيانات محفوظة');
-                return;
-            }
-            generateMonthlyReportView();
-            showSection('dashboard');
-        }
-
-        function generateMonthlyReportView() {
-            const container = document.getElementById('monthlyReportContainer');
-            container.innerHTML = '';
-            document.getElementById('monthlyReportUnit').querySelector('span').textContent = monthlyData.unitName || 'غير محدد';
-
-            const weeks = Object.values(monthlyData.weeks).sort((a, b) => a.weekNumber - b.weekNumber);
-            if (weeks.length > 0) {
-                const firstWeek = weeks[0];
-                const lastWeek = weeks[weeks.length - 1];
-
-                const startHijri = gregorianToHijri(firstWeek.startDate);
-                const endHijri = gregorianToHijri(lastWeek.endDate);
-
-                document.getElementById('monthlyPeriod').textContent =
-                    `${firstWeek.startDate} (${startHijri.display}) إلى ${lastWeek.endDate} (${endHijri.display})`;
-            }
-            document.getElementById('monthlyReportDate').textContent = new Date().toLocaleDateString('ar-SA');
-
-            const savedList = document.getElementById('monthlySavedList');
-            savedList.innerHTML = weeks.map(w => {
-                const wh = gregorianToHijri(w.startDate);
-                return `<span class="saved-week-tag">${weekNames[w.weekNumber-1]} (${wh.display})</span>`;
-            }).join('');
-
-            weeks.forEach(weekData => {
-                const weekDiv = document.createElement('div');
-                weekDiv.className = 'monthly-week';
-                weekDiv.style.maxWidth = '100%';
-                weekDiv.style.overflow = 'hidden';
-
-                const weekHijri = gregorianToHijri(weekData.startDate);
-                const weekEndHijri = gregorianToHijri(weekData.endDate);
-
-                const weekHeader = document.createElement('div');
-                weekHeader.className = 'week-header';
-                weekHeader.innerHTML = `
-                    <span>${weekNames[weekData.weekNumber-1]}</span>
-                    <span class="week-date">${weekData.startDate} (${weekHijri.display}) - ${weekData.endDate} (${weekEndHijri.display})</span>
-                `;
-                weekDiv.appendChild(weekHeader);
-
-                // Create table with proper structure
-                const table = document.createElement('table');
-                table.className = 'monthly-table';
-                table.style.tableLayout = 'fixed';
-                table.style.width = '100%';
-                table.style.borderCollapse = 'collapse';
-
-                // Create thead - this will repeat on each page
-                const thead = document.createElement('thead');
-                const headerRow = document.createElement('tr');
-                headerRow.style.background = '#f0f0f0';
-                headerRow.innerHTML = `
-                    <th style="width: 4%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">ت</th>
-                    <th style="width: 16%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الاسم الثلاثي</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">السبت</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الأحد</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الإثنين</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الثلاثاء</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الأربعاء</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الخميس</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الجمعة</th>
-                    <th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">ملاحظات</th>
-                `;
-                thead.appendChild(headerRow);
-                table.appendChild(thead);
-
-                // Create tbody - data rows
-                const tbody = document.createElement('tbody');
-                weekData.employees.forEach(emp => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem;">${emp.id}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; word-wrap: break-word;">${emp.name}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[0])}; font-weight: bold;">${statusFullNames[emp.days[0]] || emp.days[0]}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[1])}; font-weight: bold;">${statusFullNames[emp.days[1]] || emp.days[1]}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[2])}; font-weight: bold;">${statusFullNames[emp.days[2]] || emp.days[2]}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[3])}; font-weight: bold;">${statusFullNames[emp.days[3]] || emp.days[3]}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[4])}; font-weight: bold;">${statusFullNames[emp.days[4]] || emp.days[4]}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[5])}; font-weight: bold;">${statusFullNames[emp.days[5]] || emp.days[5]}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ${getStatusColor(emp.days[6])}; font-weight: bold;">${statusFullNames[emp.days[6]] || emp.days[6]}</td>
-                        <td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; word-wrap: break-word;"></td>
-                    `;
-                    tbody.appendChild(tr);
+        function collectCurrentData() {
+            const rows = [];
+            const tbody = document.getElementById('tableBody');
+            const trs = tbody.querySelectorAll('tr');
+            trs.forEach(tr => {
+                const inputs = tr.querySelectorAll('input, textarea');
+                rows.push({
+                    rowNum: tr.querySelector('.row-number').textContent,
+                    tasks: inputs[0].value,
+                    employees: inputs[1].value,
+                    planned: inputs[2].value,
+                    completion: inputs[3].value,
+                    section: inputs[4].value,
+                    department: inputs[5].value,
+                    beneficiary: inputs[6].value,
+                    supporting: inputs[7].value,
+                    date: inputs[8].value,
                 });
-                table.appendChild(tbody);
-
-                weekDiv.appendChild(table);
-
-                // Add week notes if exist
-                if (weekData.notes && weekData.notes.trim() !== '') {
-                    const notesDiv = document.createElement('div');
-                    notesDiv.style.cssText = 'padding: 8px 10px; background: #f8f9fa; border-top: 1px solid #ddd; font-size: 0.8rem; color: #333;';
-                    notesDiv.innerHTML = `<strong>ملاحظات الأسبوع:</strong> ${weekData.notes}`;
-                    weekDiv.appendChild(notesDiv);
-                }
-
-                container.appendChild(weekDiv);
             });
+            return rows;
         }
 
-        function getStatusColor(status) {
-            const colors = {
-                'present': '#27ae60',
-                'absent': '#e74c3c',
-                'holiday': '#3498db',
-                'rest': '#f39c12',
-                'compensation': '#9b59b6',
-                'tafreeg': '#1abc9c',
-                'tafreeg-taawidi': '#fdcb6e',
-                'istiraha': '#636e72',
-                'wajib': '#0984e3',
-                  'egaza': '#8e44ad',
-                'egaza_maradia': '#c0392b'
-
-            };
-            return colors[status] || '#000';
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        function showSection(section) {
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-            if (section === 'form') {
-                document.getElementById('formSection').classList.add('active');
-            } else if (section === 'dashboard') {
-                document.getElementById('dashboardSection').classList.add('active');
-            }
-        }
-
-        function backToForm() {
-            showSection('form');
-        }
-
-        async function shareToWhatsAppAuto() {
-            showLoading(true);
-            showToast('⏳ جاري إعداد ملف PDF للإرسال...');
-
+        async function createPDF(governorate, month, rows, type) {
             try {
-                const { pdf } = await generateReportPDF();
+                const ROWS_PER_PAGE = 12;
 
-                // Get PDF as blob
-                const pdfBlob = pdf.output('blob');
-                // Use English filename to avoid WhatsApp encoding issues
-                const safeUnitName = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
-                const pdfFile = new File([pdfBlob], `attendance_report_${safeUnitName}_${new Date().toISOString().split('T')[0]}.pdf`, { type: 'application/pdf' });
+                if (!rows || rows.length === 0) {
+                    showNotification('⚠️ لا توجد بيانات لإنشاء PDF', 'error');
+                    return null;
+                }
 
-                // Try native share with PDF
-                if (navigator.share && navigator.canShare) {
-                    if (navigator.canShare({ files: [pdfFile] })) {
-                        await navigator.share({
-                            title: 'تقرير الحضور الشهري',
-                            text: `تقرير الحضور - ${monthlyData.unitName || 'النصاريح'}`,
-                            files: [pdfFile]
-                        });
-                        showToast('✅ تم فتح مشاركة ملف PDF');
-                        showLoading(false);
-                        return;
+                const totalPages = Math.ceil(rows.length / ROWS_PER_PAGE);
+                const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+                // Create a hidden container for rendering
+                let hiddenContainer = document.getElementById('pdfRenderContainer');
+                if (!hiddenContainer) {
+                    hiddenContainer = document.createElement('div');
+                    hiddenContainer.id = 'pdfRenderContainer';
+                    hiddenContainer.style.cssText = 'position:fixed;left:-10000px;top:0;width:1200px;background:white;padding:20px;direction:rtl;z-index:-9999;overflow:hidden;';
+                    document.body.appendChild(hiddenContainer);
+                }
+
+                for (let page = 0; page < totalPages; page++) {
+                    if (page > 0) {
+                        pdf.addPage();
                     }
+
+                    const pageRows = rows.slice(page * ROWS_PER_PAGE, (page + 1) * ROWS_PER_PAGE);
+
+                    let tableHTML = `
+                        <div style="text-align:center;margin-bottom:12px;direction:rtl;font-family:Arial,Tahoma,sans-serif;">
+                            <div style="color:#1e3c72;font-size:24px;font-weight:bold;margin-bottom:6px;">وحدة التصاريح الأمنية</div>
+                            <div style="color:#1e3c72;font-size:20px;font-weight:bold;margin-bottom:6px;">استمارة الانشطة الشهرية</div>
+                            <div style="color:#2a5298;font-size:16px;font-weight:bold;margin-bottom:6px;">محافظة ${governorate} - ${month}</div>
+                            <div style="color:#666;font-size:11px;">تاريخ الإنشاء: ${new Date().toLocaleDateString('ar-IQ')} | نوع العملية: ${type} ${type === 'حفظ' ? '(تراكمي)' : '(فوري)'} | عدد السجلات: ${rows.length} | صفحة ${page + 1} من ${totalPages}</div>
+                        </div>
+                        <table style="width:100%;border-collapse:collapse;direction:rtl;font-family:Arial,Tahoma,sans-serif;table-layout:fixed;">
+                            <thead>
+                                <tr style="background:#1e3c72;color:white;">
+                                    <th style="border:2px solid #1e3c72;padding:8px 3px;text-align:center;font-size:13px;width:35px;">ت</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:180px;">المهام والواجبات</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:70px;">عدد الموظفين</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:70px;">عدد الأعمال</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:80px;">نسبة الإنجاز</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:90px;">القسم</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:90px;">الشعبة</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:100px;">الجهة المستفيدة</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:100px;">الجهة الساندة</th>
+                                    <th style="border:2px solid #1e3c72;padding:8px;text-align:center;font-size:13px;width:90px;">تاريخ التنفيذ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    pageRows.forEach((row, index) => {
+                        const bgColor = index % 2 === 0 ? '#ffffff' : '#f8f9fa';
+                        const globalIndex = page * ROWS_PER_PAGE + index;
+                        tableHTML += `
+                            <tr style="background:${bgColor};">
+                                <td style="border:1px solid #dee2e6;padding:7px 3px;text-align:center;font-size:12px;width:35px;word-wrap:break-word;">${globalIndex + 1}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:180px;word-wrap:break-word;">${escapeHtml(row.tasks || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:70px;word-wrap:break-word;">${escapeHtml(row.employees || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:70px;word-wrap:break-word;">${escapeHtml(row.planned || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:80px;word-wrap:break-word;">${escapeHtml(row.completion || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:90px;word-wrap:break-word;">${escapeHtml(row.section || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:90px;word-wrap:break-word;">${escapeHtml(row.department || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:100px;word-wrap:break-word;">${escapeHtml(row.beneficiary || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:100px;word-wrap:break-word;">${escapeHtml(row.supporting || '')}</td>
+                                <td style="border:1px solid #dee2e6;padding:7px;text-align:center;font-size:12px;width:90px;word-wrap:break-word;">${escapeHtml(row.date || '')}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHTML += '</tbody></table>';
+                    hiddenContainer.innerHTML = tableHTML;
+
+                    // Force layout calculation
+                    hiddenContainer.offsetHeight;
+
+                    await new Promise(resolve => setTimeout(resolve, 100));
+
+                    const canvas = await html2canvas(hiddenContainer, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff',
+                        width: 1200,
+                        height: hiddenContainer.scrollHeight,
+                        windowWidth: 1200,
+                        windowHeight: hiddenContainer.scrollHeight
+                    });
+
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const margin = 8;
+                    const availableWidth = pdfWidth - (margin * 2);
+                    const availableHeight = pdfHeight - (margin * 2);
+
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(availableWidth / imgWidth, availableHeight / imgHeight);
+
+                    const imgX = margin + (availableWidth - imgWidth * ratio) / 2;
+                    const imgY = margin;
+
+                    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
                 }
 
-                // Fallback: download PDF and open WhatsApp
-                const pdfUrl = URL.createObjectURL(pdfBlob);
-                const link = document.createElement('a');
-                const safeUnitName2 = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
-                link.download = `attendance_report_${safeUnitName2}_${new Date().toISOString().split('T')[0]}.pdf`;
-                link.href = pdfUrl;
-                link.click();
+                // Clean up
+                hiddenContainer.innerHTML = '';
 
-                const message = `تقرير الحضور الشهري - ${monthlyData.unitName || 'النصاريح'}`;
-                const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+                const fileName = `تصاريح_${governorate}_${month}_${type}_${new Date().toISOString().split('T')[0]}.pdf`;
 
-                setTimeout(() => {
-                    window.open(whatsappUrl, '_blank');
-                    showToast('📱 تم حفظ ملف PDF وفتح واتساب - أرسل الملف يدوياً');
-                }, 1000);
-
+                return {
+                    pdf: pdf,
+                    fileName: fileName,
+                    blob: pdf.output('blob')
+                };
             } catch (error) {
-                console.error('Share Error:', error);
-                const message = `تقرير الحضور الشهري - ${monthlyData.unitName || 'النصاريح'}`;
-                window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
-                showToast('📱 جاري فتح واتساب');
-            } finally {
-                showLoading(false);
+                console.error('Error creating PDF:', error);
+                showNotification('❌ حدث خطأ أثناء إنشاء PDF: ' + error.message, 'error');
+                return null;
             }
         }
 
-        function printReport() {
-            window.print();
+        function isDuplicateRow(row1, row2) {
+            return row1.tasks === row2.tasks &&
+                   row1.employees === row2.employees &&
+                   row1.planned === row2.planned &&
+                   row1.completion === row2.completion &&
+                   row1.section === row2.section &&
+                   row1.department === row2.department &&
+                   row1.beneficiary === row2.beneficiary &&
+                   row1.supporting === row2.supporting &&
+                   row1.date === row2.date;
         }
 
-        async function generateReportPDF() {
-            const { jsPDF } = window.jspdf;
-            const reportContent = document.getElementById('reportContent');
+        function filterDuplicateRows(newRows, existingRows) {
+            const filtered = [];
+            let duplicateCount = 0;
 
-            // Capture the report as canvas with high quality
-            const canvas = await html2canvas(reportContent, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: '#ffffff',
-                windowWidth: reportContent.scrollWidth,
-                windowHeight: reportContent.scrollHeight,
-                logging: false
+            newRows.forEach(newRow => {
+                // Check if this row already exists in accumulated data
+                const isDup = existingRows.some(existingRow => isDuplicateRow(newRow, existingRow));
+                if (isDup) {
+                    duplicateCount++;
+                } else {
+                    filtered.push(newRow);
+                }
             });
 
-            const imgData = canvas.toDataURL('imag.jpg');
-
-            // A4 dimensions in mm
-            const pdfWidth = 210;
-            const pdfHeight = 297;
-
-            // Margins
-            const topMargin = 10;
-            const bottomMargin = 10;
-            const contentHeight = pdfHeight - topMargin - bottomMargin;
-
-            // Calculate image dimensions to fit width
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
-            const scale = pdfWidth / imgWidth;
-            const scaledHeight = imgHeight * scale;
-
-            // Create PDF
-            const pdf = new jsPDF('p', 'mm', 'a4');
-
-            let heightLeft = scaledHeight;
-            let position = topMargin;
-            let pageCount = 1;
-
-            // Add first page
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
-
-            // Add white margins to cover overflow
-            pdf.setFillColor(255, 255, 255);
-            pdf.rect(0, 0, pdfWidth, topMargin, 'F');
-            pdf.rect(0, pdfHeight - bottomMargin, pdfWidth, bottomMargin, 'F');
-
-            heightLeft -= contentHeight;
-
-            // Add additional pages if content is longer than one page
-            while (heightLeft > 0) {
-                position -= contentHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
-
-                // Add white margins for each page
-                pdf.setFillColor(255, 255, 255);
-                pdf.rect(0, 0, pdfWidth, topMargin, 'F');
-                pdf.rect(0, pdfHeight - bottomMargin, pdfWidth, bottomMargin, 'F');
-
-                heightLeft -= contentHeight;
-                pageCount++;
-            }
-
-            return { pdf, pageCount };
+            return { filtered, duplicateCount };
         }
 
-        async function saveReportPDF() {
-            showLoading(true);
-            showToast('⏳ جاري إنشاء ملف PDF...');
+        async function savePDF() {
+            const btn = document.getElementById('savePdfBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري الحفظ...';
 
             try {
-                const { pdf, pageCount } = await generateReportPDF();
+                const governorate = document.getElementById('governorateSelect').value || 'غير محدد';
+                const month = document.getElementById('monthSelect').value || 'غير محدد';
+                const currentRows = collectCurrentData();
 
-                // Save the PDF - use English filename for compatibility
-                const safeUnitName = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
-                const fileName = `attendance_report_${safeUnitName}_${new Date().toISOString().split('T')[0]}.pdf`;
-                pdf.save(fileName);
+                if (!accumulatedPDFData.governorate) accumulatedPDFData.governorate = governorate;
+                if (!accumulatedPDFData.month) accumulatedPDFData.month = month;
 
-                showToast(`✅ تم حفظ ملف PDF بنجاح (${pageCount} صفحة)`);
+                // Filter out duplicate rows before adding to accumulated data
+                const { filtered: uniqueRows, duplicateCount } = filterDuplicateRows(currentRows, accumulatedPDFData.rows);
+
+                if (uniqueRows.length === 0 && currentRows.length > 0) {
+                    showNotification(`⚠️ جميع السجلات (${currentRows.length}) مكررة ولم تتم إضافتها`, 'info');
+                    btn.disabled = false;
+                    btn.textContent = '💾 حفظ PDF';
+                    return;
+                }
+
+                accumulatedPDFData.rows = [...accumulatedPDFData.rows, ...uniqueRows];
+                localStorage.setItem('accumulatedPDFData', JSON.stringify(accumulatedPDFData));
+
+                const result = await createPDF(accumulatedPDFData.governorate, accumulatedPDFData.month, accumulatedPDFData.rows, 'حفظ');
+
+                if (result) {
+                    result.pdf.save(result.fileName);
+                    let msg = `✅ تم حفظ PDF بشكل تراكمي (${accumulatedPDFData.rows.length} سجل)`;
+                    if (duplicateCount > 0) {
+                        msg += ` - تم تخطي ${duplicateCount} سجل مكرر`;
+                    }
+                    showNotification(msg, 'success');
+                }
             } catch (error) {
-                console.error('PDF Error:', error);
-                showToast('❌ فشل إنشاء ملف PDF');
+                console.error('Error saving PDF:', error);
+                showNotification('❌ حدث خطأ أثناء الحفظ', 'error');
             } finally {
-                showLoading(false);
+                btn.disabled = false;
+                btn.textContent = '💾 حفظ PDF';
             }
         }
 
-        function showClearConfirm() {
-            document.getElementById('confirmModal').classList.add('active');
+        async function exportToPDF() {
+            const btn = document.getElementById('exportPdfBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ جاري التصدير...';
+
+            try {
+                const governorate = document.getElementById('governorateSelect').value || 'غير محدد';
+                const month = document.getElementById('monthSelect').value || 'غير محدد';
+                const currentRows = collectCurrentData();
+
+                const result = await createPDF(governorate, month, currentRows, 'تصدير');
+
+                if (result) {
+                    result.pdf.save(result.fileName);
+                    showNotification(`✅ تم تصدير PDF (${currentRows.length} سجل)`, 'success');
+                }
+            } catch (error) {
+                console.error('Error exporting PDF:', error);
+                showNotification('❌ حدث خطأ أثناء التصدير', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '📄 تصدير PDF';
+            }
         }
 
-        function closeModal() {
-            document.getElementById('confirmModal').classList.remove('active');
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.className = 'notification show ' + type;
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
         }
 
-        function confirmClear() {
-            monthlyData = { unitName: '', supervisor: '', weeks: {} };
-            localStorage.removeItem('monthlyAttendance');
-            document.getElementById('unitName').value = '';
-            document.getElementById('supervisorName').value = '';
-            document.querySelectorAll('.week-btn').forEach(btn => btn.classList.remove('saved'));
-            updateSavedWeeksIndicator();
-            loadWeekData(1);
-            closeModal();
-            showToast('✅ تم مسح جميع البيانات');
+        function clearAll() {
+            if (confirm('هل أنت متأكد من مسح جميع البيانات؟')) {
+                localStorage.removeItem('securityFormData');
+                localStorage.removeItem('accumulatedPDFData');
+                accumulatedPDFData = { governorate: '', month: '', rows: [] };
+                document.getElementById('tableBody').innerHTML = '';
+                document.getElementById('governorateSelect').value = '';
+                document.getElementById('monthSelect').value = '';
+                updateHeader();
+                addRow();
+                showNotification('🗑️ تم مسح جميع البيانات', 'success');
+            }
         }
 
-        function showLoading(show) {
-            document.getElementById('loadingOverlay').classList.toggle('active', show);
+        function checkMonthEnd() {
+            const now = new Date();
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            const daysUntilEnd = Math.ceil((lastDay - now) / (1000 * 60 * 60 * 24));
+
+            if (daysUntilEnd <= 3) {
+                const notification = document.getElementById('notification');
+                notification.innerHTML = `⚠️ تنبيه: باقي ${daysUntilEnd} يوم على نهاية الشهر! يرجى سحب الاستمارة وإرسالها`;
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 10000);
+            }
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
+        document.getElementById('governorateSelect').addEventListener('change', updateHeader);
+        document.getElementById('monthSelect').addEventListener('change', updateHeader);
 
-        document.getElementById('confirmModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+        window.addEventListener('load', () => {
+            loadSavedData();
+            checkMonthEnd();
+            setInterval(checkMonthEnd, 3600000);
         });
+
+        setInterval(autoSave, 30000);
     </script>
 </body>
 </html>
