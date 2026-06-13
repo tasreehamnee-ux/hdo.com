@@ -79,24 +79,40 @@
         .btn-danger { width: 100%; padding: 16px; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
         .action-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         @media (max-width: 768px) { .action-buttons { grid-template-columns: 1fr 1fr; } }
+        @media print {
+            @page { size: A4 landscape; margin: 8mm; }
+            body { background: white; padding: 0; margin: 0; }
+            .top-header, .action-buttons, .nav-buttons { display: none !important; }
+            .container { display: block !important; box-shadow: none; border-radius: 0; max-width: 100%; width: 100%; }
+            .report-container { box-shadow: none; padding: 8px; margin: 0; max-width: 100%; width: 100%; }
+            .monthly-week { page-break-inside: avoid; break-inside: avoid; margin-bottom: 10px; width: 100%; }
+            .monthly-table { font-size: 0.7rem; width: 100%; }
+            .monthly-table th, .monthly-table td { padding: 3px 1px; font-size: 0.7rem; }
+            #reportContent { padding: 5mm; box-sizing: border-box; width: 100%; max-width: 100%; }
+            .report-header img { width: 50px; height: 50px; }
+            .report-title { font-size: 1.2rem; }
+            .report-subtitle { font-size: 0.9rem; }
+            .report-unit { font-size: 1rem; }
+            .week-header { padding: 6px; font-size: 0.9rem; }
+        }
         .action-btn { padding: 16px 12px; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; flex-direction: column; min-height: 70px; }
         .action-btn.pdf { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; }
         .action-btn.whatsapp { background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); color: white; }
         .action-btn.print { background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); color: white; }
         .action-btn.back { background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%); color: white; }
-        .report-container { background: white; border-radius: 12px; padding: 30px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 100%; margin-left: auto; margin-right: auto; }
+        .report-container { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 100%; margin-left: auto; margin-right: auto; box-sizing: border-box; overflow: hidden; }
         .report-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
         .report-header img { width: 80px; height: 80px; margin: 0 auto 15px; display: block; object-fit: contain; }
-        .report-title { font-size: 1.5rem; font-weight: 700; color: #000; margin-bottom: 10px; }
-        .report-subtitle { font-size: 1.1rem; color: #333; margin-bottom: 20px; }
-        .report-unit { text-align: right; font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 8px; border-right: 4px solid #c41e3a; }
+        .report-title { font-size: 1.3rem; font-weight: 700; color: #000; margin-bottom: 8px; }
+        .report-subtitle { font-size: 1rem; color: #333; margin-bottom: 15px; }
+        .report-unit { text-align: right; font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; padding: 8px; background: #f8f9fa; border-radius: 8px; border-right: 4px solid #c41e3a; }
         .monthly-report { margin-top: 30px; }
         .monthly-week { margin-bottom: 30px; page-break-inside: avoid; border: 2px solid #333; border-radius: 8px; overflow: hidden; }
         .week-header { background: #c41e3a; color: white; padding: 10px; text-align: center; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
         .week-date { font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; }
-        .monthly-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: fixed; }
-        .monthly-table th { background: #f0f0f0; color: #000; padding: 6px 2px; text-align: center; font-weight: 700; border: 1px solid #333; font-size: 0.75rem; }
-        .monthly-table td { padding: 5px 2px; border: 1px solid #333; text-align: center; vertical-align: middle; font-weight: 600; height: 30px; font-size: 0.8rem; }
+        .monthly-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; table-layout: fixed; }
+        .monthly-table th { background: #f0f0f0; color: #000; padding: 5px 2px; text-align: center; font-weight: 700; border: 1px solid #333; font-size: 0.7rem; word-wrap: break-word; overflow: hidden; }
+        .monthly-table td { padding: 4px 2px; border: 1px solid #333; text-align: center; vertical-align: middle; font-weight: 600; height: 26px; font-size: 0.75rem; word-wrap: break-word; overflow: hidden; }
         .saved-weeks-indicator { background: #d5f4e6; border: 2px solid #27ae60; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; }
         .saved-weeks-indicator h4 { color: #27ae60; margin-bottom: 10px; }
         .saved-weeks-list { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -118,6 +134,7 @@
         .modal-btn.confirm { background: #e74c3c; color: white; }
         .modal-btn.cancel { background: #95a5a6; color: white; }
     </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -223,13 +240,8 @@
                     </table>
                 </div>
                 <div class="form-group" style="margin-top: 20px;">
-                    <label class="form-label"><span class="required">*</span>حالة الدوام</label>
-                    <select class="form-select" id="workStatus" required>
-                        <option value="" disabled selected>اختر حالة الدوام</option>
-                        <option value="morning">صباحي</option>
-                        <option value="evening">مسائي</option>
-                        <option value="both">كلاهما</option>
-                    </select>
+                    <label class="form-label">ملاحظات</label>
+                    <textarea class="form-input" id="weekNotes" rows="3" placeholder="أدخل أي ملاحظات على الأسبوع..." style="resize: vertical; font-family: 'Cairo', sans-serif;"></textarea>
                 </div>
                 <button type="button" class="submit-btn" onclick="addNewRow()">+ إضافة موظف جديد</button>
                 <button type="submit" class="btn-success" style="margin-top: 10px;">💾 حفظ بيانات الأسبوع</button>
@@ -277,10 +289,7 @@
                     </div>
                 </div>
                 <div id="monthlyReportContainer" class="monthly-report"></div>
-                <div style="margin-top: 30px; display: flex; justify-content: space-between; font-weight: bold;">
-                    <div>توقيع المشرف: _________________</div>
-                    <div>الختم الرسمي: _________________</div>
-                </div>
+
             </div>
         </div>
     </div>
@@ -474,7 +483,7 @@
                     startDate: startDate,
                     endDate: endDate,
                     employees: employees,
-                    workStatus: document.getElementById('workStatus').value || 'morning',
+                    notes: document.getElementById('weekNotes').value || '',
                     savedAt: Date.now()
                 };
                 localStorage.setItem('monthlyAttendance', JSON.stringify(monthlyData));
@@ -492,7 +501,7 @@
                 if (weekData.startDate && startDatePickerInstance) {
                     startDatePickerInstance.setDate(weekData.startDate);
                 }
-                document.getElementById('workStatus').value = weekData.workStatus || 'morning';
+                document.getElementById('weekNotes').value = weekData.notes || '';
             } else {
                 for(let i = 0; i < 5; i++) addNewRow();
                 document.getElementById('workStatus').value = 'morning';
@@ -659,38 +668,53 @@
                 const thead = document.createElement('thead');
                 const headerRow = document.createElement('tr');
                 headerRow.style.background = '#f0f0f0';
-                headerRow.innerHTML = '<th style="width: 4%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">ت</th>' +
-                    '<th style="width: 16%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الاسم الثلاثي</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">السبت</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الأحد</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الإثنين</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الثلاثاء</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الأربعاء</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الخميس</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">الجمعة</th>' +
-                    '<th style="width: 10%; border: 1px solid #333; padding: 6px 2px; font-size: 0.75rem; text-align: center; font-weight: 700;">حالة الدوام</th>';
+                headerRow.innerHTML = '<th style="width: 3%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">ت</th>' +
+                    '<th style="width: 16%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">الاسم الثلاثي</th>' +
+                    '<th style="width: 11%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">السبت</th>' +
+                    '<th style="width: 11%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">الأحد</th>' +
+                    '<th style="width: 11%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">الإثنين</th>' +
+                    '<th style="width: 11%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">الثلاثاء</th>' +
+                    '<th style="width: 11%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">الأربعاء</th>' +
+                    '<th style="width: 11%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">الخميس</th>' +
+                    '<th style="width: 11%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">الجمعة</th>' +
+                    '<th style="width: 14%; border: 1px solid #333; padding: 4px 1px; font-size: 0.68rem; text-align: center; font-weight: 700; overflow: hidden;">حالة الدوام</th>';
                 thead.appendChild(headerRow);
                 table.appendChild(thead);
 
                 const tbody = document.createElement('tbody');
                 weekData.employees.forEach(emp => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem;">' + emp.id + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; word-wrap: break-word;">' + emp.name + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ' + getStatusColor(emp.days[0]) + '; font-weight: bold;">' + (statusFullNames[emp.days[0]] || emp.days[0]) + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ' + getStatusColor(emp.days[1]) + '; font-weight: bold;">' + (statusFullNames[emp.days[1]] || emp.days[1]) + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ' + getStatusColor(emp.days[2]) + '; font-weight: bold;">' + (statusFullNames[emp.days[2]] || emp.days[2]) + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ' + getStatusColor(emp.days[3]) + '; font-weight: bold;">' + (statusFullNames[emp.days[3]] || emp.days[3]) + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ' + getStatusColor(emp.days[4]) + '; font-weight: bold;">' + (statusFullNames[emp.days[4]] || emp.days[4]) + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ' + getStatusColor(emp.days[5]) + '; font-weight: bold;">' + (statusFullNames[emp.days[5]] || emp.days[5]) + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; color: ' + getStatusColor(emp.days[6]) + '; font-weight: bold;">' + (statusFullNames[emp.days[6]] || emp.days[6]) + '</td>' +
-                        '<td style="border: 1px solid #333; padding: 5px 2px; text-align: center; font-size: 0.8rem; font-weight: bold; color: ' + getShiftColor(weekData.workStatus || 'morning') + ';">' + (shiftNames[weekData.workStatus || 'morning'] || 'صباحي') + '</td>';
+                    tr.innerHTML = '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; overflow: hidden;">' + emp.id + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; word-wrap: break-word; overflow: hidden;">' + emp.name + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; color: ' + getStatusColor(emp.days[0]) + '; font-weight: bold; overflow: hidden;">' + (statusFullNames[emp.days[0]] || emp.days[0]) + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; color: ' + getStatusColor(emp.days[1]) + '; font-weight: bold; overflow: hidden;">' + (statusFullNames[emp.days[1]] || emp.days[1]) + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; color: ' + getStatusColor(emp.days[2]) + '; font-weight: bold; overflow: hidden;">' + (statusFullNames[emp.days[2]] || emp.days[2]) + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; color: ' + getStatusColor(emp.days[3]) + '; font-weight: bold; overflow: hidden;">' + (statusFullNames[emp.days[3]] || emp.days[3]) + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; color: ' + getStatusColor(emp.days[4]) + '; font-weight: bold; overflow: hidden;">' + (statusFullNames[emp.days[4]] || emp.days[4]) + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; color: ' + getStatusColor(emp.days[5]) + '; font-weight: bold; overflow: hidden;">' + (statusFullNames[emp.days[5]] || emp.days[5]) + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; color: ' + getStatusColor(emp.days[6]) + '; font-weight: bold; overflow: hidden;">' + (statusFullNames[emp.days[6]] || emp.days[6]) + '</td>' +
+                        '<td style="border: 1px solid #333; padding: 3px 1px; text-align: center; font-size: 0.72rem; font-weight: bold; color: ' + getShiftColor(emp.shift || 'morning') + '; overflow: hidden;">' + (shiftNames[emp.shift || 'morning'] || 'صباحي') + '</td>';
                     tbody.appendChild(tr);
                 });
                 table.appendChild(tbody);
                 weekDiv.appendChild(table);
 
                 
+                                // إضافة الملاحظات إن وجدت
+                if (weekData.notes && weekData.notes.trim() !== '') {
+                    const notesDiv = document.createElement('div');
+                    notesDiv.style.background = '#fffbeb';
+                    notesDiv.style.border = '1px solid #f59e0b';
+                    notesDiv.style.borderRadius = '6px';
+                    notesDiv.style.padding = '10px 15px';
+                    notesDiv.style.marginTop = '10px';
+                    notesDiv.style.fontSize = '0.85rem';
+                    notesDiv.style.color = '#92400e';
+                    notesDiv.style.fontWeight = '600';
+                    notesDiv.innerHTML = '<span style="color: #c41e3a;">📌 ملاحظات:</span> ' + weekData.notes;
+                    weekDiv.appendChild(notesDiv);
+                }
+
                 container.appendChild(weekDiv);
             });
         }
@@ -752,7 +776,7 @@
                 link.download = 'attendance_report_' + safeUnitName + '_' + new Date().toISOString().split('T')[0] + '.pdf';
                 link.href = pdfUrl;
                 link.click();
-                const message = 'تقرير الحضور الشهري - ' + (monthlyData.unitName || 'النصاريح');
+                const message = 'تقرير الحضور الشهري - ' + (monthlyData.unitName || 'النصاريح') + '\nتوقيع المشرف: سامر ستار';
                 const whatsappUrl = 'https://wa.me/' + ADMIN_WHATSAPP + '?text=' + encodeURIComponent(message);
                 setTimeout(() => {
                     window.open(whatsappUrl, '_blank');
@@ -775,25 +799,76 @@
         async function generateReportPDF() {
             const { jsPDF } = window.jspdf;
             const reportContent = document.getElementById('reportContent');
-            const canvas = await html2canvas(reportContent, {
+
+            // إنشاء نسخة مؤقتة من المحتوى مع إضافة توقيع المشرف في التذييل
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = reportContent.innerHTML;
+            tempDiv.style.width = '100%';
+            tempDiv.style.maxWidth = '277mm';
+            tempDiv.style.backgroundColor = '#ffffff';
+            tempDiv.style.padding = '15px';
+            tempDiv.style.boxSizing = 'border-box';
+            tempDiv.style.direction = 'rtl';
+            tempDiv.style.overflow = 'hidden';
+
+            // إضافة تذييل الصفحة مع توقيع المشرف
+            const footerDiv = document.createElement('div');
+            footerDiv.style.display = 'flex';
+            footerDiv.style.justifyContent = 'space-between';
+            footerDiv.style.alignItems = 'center';
+            footerDiv.style.marginTop = '20px';
+            footerDiv.style.paddingTop = '15px';
+            footerDiv.style.borderTop = '2px solid #c41e3a';
+            footerDiv.style.fontFamily = "'Cairo', sans-serif";
+            footerDiv.style.fontSize = '13px';
+            footerDiv.style.fontWeight = 'bold';
+            footerDiv.style.color = '#333';
+            footerDiv.innerHTML = '<div>توقيع المشرف: <span style="color: #c41e3a; font-size: 15px;">سامر ستار</span></div><div>الختم الرسمي: _________________</div>';
+            tempDiv.appendChild(footerDiv);
+
+            document.body.appendChild(tempDiv);
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            tempDiv.style.top = '0';
+
+            const canvas = await html2canvas(tempDiv, {
                 scale: 2,
                 useCORS: true,
                 allowTaint: true,
                 backgroundColor: '#ffffff',
-                windowWidth: reportContent.scrollWidth,
-                windowHeight: reportContent.scrollHeight,
+                windowWidth: 1123,
+                windowHeight: 794,
                 logging: false
             });
+
+            document.body.removeChild(tempDiv);
+
             const imgData = canvas.toDataURL('image/png');
-            const pdfWidth = 297;
-            const pdfHeight = 210;
+
+            // إعدادات PDF أفقي (Landscape) A4
+            const margin = 8; // هوامش 8 ملم من كل جانب
+            const pdfWidth = 297;  // عرض A4 أفقي
+            const pdfHeight = 210; // ارتفاع A4 أفقي
+            const contentWidth = pdfWidth - (margin * 2);  // 281mm
+            const contentHeight = pdfHeight - (margin * 2); // 194mm
+
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
-            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-            const imgX = (pdfWidth - imgWidth * ratio) / 2;
-            const imgY = 10;
+
+            // حساب النسبة لتناسب المحتوى داخل الهوامش بدون خروج
+            const ratioX = contentWidth / imgWidth;
+            const ratioY = contentHeight / imgHeight;
+            const ratio = Math.min(ratioX, ratioY);
+
+            const scaledWidth = imgWidth * ratio;
+            const scaledHeight = imgHeight * ratio;
+
+            // توسيط المحتوى داخل الصفحة
+            const imgX = margin + (contentWidth - scaledWidth) / 2;
+            const imgY = margin + (contentHeight - scaledHeight) / 2;
+
             const pdf = new jsPDF('l', 'mm', 'a4');
-            pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+            pdf.addImage(imgData, 'PNG', imgX, imgY, scaledWidth, scaledHeight);
             return { pdf };
         }
 
@@ -805,7 +880,7 @@
                 const safeUnitName = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
                 const fileName = 'attendance_report_' + safeUnitName + '_' + new Date().toISOString().split('T')[0] + '.pdf';
                 pdf.save(fileName);
-                showToast('✅ تم حفظ ملف PDF بنجاح');
+                showToast('✅ تم حفظ ملف PDF بنجاح - توقيع المشرف: سامر ستار');
             } catch (error) {
                 console.error('PDF Error:', error);
                 showToast('❌ فشل إنشاء ملف PDF');
