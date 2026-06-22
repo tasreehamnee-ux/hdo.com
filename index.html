@@ -237,7 +237,7 @@
                     </div>
                     <input type="hidden" id="endDate" required>
                 </div>
-
+                
                 <div class="table-responsive">
                     <table class="entry-table" id="attendanceTable">
                         <thead>
@@ -434,7 +434,7 @@
             }
             initializeMonthDates();
             loadWeekData(currentWeek);
-
+        
 
             // Setup drag and drop for attachment
             const dropZone = document.getElementById('attachmentDropZone');
@@ -750,7 +750,7 @@
                 table.appendChild(tbody);
                 weekDiv.appendChild(table);
 
-
+                
                                 // إضافة الملاحظات إن وجدت
                 if (weekData.notes && weekData.notes.trim() !== '') {
                     const notesDiv = document.createElement('div');
@@ -770,7 +770,7 @@
             });
         }
 
-
+        
         // Attachment Handling Functions
         function handleAttachmentSelect(event) {
             const file = event.target.files[0];
@@ -781,8 +781,8 @@
                 return;
             }
 
-            if (file.size > 10 * 1024 * 1024) {
-                showToast('❌ حجم الملف كبير جداً (الحد الأقصى 10 ميجابايت)');
+            if (file.size > 50 * 1024 * 1024) {
+                showToast('❌ حجم الملف كبير جداً (الحد الأقصى 50 ميجابايت)');
                 return;
             }
 
@@ -978,7 +978,7 @@
             footerDiv.style.fontSize = '13px';
             footerDiv.style.fontWeight = 'bold';
             footerDiv.style.color = '#333';
-            footerDiv.innerHTML = '<div>الختم الرسمي: _________________</div><div>تاريخ التقرير: ' + new Date().toLocaleDateString('ar-SA') + '</div>';
+            footerDiv.innerHTML = '<div>توقيع المشرف: <span style=\'color: #c41e3a; font-size: 15px;\'>سامر ستار</span></div><div>الختم الرسمي: _________________</div>';
             tempDiv.appendChild(footerDiv);
 
             document.body.appendChild(tempDiv);
