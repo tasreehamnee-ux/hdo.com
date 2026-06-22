@@ -136,7 +136,6 @@
     </style>
 <base target="_blank">
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
     <div class="loading-overlay" id="loadingOverlay">
@@ -193,6 +192,28 @@
                     <input type="text" class="form-input" id="unitName" placeholder="أدخل اسم الوحدة أو القسم" required>
                 </div>
                 <div class="form-group">
+                    <label class="form-label">📎 المرفقات <span style="color: #999; font-weight: 400;">(اختياري - PDF)</span></label>
+                    <div style="border: 2px dashed #ccc; border-radius: 12px; padding: 20px; text-align: center; background: #fafafa; cursor: pointer; transition: all 0.3s;" id="attachmentDropZone" onclick="document.getElementById('attachmentInput').click()">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">📄</div>
+                        <div style="font-weight: 700; color: #666; margin-bottom: 5px;">اضغط هنا لاختيار ملف PDF</div>
+                        <div style="font-size: 0.85rem; color: #999;">أو اسحب الملف هنا</div>
+                        <input type="file" id="attachmentInput" accept=".pdf,application/pdf" style="display: none;" onchange="handleAttachmentSelect(event)">
+                    </div>
+                    <div id="attachmentPreview" style="display: none; margin-top: 10px; padding: 10px; background: #d5f4e6; border-radius: 8px; border: 1px solid #27ae60;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.5rem;">📎</span>
+                            <div style="flex: 1;">
+                                <div id="attachmentName" style="font-weight: 700; color: #27ae60;"></div>
+                                <div id="attachmentSize" style="font-size: 0.8rem; color: #666;"></div>
+                            </div>
+                            <button type="button" onclick="removeAttachment()" style="background: #e74c3c; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 1rem;">✕</button>
+                        </div>
+                    </div>
+                    <button type="button" id="sendAttachmentBtn" onclick="sendAttachmentToWhatsApp()" style="display: none; margin-top: 10px; width: 100%; padding: 14px; background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); color: white; border: none; border-radius: 12px; font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px;">
+                        <span>📤</span> إرسال المرفق إلى الواتساب
+                    </button>
+                </div>
+                <div class="form-group">
                     <label class="form-label"><span class="required">*</span>تاريخ بداية الأسبوع (ميلادي / هجري)</label>
                     <div class="date-picker-wrapper">
                         <input type="text" class="date-input" id="startDatePicker" placeholder="اختر التاريخ" readonly>
@@ -216,10 +237,7 @@
                     </div>
                     <input type="hidden" id="endDate" required>
                 </div>
-                <div class="form-group">
-                    <label class="form-label"><span class="required">*</span>المشرف/المدير</label>
-                    <input type="text" class="form-input" id="supervisorName" placeholder="اسم المشرف المسؤول" required>
-                </div>
+
                 <div class="table-responsive">
                     <table class="entry-table" id="attendanceTable">
                         <thead>
@@ -298,9 +316,9 @@
         let currentWeek = 1;
         let monthlyData = {
             unitName: '',
-            supervisor: '',
             weeks: {}
         };
+        let currentAttachment = null;
         let startDatePickerInstance = null;
         let endDatePickerInstance = null;
         const ADMIN_WHATSAPP = '9647711059176';
@@ -416,7 +434,43 @@
             }
             initializeMonthDates();
             loadWeekData(currentWeek);
-        });
+
+
+            // Setup drag and drop for attachment
+            const dropZone = document.getElementById('attachmentDropZone');
+            if (dropZone) {
+                dropZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.style.background = '#f0f0f0';
+                    this.style.borderColor = '#999';
+                });
+                dropZone.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    if (!currentAttachment) {
+                        this.style.background = '#fafafa';
+                        this.style.borderColor = '#ccc';
+                    } else {
+                        this.style.background = '#f0fff4';
+                        this.style.borderColor = '#27ae60';
+                    }
+                });
+                dropZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    if (!currentAttachment) {
+                        this.style.background = '#fafafa';
+                        this.style.borderColor = '#ccc';
+                    } else {
+                        this.style.background = '#f0fff4';
+                        this.style.borderColor = '#27ae60';
+                    }
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const fakeEvent = { target: { files: files } };
+                        handleAttachmentSelect(fakeEvent);
+                    }
+                });
+            }
+});
 
         function initializeMonthDates() {
             const today = new Date();
@@ -450,12 +504,10 @@
 
         function saveCurrentWeekData() {
             const unitName = document.getElementById('unitName').value;
-            const supervisor = document.getElementById('supervisorName').value;
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             if (!unitName || !startDate) return;
             monthlyData.unitName = unitName;
-            monthlyData.supervisor = supervisor;
             const rows = document.getElementById('tableBody').querySelectorAll('tr');
             const employees = [];
             rows.forEach((row, index) => {
@@ -507,8 +559,7 @@
                 document.getElementById('workStatus').value = 'morning';
             }
             if (monthlyData.unitName) document.getElementById('unitName').value = monthlyData.unitName;
-            if (monthlyData.supervisor) document.getElementById('supervisorName').value = monthlyData.supervisor;
-        }
+            }
 
         function updateSavedWeeksIndicator() {
             const indicator = document.getElementById('savedWeeksIndicator');
@@ -699,7 +750,7 @@
                 table.appendChild(tbody);
                 weekDiv.appendChild(table);
 
-                
+
                                 // إضافة الملاحظات إن وجدت
                 if (weekData.notes && weekData.notes.trim() !== '') {
                     const notesDiv = document.createElement('div');
@@ -717,6 +768,110 @@
 
                 container.appendChild(weekDiv);
             });
+        }
+
+
+        // Attachment Handling Functions
+        function handleAttachmentSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
+                showToast('❌ يرجى اختيار ملف PDF فقط');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showToast('❌ حجم الملف كبير جداً (الحد الأقصى 10 ميجابايت)');
+                return;
+            }
+
+            currentAttachment = file;
+            document.getElementById('attachmentName').textContent = file.name;
+            document.getElementById('attachmentSize').textContent = formatFileSize(file.size);
+            document.getElementById('attachmentPreview').style.display = 'block';
+            document.getElementById('sendAttachmentBtn').style.display = 'flex';
+            document.getElementById('attachmentDropZone').style.borderColor = '#27ae60';
+            document.getElementById('attachmentDropZone').style.background = '#f0fff4';
+            showToast('✅ تم اختيار الملف: ' + file.name);
+        }
+
+        function removeAttachment() {
+            currentAttachment = null;
+            document.getElementById('attachmentInput').value = '';
+            document.getElementById('attachmentPreview').style.display = 'none';
+            document.getElementById('sendAttachmentBtn').style.display = 'none';
+            document.getElementById('attachmentDropZone').style.borderColor = '#ccc';
+            document.getElementById('attachmentDropZone').style.background = '#fafafa';
+            showToast('🗑️ تم إزالة الملف المرفق');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 بايت';
+            const k = 1024;
+            const sizes = ['بايت', 'كيلوبايت', 'ميجابايت', 'جيجابايت'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        async function sendAttachmentToWhatsApp() {
+            if (!currentAttachment) {
+                showToast('❌ لا يوجد ملف مرفق للإرسال');
+                return;
+            }
+
+            showLoading(true);
+            showToast('⏳ جاري إعداد الملف للإرسال...');
+
+            try {
+                let message = '📎 *مرفق جديد*\n';
+                message += '━━━━━━━━━━━━━━\n';
+                message += '📄 اسم الملف: ' + currentAttachment.name + '\n';
+                message += '📊 الحجم: ' + formatFileSize(currentAttachment.size) + '\n';
+                if (monthlyData.unitName) {
+                    message += '🏢 الوحدة: ' + monthlyData.unitName + '\n';
+                }
+                message += '━━━━━━━━━━━━━━\n';
+                message += '⬇️ يرجى تحميل الملف المرفق';
+
+                // Method 1: Try Native Share API (works on mobile browsers)
+                if (navigator.share && navigator.canShare) {
+                    const shareData = {
+                        title: 'مرفق PDF',
+                        text: message,
+                        files: [currentAttachment]
+                    };
+
+                    if (navigator.canShare(shareData)) {
+                        await navigator.share(shareData);
+                        showToast('✅ تم فتح مشاركة الملف - اختر واتساب');
+                        showLoading(false);
+                        return;
+                    }
+                }
+
+                // Method 2: Fallback - Download file + open WhatsApp with text
+                const attachUrl = URL.createObjectURL(currentAttachment);
+                const link = document.createElement('a');
+                link.href = attachUrl;
+                link.download = currentAttachment.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                const whatsappUrl = 'https://wa.me/' + ADMIN_WHATSAPP + '?text=' + encodeURIComponent(message);
+
+                setTimeout(() => {
+                    window.open(whatsappUrl, '_blank');
+                    showToast('📱 تم تحميل الملف وفتح واتساب - أرسل الملف يدوياً');
+                }, 800);
+
+            } catch (error) {
+                console.error('Attachment Send Error:', error);
+                showToast('❌ حدث خطأ أثناء الإرسال');
+            } finally {
+                showLoading(false);
+            }
         }
 
         function getStatusColor(status) {
@@ -811,7 +966,7 @@
             tempDiv.style.direction = 'rtl';
             tempDiv.style.overflow = 'hidden';
 
-            // إضافة تذييل الصفحة مع توقيع المشرف
+            // إضافة تذييل الصفحة
             const footerDiv = document.createElement('div');
             footerDiv.style.display = 'flex';
             footerDiv.style.justifyContent = 'space-between';
@@ -823,7 +978,7 @@
             footerDiv.style.fontSize = '13px';
             footerDiv.style.fontWeight = 'bold';
             footerDiv.style.color = '#333';
-            footerDiv.innerHTML = '<div>توقيع المشرف: <span style="color: #c41e3a; font-size: 15px;">سامر ستار</span></div><div>الختم الرسمي: _________________</div>';
+            footerDiv.innerHTML = '<div>الختم الرسمي: _________________</div><div>تاريخ التقرير: ' + new Date().toLocaleDateString('ar-SA') + '</div>';
             tempDiv.appendChild(footerDiv);
 
             document.body.appendChild(tempDiv);
@@ -880,7 +1035,7 @@
                 const safeUnitName = (monthlyData.unitName || 'nezarih').replace(/[^a-zA-Z0-9]/g, '_');
                 const fileName = 'attendance_report_' + safeUnitName + '_' + new Date().toISOString().split('T')[0] + '.pdf';
                 pdf.save(fileName);
-                showToast('✅ تم حفظ ملف PDF بنجاح - توقيع المشرف: سامر ستار');
+                showToast('✅ تم حفظ ملف PDF بنجاح');
             } catch (error) {
                 console.error('PDF Error:', error);
                 showToast('❌ فشل إنشاء ملف PDF');
@@ -901,7 +1056,6 @@
             monthlyData = { unitName: '', supervisor: '', weeks: {} };
             localStorage.removeItem('monthlyAttendance');
             document.getElementById('unitName').value = '';
-            document.getElementById('supervisorName').value = '';
             document.querySelectorAll('.week-btn').forEach(btn => btn.classList.remove('saved'));
             updateSavedWeeksIndicator();
             loadWeekData(1);
