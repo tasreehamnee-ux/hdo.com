@@ -299,7 +299,7 @@
                 <div class="report-header">
                     <img src="image.jpeg" alt="شعار المتابعة">
                     <div class="report-title">التقرير الشهري التراكمي</div>
-                    <div class="report-subtitle">قسم النصاريح الأمنية - شعبة المتابعة</div>
+                    <div class="report-subtitle">النصاريح الأمنية - قسم المتابعة</div>
                     <div class="report-unit" id="monthlyReportUnit">الوحدة: <span></span></div>
                     <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.9rem;">
                         <div>الفترة: <span id="monthlyPeriod"></span></div>
@@ -948,7 +948,12 @@
         }
 
         function printReport() {
+            // Force landscape orientation for printing
+            const style = document.createElement('style');
+            style.innerHTML = '@page { size: A4 landscape !important; }';
+            document.head.appendChild(style);
             window.print();
+            setTimeout(() => document.head.removeChild(style), 1000);
         }
 
         async function generateReportPDF() {
@@ -1021,7 +1026,7 @@
             const imgX = margin + (contentWidth - scaledWidth) / 2;
             const imgY = margin + (contentHeight - scaledHeight) / 2;
 
-            const pdf = new jsPDF('l', 'mm', 'a4');
+            const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
             pdf.addImage(imgData, 'PNG', imgX, imgY, scaledWidth, scaledHeight);
             return { pdf };
         }
